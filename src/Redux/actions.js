@@ -50,7 +50,6 @@ export const setAlumniKey = alumnikey => dispatch => {
 
     dispatch({
         type: SET_ALUMNI_KEY,
-
         payload: {
             alumnikey: alumnikey
         }
