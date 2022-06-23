@@ -3,18 +3,25 @@ import styled from 'styled-components';
 import Header2 from '../Components/Header2';
 import { FaAngleRight } from 'react-icons/fa';
 import { getDatabase, ref, set, onValue,push } from "firebase/database";
-import app from '../firebase'
+import app, {storage} from '../firebase'
 import { useNavigate } from "react-router-dom";
+import { getStorage,ref as sRef,uploadBytesResumable,getDownloadURL  } from "firebase/storage";
+
 
 import toast, { Toaster } from 'react-hot-toast';
 import {useSelector} from "react-redux";
 
 const db = getDatabase(app);
 
+
+
 function AddInfo() {
     let navigate = useNavigate();
 
-    const[itemInfo,setItemInfo] = useState({itemName:'',itemCost:'',stdName:'',itemDescription:''})
+    const [file, setFile] = useState("");
+    const [percent, setPercent] = useState(0);
+
+    const[itemInfo,setItemInfo] = useState({itemName:'',itemCost:'',stdName:'',itemDescription:'',imageUrl:''})
 
     const { key } = useSelector(state => state.persistedReducer)
 
@@ -23,6 +30,44 @@ function AddInfo() {
         setItemInfo({...itemInfo,[name]:value});
 
     }
+
+
+    // Handles input change event and updates state
+    function handleChange(event) {
+        setFile(event.target.files[0]);
+    }
+
+    // handle upload
+    function handleUpload() {
+        if (!file) {
+            alert("Please choose a file first!")
+        }
+
+        const storageRef = sRef(storage, `/files/${file.name}`)
+        const uploadTask = uploadBytesResumable(storageRef, file);
+
+        uploadTask.on(
+            "state_changed",
+            (snapshot) => {
+                const percent = Math.round(
+                    (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+                );
+
+                // update progress
+                setPercent(percent);
+            },
+            (err) => console.log(err),
+            () => {
+                // download url
+                getDownloadURL(uploadTask.snapshot.ref).then((url) => {
+                    console.log('url', url);
+                    setItemInfo({...itemInfo,imageUrl:url})
+                });
+            }
+        );
+    }
+
+
 console.log('hello')
     const onSubmitHandler = ()=>{
         if(itemInfo.itemName == '' || itemInfo.itemCost == '' || itemInfo.stdName =='' || itemInfo.itemDescription == '' )
@@ -96,7 +141,10 @@ console.log('hello')
             <h5>Student Photo</h5>
             </div>
             <div className='inputDiv'>
-                <input style={{outline: 'none'}} placeholder='enter name' type='file'/>
+                <input style={{outline: 'none'}} placeholder='enter name'
+                       type="file" accept="image/*" onChange={handleChange}/>
+                <button onClick={handleUpload}>Upload to Firebase</button>
+                <p>{percent} "% done"</p>
             </div>
         </div>
         

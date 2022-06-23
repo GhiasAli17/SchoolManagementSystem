@@ -4,11 +4,18 @@ import { getDatabase, ref, set, onValue,push } from "firebase/database";
 import app from '../firebase'
 import toast, { Toaster } from 'react-hot-toast';
 
+import {storage} from "../firebase";
+
 const db = getDatabase(app);
+
+
+
+
 
 function SchoolInformationAlumni(props) {
     const key = props.getKey;
     const [schoolNamesList,setSchoolNamesList] = useState([])
+
 
     useEffect(()=>{
         onValue(ref(db,'School'),(snapshot)=>{
@@ -55,6 +62,8 @@ function SchoolInformationAlumni(props) {
         console.log('val',value);
         setAlumniSchoolInfo({...alumniSchoolInfo,[name]:value});
     }
+
+
 
 
   return (

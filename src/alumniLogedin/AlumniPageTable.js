@@ -159,7 +159,7 @@ function AlumniTable({navigation}) {
                   justifyContent: "center",
                 }}
               >
-                <h4>{item.itemDescription}</h4>
+                <h4><img src={item.imageUrl} style={{width:50,height:50}}/> </h4>
               </div>
     
               <div
@@ -171,7 +171,7 @@ function AlumniTable({navigation}) {
                 }}
               
               >
-                <h4>photo</h4>
+                <h4>{item.itemDescription}</h4>
               </div>
             </div>
           );
