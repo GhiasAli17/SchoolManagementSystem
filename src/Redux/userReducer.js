@@ -1,42 +1,42 @@
-import { SET_DATA ,SET_USE_TYPE, SET_KEY, SET_ALUMNI_KEY, SET_ALUMNI_SCHOOLNAME} from './actions'
+import {
+  SET_DATA,
+  SET_USE_TYPE,
+  SET_KEY,
+  SET_ALUMNI_KEY,
+  SET_ALUMNI_SCHOOLNAME,
+} from "./actions";
 const inittialstate = {
-     data : '',
-    alumnikey : '',
-    key : '',
-    alumniSchoolname:'',
-    userType: '',
-
-}
+  data: "",
+  alumnikey: "",
+  key: "",
+  alumniSchoolname: "",
+  userType: "",
+};
 function userReducer(state = inittialstate, action) {
+  switch (action.type) {
+    case SET_DATA:
+      console.log(action.payload.data);
+      return { ...state, data: action.payload.data };
+    case SET_KEY:
+      console.log(action.payload.key);
+      return { ...state, key: action.payload.key };
+    case SET_ALUMNI_KEY:
+      console.log(` alumni key  ${action.payload.alumnikey}`);
+      return { ...state, alumnikey: action.payload.alumnikey };
+    case SET_ALUMNI_SCHOOLNAME:
+      return { ...state, alumniSchoolname: action.payload.alumniSchoolname };
+    case SET_USE_TYPE:
+      return { ...state, userType: action.payload.userType };
 
-    switch (action.type) {
-        case SET_DATA:
-            console.log(action.payload.data)
-            return { ...state, data: action.payload.data };
-        case SET_KEY:
-            console.log(action.payload.key)
-            return { ...state, key: action.payload.key };
-        case SET_ALUMNI_KEY:
-            console.log(` alumni key  ${action.payload.alumnikey}`)
-            return { ...state, alumnikey: action.payload.alumnikey };
-        case  SET_ALUMNI_SCHOOLNAME:
-            return {...state, alumniSchoolname: action.payload.alumniSchoolname}
-            case  SET_USE_TYPE:
-                return {...state, userType: action.payload.userType}
-           
-        default:
-
-            return state
-    }
+    default:
+      return state;
+  }
 }
-
 
 export default userReducer;
 
-
-
 {
-    /* 
+  /* 
     const { index1 } = action.payload;
     alert(index1)
     return {

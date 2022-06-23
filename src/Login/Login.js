@@ -1,282 +1,459 @@
-import React,{useState} from 'react';
-import styled from 'styled-components';
-import { getDatabase, ref, set, onValue,push } from "firebase/database";
-import app from '../firebase'
-import {useNavigate} from 'react-router-dom';
-import toast, { Toaster } from 'react-hot-toast';
-import { useSelector, useDispatch } from 'react-redux'
-import setLogedinEmail, {setAlumniSchoolName, setKey} from "../Redux/actions";
-import { setLoginUserType } from '../Redux/actions';
+import React, { useState } from "react";
+import styled from "styled-components";
+import { getDatabase, ref, set, onValue, push } from "firebase/database";
+import app from "../firebase";
+import { useNavigate } from "react-router-dom";
+import toast, { Toaster } from "react-hot-toast";
+import { useSelector, useDispatch } from "react-redux";
+import setLogedinEmail, { setAlumniSchoolName, setKey } from "../Redux/actions";
+import { setLoginUserType } from "../Redux/actions";
 const db = getDatabase(app);
 function Login(props) {
+  const dispatch = useDispatch();
 
-    const dispatch = useDispatch()
+  // get data from redux
 
+  const { data, key, alumnikey } = useSelector(
+    (state) => state.persistedReducer
+  );
+  console.log(`data ${key}`);
+  let navigate = useNavigate();
 
-    // get data from redux
-    
-    const { data, key, alumnikey } = useSelector(state => state.persistedReducer)
-console.log(`data ${key}`)
-    let navigate = useNavigate();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [userType, setUserType] = useState("");
+  const [isChecked, setIsChecked] = useState(false);
+  const [check, setCheck] = useState(false);
 
-    const[email, setEmail] = useState('');
-    const[password,setPassword] = useState('');
-    const [userType, setUserType] = useState('');
-    const [isChecked, setIsChecked] = useState(false);
-    const [check,setCheck] = useState(false);
+  const handleAlumni = () => {
+    setUserType("Alumni");
+  };
+  const handleAdmin = () => {
+    setUserType("Admin");
+  };
+  const onChangeHandler = (event) => {
+    console.log("name", event.target.name);
+    const inputName = event.target.name;
+    const inputValue = event.target.value;
+    switch (inputName) {
+      case "email":
+        setEmail(inputValue);
+        break;
+      case "password":
+        setPassword(inputValue);
+        break;
+      default:
+        console.log("default");
+        break;
+    }
+  };
 
-    const handleAlumni = () => {
-        setUserType('Alumni');
-      };
-      const handleAdmin = () => {
-        setUserType('Admin');
-      };
-    const onChangeHandler= (event)=>{
-        console.log('name',event.target.name);
-        const inputName = event.target.name;
-        const inputValue = event.target.value;
-        switch (inputName){
-            case 'email':
-                setEmail(inputValue)
-                break;
-            case 'password':
-                setPassword(inputValue)
-   break;
-            default:
-                console.log('default')
-                break;
+  function nextHandler() {
+    if (email == "" || password == "") {
+      toast.custom(
+        <div
+          style={{
+            marginTop: "5%",
+            width: "100%",
+            height: "6vh",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "flex-start",
+          }}
+        >
+          <div
+            style={{
+              alignSelf: "flex-start",
+              width: "30%",
+              height: "100%",
+              borderLeftWidth: "8px",
+              borderColor: "red",
+              borderStyle: "solid",
+              borderBottomWidth: 0,
+              borderRightWidth: 0,
+              borderTopWidth: 0,
+              borderRadius: 5,
+              backgroundColor: "#F5F5F5",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <h3
+              style={{
+                color: "#515C6F",
+                fontFamily: "GraphikMedium",
+                fontWeight: "100",
+                fontSize: "12px",
+              }}
+            >
+              Kindly fill all the fields
+            </h3>
+          </div>
+        </div>,
+        { duration: 1000 }
+      );
+    } else {
+      let role = "";
 
+      if (userType == "Admin") role = "admin";
+      else {
+        role = "alumni";
+      }
+      const starCountRef = ref(db, "users/" + role);
+      let emailAndPassCheck = false;
+      let keyvalue;
+
+      onValue(
+        starCountRef,
+        (snapshot) => {
+          let alumniEmail, alumniPassword;
+          let approveCheck = false;
+          let SchoolName = "";
+          snapshot.forEach((childSnapshot) => {
+            const childKey = childSnapshot.key;
+            const childData = childSnapshot.val();
+            console.log("child data Login", childKey);
+
+            if (email == childData.email && password == childData.password) {
+              alumniEmail = childData.email;
+              alumniPassword = childData.password;
+              keyvalue = childKey;
+              approveCheck = childData.approve;
+              onValue(
+                ref(db, "users/" + role + "/" + childKey + "/schoolInfo"),
+                (innerSnapShot) => {
+                  innerSnapShot.forEach((innerChildSnapshot) => {
+                    console.log("inner snap", innerChildSnapshot.val());
+                    SchoolName = innerChildSnapshot.val();
+                  });
+                }
+              );
+              // SchoolName = childData.schoolName;
+            }
+            if (email == childData.email) {
+              alumniEmail = childData.email;
+            }
+            if (password == childData.password) {
+              alumniPassword = childData.password;
+            }
+
+            // ...
+          });
+          if (alumniEmail == email) {
+            if (alumniPassword == password) {
+              dispatch(setLogedinEmail(email));
+              if (userType == "Alumni") {
+                if (approveCheck) {
+                  dispatch(setAlumniSchoolName(SchoolName));
+                  dispatch(setLoginUserType("Alumni"));
+                  console.log("setAlumniSchoolName", SchoolName);
+                  navigate("/alumnilogin");
+                } else {
+                  console.log("Sorry!, you are not approved");
+                  toast.custom(
+                    <div
+                      style={{
+                        marginTop: "5%",
+                        width: "100%",
+                        height: "6vh",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "flex-start",
+                      }}
+                    >
+                      <div
+                        style={{
+                          alignSelf: "flex-start",
+                          width: "30%",
+                          height: "100%",
+                          borderLeftWidth: "8px",
+                          borderColor: "red",
+                          borderStyle: "solid",
+                          borderBottomWidth: 0,
+                          borderRightWidth: 0,
+                          borderTopWidth: 0,
+                          borderRadius: 5,
+                          backgroundColor: "#F5F5F5",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                        }}
+                      >
+                        <h3
+                          style={{
+                            color: "#515C6F",
+                            fontFamily: "GraphikMedium",
+                            fontWeight: "100",
+                            fontSize: "12px",
+                          }}
+                        >
+                          You are not approved
+                        </h3>
+                      </div>
+                    </div>,
+                    { duration: 1000 }
+                  );
+                }
+              } else {
+                dispatch(setKey(keyvalue));
+                dispatch(setLoginUserType("Admin"));
+
+                navigate("/loggedin");
+              }
+            }
+          }
+          if (alumniPassword == password) {
+            if (alumniEmail == email) {
+              if (userType == "Alumni") {
+                if (approveCheck) {
+                  dispatch(setAlumniSchoolName(SchoolName));
+                  navigate("/alumnilogin");
+                } else {
+                  console.log("Sorry!, you are not approved");
+                  toast.custom(
+                    <div
+                      style={{
+                        marginTop: "5%",
+                        width: "100%",
+                        height: "6vh",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "flex-start",
+                      }}
+                    >
+                      <div
+                        style={{
+                          alignSelf: "flex-start",
+                          width: "30%",
+                          height: "100%",
+                          borderLeftWidth: "8px",
+                          borderColor: "red",
+                          borderStyle: "solid",
+                          borderBottomWidth: 0,
+                          borderRightWidth: 0,
+                          borderTopWidth: 0,
+                          borderRadius: 5,
+                          backgroundColor: "#F5F5F5",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                        }}
+                      >
+                        <h3
+                          style={{
+                            color: "#515C6F",
+                            fontFamily: "GraphikMedium",
+                            fontWeight: "100",
+                            fontSize: "12px",
+                          }}
+                        >
+                          You are not approved
+                        </h3>
+                      </div>
+                    </div>,
+                    { duration: 1000 }
+                  );
+                }
+              } else {
+                navigate("/loggedin");
+                dispatch(setKey(keyvalue));
+              }
+            }
+          }
+          if (alumniEmail != email) {
+            toast.custom(
+              <div
+                style={{
+                  marginTop: "5%",
+                  width: "100%",
+                  height: "6vh",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "flex-start",
+                }}
+              >
+                <div
+                  style={{
+                    alignSelf: "flex-start",
+                    width: "30%",
+                    height: "100%",
+                    borderLeftWidth: "8px",
+                    borderColor: "red",
+                    borderStyle: "solid",
+                    borderBottomWidth: 0,
+                    borderRightWidth: 0,
+                    borderTopWidth: 0,
+                    borderRadius: 5,
+                    backgroundColor: "#F5F5F5",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  <h3
+                    style={{
+                      color: "#515C6F",
+                      fontFamily: "GraphikMedium",
+                      fontWeight: "100",
+                      fontSize: "12px",
+                    }}
+                  >
+                    email not found
+                  </h3>
+                </div>
+              </div>,
+              { duration: 1000 }
+            );
+          } else if (alumniPassword != password) {
+            toast.custom(
+              <div
+                style={{
+                  marginTop: "5%",
+                  width: "100%",
+                  height: "6vh",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "flex-start",
+                }}
+              >
+                <div
+                  style={{
+                    alignSelf: "flex-start",
+                    width: "30%",
+                    height: "100%",
+                    borderLeftWidth: "8px",
+                    borderColor: "red",
+                    borderStyle: "solid",
+                    borderBottomWidth: 0,
+                    borderRightWidth: 0,
+                    borderTopWidth: 0,
+                    borderRadius: 5,
+                    backgroundColor: "#F5F5F5",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  <h3
+                    style={{
+                      color: "#515C6F",
+                      fontFamily: "GraphikMedium",
+                      fontWeight: "100",
+                      fontSize: "12px",
+                    }}
+                  >
+                    Invalid Password
+                  </h3>
+                </div>
+              </div>,
+              { duration: 1000 }
+            );
+          }
+
+          // setCheck(true)
+        },
+        {
+          onlyOnce: false,
         }
+      );
     }
+  }
 
-
-    function nextHandler() {
-
-    if(email == '' || password == '')
-    {
-        toast.custom(
-            <div style={{ marginTop: '5%',width: '100%', height: '6vh',  display: 'flex', alignItems: 'center', justifyContent: 'flex-start' }}>
-
-                <div style={{ alignSelf: 'flex-start', width: '30%', height: '100%', borderLeftWidth: '8px', borderColor: 'red', borderStyle: 'solid', borderBottomWidth: 0, borderRightWidth: 0, borderTopWidth: 0, borderRadius: 5, backgroundColor: '#F5F5F5', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    <h3 style={{ color: '#515C6F', fontFamily: 'GraphikMedium', fontWeight: '100', fontSize: '12px' }}>Kindly fill all the fields</h3>
-                </div>
-            </div>, { duration: 1000 })
-    }
-
-    else {
-        let role='';
-
-        if(userType == 'Admin')
-            role = 'admin'
-        else{
-            role = 'alumni'
-        }
-        const starCountRef = ref(db, 'users/'+role);
-        let emailAndPassCheck = false;
-        let keyvalue;
-
-            onValue(starCountRef, (snapshot) => {
-                let alumniEmail,alumniPassword;
-                let approveCheck = false;
-                let SchoolName = ''
-                snapshot.forEach((childSnapshot) => {
-                    const childKey = childSnapshot.key;
-                    const childData = childSnapshot.val();
-                    console.log('child data Login',childKey);
-
-                    if(email == childData.email && password==childData.password){
-                        alumniEmail =  childData.email;
-                        alumniPassword = childData.password;
-                        keyvalue = childKey;
-                        approveCheck = childData.approve;
-                        onValue(ref(db,'users/'+role+'/'+childKey+"/schoolInfo"),(innerSnapShot)=>{
-                            innerSnapShot.forEach(innerChildSnapshot=>{
-                                console.log('inner snap',innerChildSnapshot.val())
-                                SchoolName = innerChildSnapshot.val();
-                            })
-                        })
-                       // SchoolName = childData.schoolName;
-                    }
-                    if(email == childData.email){
-                        alumniEmail = childData.email;
-                    }
-                    if(password == childData.password){
-                        alumniPassword = childData.password;
-                    }
-
-      // ...
-                });
-                if(alumniEmail == email){
-                    if(alumniPassword == password)
-                    {
-                        dispatch(setLogedinEmail(email))
-                        if(userType == 'Alumni')
-                        {
-                            if(approveCheck){
-                                dispatch(setAlumniSchoolName(SchoolName))
-                                dispatch(setLoginUserType('Alumni'))
-                                console.log('setAlumniSchoolName', SchoolName)
-                                navigate('/alumnilogin');
-                            }
-                            else{
-                                console.log('Sorry!, you are not approved')
-                                toast.custom(
-                                    <div style={{ marginTop: '5%',width: '100%', height: '6vh',  display: 'flex', alignItems: 'center', justifyContent: 'flex-start' }}>
-
-                                        <div style={{ alignSelf: 'flex-start', width: '30%', height: '100%', borderLeftWidth: '8px', borderColor: 'red', borderStyle: 'solid', borderBottomWidth: 0, borderRightWidth: 0, borderTopWidth: 0, borderRadius: 5, backgroundColor: '#F5F5F5', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                                            <h3 style={{ color: '#515C6F', fontFamily: 'GraphikMedium', fontWeight: '100', fontSize: '12px' }}>You are not approved</h3>
-                                        </div>
-                                    </div>, { duration: 1000 })
-                            }
-                        }
-                        else {
-                            dispatch(setKey(keyvalue));
-                          dispatch(setLoginUserType('Admin'))
-
-                            navigate('/loggedin');
-                        }
-                    }
-                   
-                }
-                if(alumniPassword == password){
-                    if(alumniEmail == email) 
-                    {
-                        if(userType == 'Alumni')
-                        {
-                            if(approveCheck){
-                                dispatch(setAlumniSchoolName(SchoolName))
-                                navigate('/alumnilogin');
-                            }
-                            else{
-                                console.log('Sorry!, you are not approved')
-                                toast.custom(
-                                    <div style={{ marginTop: '5%',width: '100%', height: '6vh',  display: 'flex', alignItems: 'center', justifyContent: 'flex-start' }}>
-
-                                        <div style={{ alignSelf: 'flex-start', width: '30%', height: '100%', borderLeftWidth: '8px', borderColor: 'red', borderStyle: 'solid', borderBottomWidth: 0, borderRightWidth: 0, borderTopWidth: 0, borderRadius: 5, backgroundColor: '#F5F5F5', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                                            <h3 style={{ color: '#515C6F', fontFamily: 'GraphikMedium', fontWeight: '100', fontSize: '12px' }}>You are not approved</h3>
-                                        </div>
-                                    </div>, { duration: 1000 })
-                            }
-                        }
-                        else {
-                            navigate('/loggedin');
-                            dispatch(setKey(keyvalue));
-
-                        }
-                    }
-                 
-                }
-                if(alumniEmail != email){
-                    toast.custom(
-                        <div style={{ marginTop: '5%',width: '100%', height: '6vh',  display: 'flex', alignItems: 'center', justifyContent: 'flex-start' }}>
-            
-                            <div style={{ alignSelf: 'flex-start', width: '30%', height: '100%', borderLeftWidth: '8px', borderColor: 'red', borderStyle: 'solid', borderBottomWidth: 0, borderRightWidth: 0, borderTopWidth: 0, borderRadius: 5, backgroundColor: '#F5F5F5', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                                <h3 style={{ color: '#515C6F', fontFamily: 'GraphikMedium', fontWeight: '100', fontSize: '12px' }}>email not found</h3>
-                            </div>
-                        </div>, { duration: 1000 })
-                }
-               else if(alumniPassword != password){
-                   toast.custom(
-                    <div style={{ marginTop: '5%',width: '100%', height: '6vh',  display: 'flex', alignItems: 'center', justifyContent: 'flex-start' }}>
-        
-                        <div style={{ alignSelf: 'flex-start', width: '30%', height: '100%', borderLeftWidth: '8px', borderColor: 'red', borderStyle: 'solid', borderBottomWidth: 0, borderRightWidth: 0, borderTopWidth: 0, borderRadius: 5, backgroundColor: '#F5F5F5', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                            <h3 style={{ color: '#515C6F', fontFamily: 'GraphikMedium', fontWeight: '100', fontSize: '12px' }}>Invalid Password</h3>
-                        </div>
-                    </div>, { duration: 1000 })
-                }
-
-
-               // setCheck(true)
-            }, {
-                onlyOnce: false
-            });
-    }
-  
-    }
-
-    return (
-        <Container>
-       
-            <div className='emailMainDiv'>
-                <div className='emailDiv'>
-                    <div className='h3Div2'>
-                        <h3>Email</h3>
-                    </div>
-                    <div className='emailInputDiv'>
-                        <input style={{outline: 'none'}} placeholder='enter email' name="email" value={email} onChange={onChangeHandler} />
-                    </div>
-                </div>
-            </div>
-
-            <div className='emailMainDiv'>
-                <div className='emailDiv'>
-                    <div className='h3Div2'>
-                        <h3>Password</h3>
-                    </div>
-                    <div className='emailInputDiv'>
-                        <input style={{outline: 'none'}} type='password' placeholder='enter password' name="password" value={password} onChange={onChangeHandler} />
-                    </div>
-                </div>
-            </div>
-            <div style={{flexDirection: 'row', marginLeft: '40px', marginTop: '30px'}}>
-            <div style={{flexDirection: 'row'}}>
-            <input style={{outline: 'none'}}
-          type="checkbox"
-          id="topping"
-          name="topping"
-          value={userType}
-          checked={userType == 'Admin'}
-          onChange={handleAdmin}
-        />
-        Admin
+  return (
+    <Container>
+      <div className="emailMainDiv">
+        <div className="emailDiv">
+          <div className="h3Div2">
+            <h3>Email</h3>
+          </div>
+          <div className="emailInputDiv">
+            <input
+              style={{ outline: "none" }}
+              placeholder="enter email"
+              name="email"
+              value={email}
+              onChange={onChangeHandler}
+            />
+          </div>
         </div>
-        <div style={{flexDirection: 'row'}}>
-
-            <input style={{outline: 'none'}}
-          type="checkbox"
-          id="topping"
-          name="topping"
-          value={userType}
-          checked={userType == 'Alumni'}
-          onChange={handleAlumni}
-        />
-        Alumni
       </div>
+
+      <div className="emailMainDiv">
+        <div className="emailDiv">
+          <div className="h3Div2">
+            <h3>Password</h3>
+          </div>
+          <div className="emailInputDiv">
+            <input
+              style={{ outline: "none" }}
+              type="password"
+              placeholder="enter password"
+              name="password"
+              value={password}
+              onChange={onChangeHandler}
+            />
+          </div>
+        </div>
       </div>
-      
-      
-                  <div className='btnMainDiv'>
-                <div className='btnInnerDiv'>
-                    <div className='btnDiv'>
-                        <button onClick={()=>nextHandler()}>Login</button>
-                    </div>
-                    <p>StudentBook does not sell your information to anyone</p>
+      <div
+        style={{ flexDirection: "row", marginLeft: "40px", marginTop: "30px" }}
+      >
+        <div style={{ flexDirection: "row" }}>
+          <input
+            style={{ outline: "none" }}
+            type="checkbox"
+            id="topping"
+            name="topping"
+            value={userType}
+            checked={userType == "Admin"}
+            onChange={handleAdmin}
+          />
+          Admin
+        </div>
+        <div style={{ flexDirection: "row" }}>
+          <input
+            style={{ outline: "none" }}
+            type="checkbox"
+            id="topping"
+            name="topping"
+            value={userType}
+            checked={userType == "Alumni"}
+            onChange={handleAlumni}
+          />
+          Alumni
+        </div>
+      </div>
 
-                </div>
-
-            </div>
-            <Toaster />
-        </Container >
-    )
+      <div className="btnMainDiv">
+        <div className="btnInnerDiv">
+          <div className="btnDiv">
+            <button onClick={() => nextHandler()}>Login</button>
+          </div>
+          <p>StudentBook does not sell your information to anyone</p>
+        </div>
+      </div>
+      <Toaster />
+    </Container>
+  );
 }
 
 export default Login;
 
 const Container = styled.div`
-
-//background-color: green;
-height: 76vh;
-width: 100%;
-display: flex;
-flex-direction: column;
-justify-content: center;
-overflow: hidden;
-.firstNameLastNameDiv {
+  //background-color: green;
+  height: 76vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  overflow: hidden;
+  .firstNameLastNameDiv {
     //background-color: yellow;
     display: flex;
     height: 18%;
-}
-.firstNameDiv {
+  }
+  .firstNameDiv {
     height: 100%;
     width: 20%;
     //background-color: aqua;
@@ -285,8 +462,8 @@ overflow: hidden;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-}
-.lastNameDiv {
+  }
+  .lastNameDiv {
     height: 100%;
     width: 20%;
     //background-color: aliceblue;
@@ -295,15 +472,15 @@ overflow: hidden;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-}
-.h3Div {
+  }
+  .h3Div {
     //background-color: blueviolet;
     height: 50%;
     width: 90%;
     display: flex;
     align-items: center;
-}
-.inputDiv {
+  }
+  .inputDiv {
     height: 50%;
     width: 90%;
     //background-color: azure;
@@ -313,15 +490,15 @@ overflow: hidden;
     border-radius: 7px;
     border: 1px solid black;
     //border-color: brown;
-}
-input {
+  }
+  input {
     border: 0px;
-}
-.emailMainDiv {
+  }
+  .emailMainDiv {
     //background-color: yellow;
     height: 18%;
-}
-.emailDiv {
+  }
+  .emailDiv {
     //background-color: aqua;
     height: 100%;
     width: 20%;
@@ -329,15 +506,15 @@ input {
     display: flex;
     flex-direction: column;
     align-items: center;
-}
-.h3Div2 {
+  }
+  .h3Div2 {
     //background-color: blueviolet;
     height: 50%;
     width: 90%;
     display: flex;
     align-items: center;
-}
-.emailInputDiv {
+  }
+  .emailInputDiv {
     //background-color: aliceblue;
     height: 50%;
     width: 90%;
@@ -346,32 +523,31 @@ input {
     justify-content: center;
     border-radius: 7px;
     border: 1px solid black;
-}
+  }
 
-.btnMainDiv {
+  .btnMainDiv {
     //background-color: aqua;
     height: 18%;
     width: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
-}
-.btnInnerDiv {
+  }
+  .btnInnerDiv {
     //background-color: red;
     height: 100%;
     width: 94%;
     display: flex;
     align-items: center;
     justify-content: space-between;
-}
-.btnDiv {
+  }
+  .btnDiv {
     //background-color: gray;
     height: 50%;
     width: 16%;
     //border: 1px solid black;
-    
-}
-button {
+  }
+  button {
     background-color: gray;
     height: 100%;
     width: 100%;
@@ -379,9 +555,5 @@ button {
     font-size: 20px;
     border-radius: 5px;
     border: 0px;
-}
-
-
-
-
-`
+  }
+`;
