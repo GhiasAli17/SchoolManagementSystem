@@ -15,6 +15,8 @@ import { PersistGate } from "redux-persist/integration/react";
 import { persistor } from "../src/Redux/store";
 import AccountReq from "./Screens/AccountReq";
 import Settings from "./Screens/Settings";
+import AdminLogin from "./Screens/Admin";
+import AdminPanel from "./Screens/AdminPanel";
 import "./App.css";
 
 function App() {
@@ -33,7 +35,9 @@ function App() {
           <Route path="/payment" element={<StripeContainer />} />
           <Route path="/AlumniLogin" element={<AlumniPanel />} />
           <Route path="/additem" element={<AddItem />} />
-          <Route path="/settings" element={<Settings />} />
+          <Route path="/settings" element={<Settings />} />{" "}
+          <Route path="/admin" element={<AdminLogin />} />
+          <Route path="/AdminPanel" element={<AdminPanel />} />
         </Routes>
       </PersistGate>
     </Provider>

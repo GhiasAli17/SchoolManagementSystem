@@ -23,9 +23,8 @@ function Header() {
   const { data, key } = useSelector((state) => state.persistedReducer);
 
   useEffect(() => {
-    console.log(location);
-    console.log(data);
-    console.log(`data is ${data}`);
+    console.log(`location is ========== ${location}`);
+    console.log(`data is ============ ${data}`);
 
     if (
       location.pathname == "/SchoolLogin" ||
@@ -35,7 +34,7 @@ function Header() {
         navigate("/login");
       }
     }
-  }, [location, data]);
+  }, [data, location]);
 
   function loginHandler() {
     navigate("/home");

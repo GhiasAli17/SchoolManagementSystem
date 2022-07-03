@@ -19,7 +19,7 @@ import DropDown from "../assets/Images/DropDown.svg";
 
 const db = getDatabase(app);
 
-function AccountsReq() {
+function AdminPanel() {
   const [modalVisible, setModalVisible] = useState("");
 
   const [deleteCheck, setdeleteCheck] = useState(false);
@@ -283,7 +283,7 @@ function AccountsReq() {
     );
 }
 
-export default AccountsReq;
+export default AdminPanel;
 
 const Container = styled.div`
   //background-color: gray;

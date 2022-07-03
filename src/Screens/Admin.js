@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
+
+import registerImage from "../assets/Images/registerImage.svg";
 import { getDatabase, ref, set, onValue, push } from "firebase/database";
 import { useNavigate } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
@@ -12,8 +14,12 @@ import mail from "../assets/Images/mail.svg";
 import lock from "../assets/Images/lock.svg";
 import Alumni from "../assets/Images/Alumni.svg";
 import school from "../assets/Images/school.svg";
+import LoginComponent from "../Components/LoginComponent";
 const db = getDatabase(app);
-function LoginComponent(props) {
+
+function AdminLogin() {
+  const [component, setcomponent] = useState("register");
+
   const dispatch = useDispatch();
 
   // get data from redux
@@ -33,8 +39,8 @@ function LoginComponent(props) {
   const handleAlumni = () => {
     setUserType("Alumni");
   };
-  const handleAdmin = () => {
-    setUserType("Admin");
+  const handleAppAdmin = () => {
+    setUserType("AppAdmin");
   };
   const onChangeHandler = (event) => {
     console.log("name", event.target.name);
@@ -154,7 +160,7 @@ function LoginComponent(props) {
                   dispatch(setAlumniSchoolName(SchoolName));
                   dispatch(setLoginUserType("Alumni"));
                   console.log("setAlumniSchoolName", SchoolName);
-                  navigate("/AlumniLogin");
+                  navigate("/AdminPanel");
                 } else {
                   console.log("Sorry!, you are not approved");
                   toast.custom(
@@ -205,7 +211,7 @@ function LoginComponent(props) {
                 dispatch(setKey(keyvalue));
                 dispatch(setLoginUserType("Admin"));
 
-                navigate("/SchoolLogin");
+                navigate("/AdminPanel");
               }
             }
           }
@@ -368,98 +374,124 @@ function LoginComponent(props) {
   }
 
   return (
-    <Container>
-      <div className="inputsConatiner">
-        <img src={mail} style={{ width: "30px", height: "30px" }} />
-        <input
-          className="inputDiv"
-          style={{ outline: "none" }}
-          placeholder="enter email"
-          name="email"
-          value={email}
-          onChange={onChangeHandler}
-        />
-      </div>
-      <div className="inputsConatiner">
-        <img src={lock} style={{ width: "30px", height: "30px" }} />
-        <input
-          className="inputDiv"
-          style={{ outline: "none" }}
-          type="password"
-          placeholder="enter password"
-          name="password"
-          value={password}
-          onChange={onChangeHandler}
-        />
-      </div>
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-evenly",
-          flexDirection: "row",
-          width: "70%",
-        }}
-      >
-        <div style={{ flexDirection: "row" }}>
-          <input
-            style={{ outline: "none" }}
-            type="checkbox"
-            id="topping"
-            name="topping"
-            value={userType}
-            checked={userType == "Admin"}
-            onChange={handleAdmin}
-          />
-          <img
-            src={school}
-            style={{ marginInline: "12px", width: "15px", height: "15px" }}
-          />
-          <h5 style={{ color: "#2291F1" }}>School</h5>
-        </div>
-        <div style={{ flexDirection: "row" }}>
-          <input
-            style={{ outline: "none" }}
-            type="checkbox"
-            id="topping"
-            name="topping"
-            value={userType}
-            checked={userType == "Alumni"}
-            onChange={handleAlumni}
-          />
-          <img
-            src={Alumni}
-            style={{ marginInline: "12px", width: "15px", height: "15px" }}
-          />
-          <h5 style={{ color: "#2291F1" }}>Alumni</h5>
-        </div>
-      </div>
-      <button
-        className="inputsConatiner button blueBack"
-        onClick={() => nextHandler()}
-      >
-        <h3 className="whiteText">Login</h3>
-      </button>
-      <button className="inputsConatiner button" onClick={() => navigate("/")}>
-        <h3 style={{ color: "#2291f1" }}>Back</h3>
-      </button>
+    <>
+      <Container>
+        <div className="leftChild">
+          <h3>Admin Login</h3>
+          <div className="loginComponent">
+            <div className="inputsConatiner">
+              <img src={mail} style={{ width: "30px", height: "30px" }} />
+              <input
+                className="inputDiv"
+                style={{ outline: "none" }}
+                placeholder="enter email"
+                name="email"
+                value={email}
+                onChange={onChangeHandler}
+              />
+            </div>
+            <div className="inputsConatiner">
+              <img src={lock} style={{ width: "30px", height: "30px" }} />
+              <input
+                className="inputDiv"
+                style={{ outline: "none" }}
+                type="password"
+                placeholder="enter password"
+                name="password"
+                value={password}
+                onChange={onChangeHandler}
+              />
+            </div>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-evenly",
+                flexDirection: "row",
+                width: "70%",
+              }}
+            >
+              <div style={{ flexDirection: "row" }}>
+                <input
+                  style={{ outline: "none" }}
+                  type="checkbox"
+                  id="topping"
+                  name="topping"
+                  value={userType}
+                  checked={userType == "Admin"}
+                  onChange={handleAppAdmin}
+                />
+                <img
+                  src={school}
+                  style={{
+                    marginInline: "12px",
+                    width: "15px",
+                    height: "15px",
+                  }}
+                />
+                <h5 style={{ color: "#2291F1" }}>School</h5>
+              </div>
+              <div style={{ flexDirection: "row" }}>
+                <input
+                  style={{ outline: "none" }}
+                  type="checkbox"
+                  id="topping"
+                  name="topping"
+                  value={userType}
+                  checked={userType == "Alumni"}
+                  onChange={handleAlumni}
+                />
+                <img
+                  src={Alumni}
+                  style={{
+                    marginInline: "12px",
+                    width: "15px",
+                    height: "15px",
+                  }}
+                />
+                <h5 style={{ color: "#2291F1" }}>Alumni</h5>
+              </div>
+            </div>
+            <button
+              className="inputsConatiner button blueBack"
+              onClick={() => nextHandler()}
+            >
+              <h3 className="whiteText">Login</h3>
+            </button>
+            <button
+              className="inputsConatiner button"
+              onClick={() => navigate("/")}
+            >
+              <h3 style={{ color: "#2291f1" }}>Back</h3>
+            </button>
 
-      <Toaster />
-    </Container>
+            <Toaster />
+          </div>
+        </div>
+      </Container>
+    </>
   );
 }
 
-export default LoginComponent;
+export default AdminLogin;
 
 const Container = styled.div`
-  //background-color: green;
-  height: 75vh;
-  width: 100%;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
   display: flex;
-  flex-direction: column;
+  justify-content: center;
   align-items: center;
-  justify-content: space-evenly;
-  margin-top: 20px;
-
+  .loginComponent {
+    height: 75vh;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+    margin-top: 20px;
+  }
   .inputsConatiner {
     height: 10%;
     width: 60%;
@@ -496,5 +528,36 @@ const Container = styled.div`
     padding-left: 20px !important;
     border-radius: 7px;
     border: 1px solid rgba(218, 221, 225, 0.4);
+  }
+  .bgImage {
+    position: fixed;
+    bottom: 0;
+    background-position-x: right;
+    background: url(${registerImage});
+    background-repeat: no-repeat;
+    width: 100%;
+    height: 100%;
+  }
+  #img {
+    display: block;
+    width: 40vw;
+    align-self: flex-end;
+    height: 100vh;
+    object-fit: cover;
+  }
+  .leftChild {
+    height: 90%;
+    width: 60%;
+    padding-top: 1%;
+    padding-left: 1%;
+    display: flex;
+    flex-direction: column;
+  }
+  .rightChild {
+    height: 100%;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
   }
 `;
