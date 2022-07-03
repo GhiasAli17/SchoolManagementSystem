@@ -1,11 +1,18 @@
-import {SET_AMOUNT, SET_DATA ,SET_USE_TYPE, SET_KEY, SET_ALUMNI_KEY, SET_ALUMNI_SCHOOLNAME} from './actions'
+import {
+    SET_AMOUNT,
+    SET_DATA,
+    SET_USE_TYPE,
+    SET_KEY,
+    SET_ALUMNI_KEY,
+    SET_ALUMNI_SCHOOLNAME,
+} from './actions'
 const inittialstate = {
      data : '',
     alumnikey : '',
     key : '',
     alumniSchoolname:'',
     userType: '',
-    amount:''
+    amount:'',
 
 }
 function userReducer(state = inittialstate, action) {

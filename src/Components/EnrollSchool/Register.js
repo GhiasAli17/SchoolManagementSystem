@@ -156,7 +156,8 @@ function Register(props) {
           email,
           password,
           confirmPass,
-            approve:false
+            approve:false,
+            imageUri:''
         });
 
         console.log("key", key.key);

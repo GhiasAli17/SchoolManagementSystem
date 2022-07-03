@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, {useEffect, useState} from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import lock from "../assets/Images/lock.svg";
@@ -15,9 +15,9 @@ import userIcon from "../assets/Images/user.svg";
 import mailIcon from "../assets/Images/mail.svg";
 import contact from "../assets/Images/contact.svg";
 import {useSelector} from "react-redux";
-import {getDatabase, ref, update} from "firebase/database";
+import {getDatabase, onValue, ref, update} from "firebase/database";
 import app, {storage} from "../firebase";
-import {getDownloadURL, ref as sRef, uploadBytesResumable} from "firebase/storage";
+import {deleteObject, getDownloadURL, ref as sRef, uploadBytesResumable} from "firebase/storage";
 
 const db = getDatabase(app);
 
@@ -30,6 +30,18 @@ function Settings({ navigation }) {
   const [password, setPassword] = useState("");
   const [file, setFile] = useState("");
   const [percent, setPercent] = useState(0);
+  const [imageUri,setImageUri] = useState('')
+  const [prevImageUri,setPrevImageUri] = useState('')
+
+  useEffect(()=>{
+    const dbRef = ref(db, "users/admin/"+key);
+    onValue(dbRef, (snapshot) => {
+     console.log('setting',snapshot.val().imageUri.imageUri)
+      setImageUri(snapshot.val().imageUri.imageUri)
+      setPrevImageUri(snapshot.val().imageUri.imageUri)
+    });
+
+  },[])
 
   const [bankInfo, setBankInfo]=useState({
     accountName:'',
@@ -69,7 +81,29 @@ function Settings({ navigation }) {
           // download url
           getDownloadURL(uploadTask.snapshot.ref).then((url) => {
             console.log("url", url);
-            setBankInfo({ ...bankInfo, imageUrl: url });
+           // setBankInfo({ ...bankInfo, imageUrl: url });
+            update(ref(db,"users/admin/" + key + "/imageUri"),{imageUri:url})
+            setImageUri(url)
+
+            let url1 = prevImageUri+"";
+
+            // note below url will be different for every project, So update it if new firebase app is made from client
+            const baseUrl = "https://firebasestorage.googleapis.com/v0/b/school-management-system-79f54.appspot.com/o/";
+
+            var imagePath = url1.replace(baseUrl,"");
+
+            const indexOfEndPath = imagePath.indexOf("?");
+
+            imagePath = imagePath.substring(0,indexOfEndPath);
+
+            imagePath = imagePath.replace("%2F","/");
+            console.log("omage name", imagePath)
+
+            deleteObject(sRef(storage,imagePath)).then(() => {
+              console.log(' File deleted successfully');
+            }).catch((error) => {
+              console.log("delete error:", error)
+            });
           });
         }
     );
@@ -86,6 +120,8 @@ function Settings({ navigation }) {
         .then(() => {
           console.log("payment data updated successfully")
         })
+
+
   }
 
   const updateClickHandler = () =>{
@@ -131,7 +167,7 @@ function Settings({ navigation }) {
                       <img
                           width={50}
                           height={50}
-                          src={user}
+                          src={imageUri}
                           style={{ borderRadius: 30 }}
                       />
                     </div>
@@ -149,7 +185,7 @@ function Settings({ navigation }) {
                   <button
                       className="uploadButton"
                       onClick={() => {
-                        setButtonPresed("Account")
+                       // setButtonPresed("Account")
                         handleUpload()
                       }}
                   >
@@ -237,7 +273,8 @@ function Settings({ navigation }) {
                       width: "90%",
                     }}
                 >
-                  <div className="cardNumber">{`2334   -   2424   -   2424   -   5666`}</div>
+                  <input  type='text' className="cardNumber" />
+                  {/*<div className="cardNumber">{`2334   -   2424   -   2424   -   5666`}</div>*/}
                   <img style={{ width: "30px", height: "30px" }} src={cardCheck} />
                 </div>
                 <div className="cardDetailContainer">

@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
 import { useSelector, useDispatch } from "react-redux";
 
-import setLogedinEmail, { setAlumniSchoolName, setKey } from "../Redux/actions";
+import setLogedinEmail, {setAlumniSchoolName, setImageUri, setKey} from "../Redux/actions";
 import { setLoginUserType } from "../Redux/actions";
 import app from "../firebase";
 import mail from "../assets/Images/mail.svg";
@@ -205,6 +205,7 @@ function LoginComponent(props) {
                   if(approveCheck){
                 dispatch(setKey(keyvalue));
                 dispatch(setLoginUserType("Admin"));
+
 
                 navigate("/SchoolLogin");}
                   else{

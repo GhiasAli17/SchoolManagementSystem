@@ -1,3 +1,4 @@
+
 export const SET_DATA = "SET_DATA"
 
 export const SET_KEY = "SET_KEY"
@@ -8,6 +9,8 @@ export const SET_ALUMNI_SCHOOLNAME = "SET_ALUMNI_SCHOOLNAME"
 export const SET_USE_TYPE = "SET_USE_TYPE"
 
 export const SET_AMOUNT = "SET_AMOUNT"
+
+
 
 
 export const setAmount = amount => dispatch => {
