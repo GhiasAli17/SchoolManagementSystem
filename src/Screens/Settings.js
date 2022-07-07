@@ -33,23 +33,31 @@ function Settings({ navigation }) {
   const [imageUri,setImageUri] = useState('')
   const [prevImageUri,setPrevImageUri] = useState('')
 
+  const [bankInfo, setBankInfo]=useState({
+    accountName:'',
+    accountNumber:'',
+    bankName:'',
+    routingNumber:'',
+    imageUrl:''
+  })
+
+
+
   useEffect(()=>{
     const dbRef = ref(db, "users/admin/"+key);
     onValue(dbRef, (snapshot) => {
      console.log('setting',snapshot.val().imageUri.imageUri)
       setImageUri(snapshot.val().imageUri.imageUri)
       setPrevImageUri(snapshot.val().imageUri.imageUri)
+      setBankInfo({...bankInfo,accountNumber: snapshot.val().bankInfo.accountNumber})
+      setFirstName(snapshot.val().firstName)
+      setLastName(snapshot.val().lastName)
+      setEmail(snapshot.val().email)
+      setPassword(snapshot.val().password)
     });
 
   },[])
 
-  const [bankInfo, setBankInfo]=useState({
-    accountName:'',
-    accountNumber:'',
-    bankName:'allied',
-    routingNumber:'123',
-    imageUrl:''
-  })
 
   // Handles input change event and updates state
   function handleChange(event) {
