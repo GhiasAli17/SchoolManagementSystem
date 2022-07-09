@@ -5,16 +5,20 @@ import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import Modal from "react-modal";
 import { useLocation } from "react-router-dom";
-
+import logo from "../assets/Images/logo.png";
+import { setProfilePic } from "../Redux/actions";
 import setLogedinEmail from "../Redux/actions";
 
 import DropDown from "../assets/Images/DropDown.svg";
 import LogOut from "../assets/Images/LogOut.svg";
 import Settings from "../assets/Images/Settings.svg";
+import useravatar from "../assets/Images/useravatar.png";
 
 function Header() {
   const dispatch = useDispatch();
-  const { userType } = useSelector((state) => state.persistedReducer);
+  const { userType, profilepic } = useSelector(
+    (state) => state.persistedReducer
+  );
   const [modalVisible, setModalVisible] = useState(false);
 
   const location = useLocation();
@@ -38,7 +42,7 @@ function Header() {
   }, [location, data]);
 
   function loginHandler() {
-    navigate("/home");
+    navigate("/");
   }
 
   return (
@@ -46,17 +50,17 @@ function Header() {
       <div className="innerDiv">
         <div className="leftDiv">
           <div className="logoContainer" onClick={() => navigate("/home")}>
-            <h3 style={{ color: "#2291F1" }}>LOGO</h3>
+            <img src={logo} style={{ width: "100px", height: "60px" }} />
           </div>
         </div>
         <div className="rightDiv">
           <div className="searchDiv">
-            <FaSearch size={17} className="searchIcon" />
+            <FaSearch size={13} className="searchIcon" />
             <input
               id="inputID"
               style={{
                 outline: "none",
-                backgroundColor: "#DADDE1",
+                backgroundColor: "transparent",
                 width: "100%",
               }}
               placeholder="Search"
@@ -65,26 +69,26 @@ function Header() {
           </div>
 
           <div className="loginAndIconDiv">
-            <button
-              className="headerButtons blueButton"
-              onClick={() => loginHandler()}
-            >
-              <h3
-                style={{
-                  color: "#0E3746",
-                  alignSelf: "center",
-                  justifySelf: "center",
-                  fontSize: 20,
-                  fontWeight: "500",
-                }}
-              >
-                {" "}
-                About
-              </h3>
-            </button>
-
             {data == "" ? (
               <div className="buttonContainer">
+                <button
+                  className="headerButtons"
+                  onClick={() => navigate("/admin")}
+                >
+                  {" "}
+                  <h3
+                    style={{
+                      color: "white",
+                      alignSelf: "center",
+                      justifySelf: "center",
+                      fontSize: 15,
+                      fontWeight: "500",
+                    }}
+                  >
+                    {" "}
+                    Admin
+                  </h3>
+                </button>
                 <button
                   className="headerButtons"
                   onClick={() => navigate("/SchoolLogin")}
@@ -94,7 +98,7 @@ function Header() {
                       color: "white",
                       alignSelf: "center",
                       justifySelf: "center",
-                      fontSize: 20,
+                      fontSize: 15,
                       fontWeight: "500",
                     }}
                   >
@@ -104,28 +108,63 @@ function Header() {
                 </button>
               </div>
             ) : (
-              <div className="buttonContainer">
-                <div onClick={() => navigate("/home")}>
-                  <img
-                    src={require("../imgs/userImg.png")}
+              <>
+                <div
+                  className="headerButtons blueButton"
+                  onClick={() => {
+                    data == "Admin" ? navigate("./AdminPanel") : console.log();
+                  }}
+                >
+                  <h3
                     style={{
-                      width: "35px",
-                      height: "35px",
-                      borderRadius: "20px",
+                      color: "#0E3746",
+                      alignSelf: "center",
+                      justifySelf: "center",
+                      fontSize: 13,
+                      fontWeight: "500",
                     }}
-                  />
+                  >
+                    {" "}
+                    {data}
+                  </h3>
                 </div>
-                <div onClick={() => setModalVisible(true)}>
-                  <img
-                    src={DropDown}
-                    style={{
-                      marginLeft: "20px",
-                      width: "15px",
-                      height: "15px",
-                    }}
-                  />
+                <div className="buttonContainer">
+                  <div onClick={() => navigate("/")}>
+                    {profilepic == "" ? (
+                      <img
+                        src={useravatar}
+                        style={{
+                          width: "35px",
+                          height: "35px",
+                          borderRadius: "20px",
+                        }}
+                      />
+                    ) : (
+                      <img
+                        src={profilepic}
+                        style={{
+                          width: "35px",
+                          height: "35px",
+                          borderRadius: "20px",
+                        }}
+                      />
+                    )}
+                  </div>
+                  <div
+                    style={{ cursor: "pointer" }}
+                    onClick={() => setModalVisible(true)}
+                  >
+                    <img
+                      src={DropDown}
+                      style={{
+                        marginLeft: "20px",
+                        width: "10px",
+                        height: "10px",
+                      }}
+                    />
+                  </div>
                 </div>
-              </div>
+              </>
             )}
           </div>
         </div>
@@ -169,6 +208,7 @@ function Header() {
               alignItems: "center",
               borderBottom: "1px solid #ccc",
               justifyContent: "space-evenly",
+              cursor: "pointer",
             }}
             onClick={() => navigate("/settings")}
           >
@@ -182,9 +222,11 @@ function Header() {
               display: "flex",
               alignItems: "center",
               justifyContent: "space-evenly",
+              cursor: "pointer",
             }}
             onClick={() => {
               dispatch(setLogedinEmail(""));
+              navigate("/");
               setModalVisible(false);
             }}
           >
@@ -241,6 +283,7 @@ const Container = styled.div`
     width: 75%;
     display: flex;
     align-items: center;
+    justify-content: space-between;
   }
   .searchDiv {
     width: 50%;
@@ -248,7 +291,7 @@ const Container = styled.div`
     display: flex;
     align-items: center;
     border-radius: 11px;
-    background-color: #dadde1;
+    background-color: rgba(218, 221, 225, 0.4);
   }
   .searchIcon {
     color: #0e3746;
@@ -259,30 +302,36 @@ const Container = styled.div`
   }
 
   .loginAndIconDiv {
-    margin-left: 20%;
-    width: 30%;
+    width: 20%;
     height: 80%;
     display: flex;
     align-items: center;
+    justify-content: space-evenly;
   }
   .buttonContainer {
     display: flex;
     align-items: center;
     height: 100%;
-    width: 60%;
+    width: 100%;
   }
   .headerButtons {
     background-color: #2291f1;
     height: 60%;
     width: 100%;
+    margin-inline: 5px;
+    padding-inline: 15px;
     align-items: center;
     display: flex;
     justify-content: center;
     border: 0px;
     border-radius: 5px;
+    cursor: pointer;
   }
   .blueButton {
     background-color: white;
     width: 70%;
+  }
+  .logoContainer {
+    cursor: pointer;
   }
 `;

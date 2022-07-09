@@ -10,7 +10,7 @@ function Complete(props) {
     <Container>
       <div className="paragraphDiv">
         <div className="h4Div">
-          <h4>
+          <h4 style={{ fontFamily: "poppins-regular" }}>
             Thank you for registering.You will be notified within one business
             day when your School Admin would accept your registrtion
           </h4>
@@ -55,6 +55,7 @@ const Container = styled.div`
     justify-content: center;
     background-color: #2291f1;
     border: 1px solid #2291f1;
+    cursor: pointer;
   }
 
   .h4Div {

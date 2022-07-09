@@ -4,9 +4,13 @@ import Header from "../Components/Header";
 import HomeLeftChild from "../Components/Home/HomeLeftChild";
 import HomeRightChild from "../Components/Home/HomeRightChild";
 import { useNavigate } from "react-router-dom";
+import setLogedinEmail from "../Redux/actions";
+import { useSelector, useDispatch } from "react-redux";
+import logo from "../assets/Images/logo.png";
 
 function HomePgae() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   function enrollSchollHandler() {
     navigate("/EnrollSchool");

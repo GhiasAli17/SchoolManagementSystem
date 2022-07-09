@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import RegisterAlumni from "../Components/EnrollAlumni/RegisterAlumni";
 import SchoolInformationAlumni from "../Components/EnrollAlumni/SchoolInformationAlumni";
 import CompleteAlumni from "../Components/EnrollAlumni/CompleteAlumni";
+import logo from "../assets/Images/logo.png";
 
 import registerImage from "../assets/Images/registerImage.svg";
 
@@ -20,7 +21,7 @@ function EnrollAlumni() {
 
   function componentHandler(item1) {
     if (item1 == "contactus") {
-      navigate("/home");
+      navigate("/");
     }
     setcomponent(item1);
   }
@@ -29,9 +30,16 @@ function EnrollAlumni() {
     <>
       <Container>
         <div className="leftChild">
-          <div>
-            <h3 style={{ fontSize: 30, margin: 0, color: "#2291F1" }}>Logo</h3>
-            <h3 style={{ fontSize: 30, margin: 0, marginTop: 10 }}>
+          <div style={{ marginLeft: "5%" }}>
+            <img src={logo} style={{ width: "70px", height: "60px" }} />
+            <h3
+              style={{
+                fontSize: 20,
+                margin: 0,
+                marginTop: 10,
+                fontFamily: "poppins-regular",
+              }}
+            >
               {component}
             </h3>
           </div>

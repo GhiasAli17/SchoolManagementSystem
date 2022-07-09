@@ -2,10 +2,13 @@ import React, { useState } from "react";
 import styled from "styled-components";
 
 import registerImage from "../assets/Images/registerImage.svg";
+import logo from "../assets/Images/logo.png";
+import { useNavigate } from "react-router-dom";
 
 import LoginComponent from "../Components/LoginComponent";
 function Login() {
   const [component, setcomponent] = useState("register");
+  let navigate = useNavigate();
 
   function componentHandler(item1) {
     setcomponent(item1);
@@ -15,6 +18,23 @@ function Login() {
     <>
       <Container>
         <div className="leftChild">
+          <div style={{ cursor: "pointer" }}>
+            <img
+              src={logo}
+              style={{ cursor: "pointer", width: "70px", height: "60px" }}
+              onClick={() => navigate("/")}
+            />
+            <h3
+              style={{
+                fontSize: 20,
+                margin: 0,
+                marginTop: 10,
+                fontFamily: "poppins-regular",
+              }}
+            >
+              Login
+            </h3>
+          </div>
           <LoginComponent onClick={componentHandler} />
         </div>
         <div className="rightChild">
@@ -56,7 +76,7 @@ const Container = styled.div`
     height: 90%;
     width: 60%;
     padding-top: 1%;
-    padding-left: 1%;
+    padding-left: 3%;
     display: flex;
     flex-direction: column;
   }

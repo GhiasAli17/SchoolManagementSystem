@@ -4,12 +4,12 @@ import Header from "../Components/Header";
 import { useNavigate } from "react-router-dom";
 import app from "../firebase";
 import {
-    getDatabase,
-    ref,
-    set,
-    onValue,
-    push,
-    update,
+  getDatabase,
+  ref,
+  set,
+  onValue,
+  push,
+  update,
 } from "firebase/database";
 import { useSelector } from "react-redux";
 import Modal from "react-modal";
@@ -20,280 +20,272 @@ import DropDown from "../assets/Images/DropDown.svg";
 const db = getDatabase(app);
 
 function AccountsReq() {
-    const [modalVisible, setModalVisible] = useState("");
+  const [modalVisible, setModalVisible] = useState("");
 
-    const [deleteCheck, setdeleteCheck] = useState(false);
-    const HaederList = ["Name", "Graduation Year", "Phone Number", "Status"];
-    const StatusList = ["Pending"];
-    const DeleteItem = (id) => {
-        console.log(id);
-    };
-    const [check, setCheck] = useState(false);
-    const [dummyCheck, setDummyCheck] = useState(false);
-    const [buttonPressed, setButtonPresed] = useState("Pending");
-    const [data, setLogedinEmail] = useState([]);
-    const [approveAlumni,setApprovedAlumni] = useState([])
-    const { key, alumniSchoolName } = useSelector(
-        (state) => state.persistedReducer
-    );
-    console.log("key is", key);
+  const [deleteCheck, setdeleteCheck] = useState(false);
+  const HaederList = ["Name", "Graduation Year", "Phone Number", "Status"];
+  const StatusList = ["Pending"];
+  const DeleteItem = (id) => {
+    console.log(id);
+  };
+  const [check, setCheck] = useState(false);
+  const [dummyCheck, setDummyCheck] = useState(false);
+  const [buttonPressed, setButtonPresed] = useState("Pending");
+  const [data, setLogedinEmail] = useState([]);
+  const [approveAlumni, setApprovedAlumni] = useState([]);
+  const { key, alumniSchoolName } = useSelector(
+    (state) => state.persistedReducer
+  );
+  console.log("key is", key);
 
-    // key should be dynamic
-    const starCountRef = ref(db, "users/alumni");
+  // key should be dynamic
+  const starCountRef = ref(db, "users/alumni");
 
-    let navigate = useNavigate();
-    const onApproveHandler = (alKey) => {
-        console.log("approve called", alKey);
-        set(ref(db, "users/alumni/" + alKey + "/approve"), true);
-        dummyCheck ? setDummyCheck(false) : setDummyCheck(true);
-        setLogedinEmail([]);
-    };
+  let navigate = useNavigate();
+  const onApproveHandler = (alKey) => {
+    console.log("approve called", alKey);
+    set(ref(db, "users/alumni/" + alKey + "/approve"), true);
+    dummyCheck ? setDummyCheck(false) : setDummyCheck(true);
+    setLogedinEmail([]);
+  };
 
-    const onDisapproveHandler = (alKey) => {
-        console.log("disaprove called", alKey);
-        set(ref(db, "users/alumni/" + alKey), null);
-        deleteCheck ? setdeleteCheck(false) : setdeleteCheck(true);
-        setLogedinEmail([]);
-    };
+  const onDisapproveHandler = (alKey) => {
+    console.log("disaprove called", alKey);
+    set(ref(db, "users/alumni/" + alKey), null);
+    deleteCheck ? setdeleteCheck(false) : setdeleteCheck(true);
+    setLogedinEmail([]);
+  };
 
-    // ---------
-    //----------
-    console.log(`modalllllllllllllllllllllllllllllllllll ${modalVisible}`);
-    useEffect(() => {
-        onValue(
-            starCountRef,
-            (snapshot) => {
-                snapshot.forEach((childSnapshot) => {
-                    const childKey = childSnapshot.key;
-                    const childData = childSnapshot.val();
+  // ---------
+  //----------
+  console.log(`modalllllllllllllllllllllllllllllllllll ${modalVisible}`);
+  useEffect(() => {
+    onValue(
+      starCountRef,
+      (snapshot) => {
+        snapshot.forEach((childSnapshot) => {
+          const childKey = childSnapshot.key;
+          const childData = childSnapshot.val();
 
-                    //onValue(ref(db,"users/alumni/"+childKey))
+          //onValue(ref(db,"users/alumni/"+childKey))
 
-                    onValue(ref(db, "School/" + key), (innerSnapshot) => {
-                        console.log("buzz key", innerSnapshot.key);
-                        console.log("buzz value", innerSnapshot.val().schoolName);
-                        console.log("child value", childData);
+          onValue(ref(db, "School/" + key), (innerSnapshot) => {
+            console.log("buzz key", innerSnapshot.key);
+            console.log("buzz value", innerSnapshot.val().schoolName);
+            console.log("child value", childData);
 
-                        if (
-                            innerSnapshot.val().schoolName == childData.schoolInfo.schoolName
-                        ) {
-                            if (!childData.approve) {
-                                childData["alumniKey"] = childKey;
-                                childData["alumniSchoolname"] = childData.schoolInfo.schoolName;
-                                childData["gYear"] = childData.schoolInfo.graduationyear;
-                                setLogedinEmail((prev) => [...prev, childData]);
-                            }
-                            // else if(childData.approve){
-                            //     childData["alumniKey"] = childKey;
-                            //     childData["alumniSchoolname"] = childData.schoolInfo.schoolName;
-                            //     childData["gYear"] = childData.schoolInfo.graduationyear;
-                            //     setApprovedAlumni((prev) => [...prev, childData]);
-                            // }
-                        }
-                    });
-                    // childData['alumniKey'] = childKey;
-                    console.log("child data", childData.schoolInfo.schoolName);
-                    // if(!childData.approve){
-                    //     setLogedinEmail((prev) => [...prev, childData]);
-                    // }
-                    console.log("child data array", data, "length", data.length);
-                    // ...
-                });
-                setCheck(true);
-            },
-            {
-                onlyOnce: false,
+            if (
+              innerSnapshot.val().schoolName == childData.schoolInfo.schoolName
+            ) {
+              if (!childData.approve) {
+                childData["alumniKey"] = childKey;
+                childData["alumniSchoolname"] = childData.schoolInfo.schoolName;
+                childData["gYear"] = childData.schoolInfo.graduationyear;
+                setLogedinEmail((prev) => [...prev, childData]);
+              }
+              // else if(childData.approve){
+              //     childData["alumniKey"] = childKey;
+              //     childData["alumniSchoolname"] = childData.schoolInfo.schoolName;
+              //     childData["gYear"] = childData.schoolInfo.graduationyear;
+              //     setApprovedAlumni((prev) => [...prev, childData]);
+              // }
             }
-        );
-    }, [deleteCheck, dummyCheck]);
-    const addTodo = (item, index) => {
-        return (
-            <div className="rows">
-                <div
-                    style={{
-                        width: "15%",
-                        display: " flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                    }}
-                >
-                    <h4 className="cutText">
-                        {item.firstName} {item.lastName}
-                    </h4>
-                </div>
+          });
+          // childData['alumniKey'] = childKey;
+          console.log("child data", childData.schoolInfo.schoolName);
+          // if(!childData.approve){
+          //     setLogedinEmail((prev) => [...prev, childData]);
+          // }
+          console.log("child data array", data, "length", data.length);
+          // ...
+        });
+        setCheck(true);
+      },
+      {
+        onlyOnce: false,
+      }
+    );
+  }, [deleteCheck, dummyCheck]);
+  const addTodo = (item, index) => {
+    return (
+      <div className="rows">
+        <div
+          style={{
+            width: "15%",
+            display: " flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <h4 className="cutText">
+            {item.firstName} {item.lastName}
+          </h4>
+        </div>
 
-                <div
-                    style={{
-                        width: "15%",
-                        display: " flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                    }}
-                >
-                    <h4 className="cutText">{item.gYear}</h4>
-                </div>
+        <div
+          style={{
+            width: "15%",
+            display: " flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <h4 className="cutText">{item.gYear}</h4>
+        </div>
 
-                <div
-                    style={{
-                        width: "15%",
-                        display: " flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                    }}
-                >
-                    {" "}
-                    <h4 className="cutText">{item.schoolInfo.alumniNumber}</h4>
-                </div>
+        <div
+          style={{
+            width: "15%",
+            display: " flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          {" "}
+          <h4 className="cutText">{item.schoolInfo.alumniNumber}</h4>
+        </div>
 
-                <div
-                    style={{
-                        width: "15%",
-                        display: " flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        flexDirection: "row",
-                    }}
-                >
-                    <div style={{ display: "flex", alignItems: "center" }}>
-                        <div
-                            style={{
-                                width: "80%",
-                                marginRight: "20px",
-                                height: "60%",
-                                padding: "10px",
-                                backgroundColor: "rgba(34, 145, 241, 0.14)",
-                            }}
-                        >
-                            <h6 style={{ color: "#2291F1", margin: 0 }}> Pending</h6>
-                        </div>
-                        <img
-                            src={DropDown}
-                            style={{ width: "10px", height: "10px" }}
-                            onClick={() => {
-                                modalVisible == item.alumniKey
-                                    ? setModalVisible("")
-                                    : setModalVisible(item.alumniKey);
-                            }}
-                        />
-                    </div>
-                    {modalVisible == item.alumniKey ? (
-                        <div className="approveDiv">
-                            <div
-                                style={{
-                                    width: "100%",
-                                    height: "50%",
-                                    borderBottom: "1px solid #DADDE1",
-                                    display: "flex",
-                                    alignItems: "center",
-                                    justifyContent: "center",
-                                }}
-                            >
-                                <h6 onClick={() => {
-                                    onApproveHandler(item.alumniKey);}}>Approve</h6>
-                            </div>
-                            <div
-                                style={{
-                                    width: "100%",
-                                    height: "50%",
-                                    display: "flex",
-                                    alignItems: "center",
-
-                                    justifyContent: "center",
-                                }}
-                            >
-                                <h6  onClick={() => {
-                                    onDisapproveHandler(item.alumniKey);
-                                }}>Reject</h6>
-                            </div>
-                        </div>
-                    ) : null}
-                </div>
+        <div
+          style={{
+            width: "15%",
+            display: " flex",
+            alignItems: "center",
+            justifyContent: "center",
+            flexDirection: "row",
+          }}
+        >
+          <div style={{ display: "flex", alignItems: "center" }}>
+            <div
+              style={{
+                width: "80%",
+                marginRight: "20px",
+                height: "60%",
+                padding: "10px",
+                backgroundColor: "rgba(34, 145, 241, 0.14)",
+              }}
+            >
+              <h6 style={{ color: "#2291F1", margin: 0 }}> Pending</h6>
             </div>
-        );
-    };
+            <img
+              src={DropDown}
+              style={{ width: "10px", height: "10px" }}
+              onClick={() => {
+                modalVisible == item.alumniKey
+                  ? setModalVisible("")
+                  : setModalVisible(item.alumniKey);
+              }}
+            />
+          </div>
+          {modalVisible == item.alumniKey ? (
+            <div className="approveDiv">
+              <div
+                style={{
+                  width: "100%",
+                  height: "50%",
+                  borderBottom: "1px solid #DADDE1",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <h6
+                  onClick={() => {
+                    onApproveHandler(item.alumniKey);
+                  }}
+                >
+                  Approve
+                </h6>
+              </div>
+              <div
+                style={{
+                  width: "100%",
+                  height: "50%",
+                  display: "flex",
+                  alignItems: "center",
 
-    function addHandler() {
-        navigate("/addInfo");
-    }
+                  justifyContent: "center",
+                }}
+              >
+                <h6
+                  onClick={() => {
+                    onDisapproveHandler(item.alumniKey);
+                  }}
+                >
+                  Reject
+                </h6>
+              </div>
+            </div>
+          ) : null}
+        </div>
+      </div>
+    );
+  };
 
-    if (!check) return <div>Loading...</div>;
-    else
-        return (
-            <>
-                <Header />
+  function addHandler() {
+    navigate("/addInfo");
+  }
 
-                <Container>
-                    <div className="nav">
-                        <h3>School Dashboard</h3>
-                    </div>
-                    <div
-                        style={{
-                            width: "30%",
-                            display: "flex",
-                            height: "10%",
-                        }}
-                    >
-                        {StatusList.map((item) => {
-                            return (
-                                <div
-                                    style={{
-                                        display: "flex",
-                                        alignItems: "center",
-                                        justifyContent: "space-between",
-                                    }}
-                                >
-                                    <button
-                                        key={item}
-                                        style={{
-                                            cursor: "pointer",
-                                            backgroundColor: "white",
-                                            borderWidth: 0,
-                                        }}
-                                        onClick={() => setButtonPresed(item)}
-                                    >
-                                        <h4
-                                            style={{
-                                                color: buttonPressed == item ? "#2291F1" : "grey",
-                                            }}
-                                        >
-                                            {item}
-                                        </h4>
-                                    </button>
-                                    {item != "Cancelled" ? (
-                                        <h4 style={{ paddingInline: "30px" }}>|</h4>
-                                    ) : null}
-                                </div>
-                            );
-                        })}
-                    </div>
-                    <div className="schoolPanelHeaderContainer">
-                        {HaederList.map((item) => {
-                            return (
-                                <div
-                                    key={item}
-                                    style={{
-                                        width: "15%",
-                                        display: " flex",
-                                        alignItems: "center",
-                                        justifyContent: "center",
-                                    }}
-                                >
-                                    {item == "nill" || item == "nil" ? null : <h6>{item}</h6>}
-                                </div>
-                            );
-                        })}
-                    </div>
-                    <div className="innerDiv">
-                        {data.map((item, index) => {
-                            return addTodo(item, index);
-                        })}
-                    </div>
-                    <div className="backButton" style={{ cursor: "pointer" }}>
-                        <button onClick={() => navigate("/SchoolLogin")}>move back</button>
-                    </div>
-                </Container>
-            </>
-        );
+  if (!check)
+    return (
+      <div
+        style={{
+          position: "absolute",
+          top: 0,
+          bottom: 0,
+          left: 0,
+          right: 0,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        Loading...
+      </div>
+    );
+  else
+    return (
+      <>
+        <Header />
+
+        <Container>
+          <div className="nav">
+            <h3 style={{ fontFamily: "poppins-regular" }}>School Dashboard</h3>
+          </div>
+          <div
+            style={{
+              width: "30%",
+              display: "flex",
+              height: "10%",
+            }}
+          ></div>
+          <div className="schoolPanelHeaderContainer">
+            {HaederList.map((item) => {
+              return (
+                <div
+                  key={item}
+                  style={{
+                    width: "15%",
+                    display: " flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  {item == "nill" || item == "nil" ? null : <h6>{item}</h6>}
+                </div>
+              );
+            })}
+          </div>
+          <div className="innerDiv">
+            {data.map((item, index) => {
+              return addTodo(item, index);
+            })}
+          </div>
+          <div className="backButton" style={{ cursor: "pointer" }}>
+            <button onClick={() => navigate("/SchoolLogin")}>move back</button>
+          </div>
+        </Container>
+      </>
+    );
 }
 
 export default AccountsReq;

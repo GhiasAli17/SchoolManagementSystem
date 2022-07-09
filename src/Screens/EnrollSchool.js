@@ -8,7 +8,7 @@ import Payment from "../Components/EnrollSchool/Payment";
 import Complete from "../Components/EnrollSchool/Complete";
 import ContactUs from "../Components/EnrollSchool/ContactUs";
 import registerImage from "../assets/Images/registerImage.svg";
-
+import logo from "../assets/Images/logo.png";
 function EnrollSchool({ navigation }) {
   const navigate = useNavigate();
 
@@ -20,7 +20,7 @@ function EnrollSchool({ navigation }) {
   function componentHandler(item1) {
     console.log(item1);
     if (item1 == "contactus") {
-      navigate("/home");
+      navigate("/");
     }
     setcomponent(item1);
   }
@@ -30,8 +30,15 @@ function EnrollSchool({ navigation }) {
       <Container>
         <div className="leftChild">
           <div>
-            <h3 style={{ fontSize: 30, margin: 0, color: "#2291F1" }}>Logo</h3>
-            <h3 style={{ fontSize: 30, margin: 0, marginTop: 10 }}>
+            <img src={logo} style={{ width: "70px", height: "60px" }} />
+            <h3
+              style={{
+                fontSize: 20,
+                margin: 0,
+                marginTop: 10,
+                fontFamily: "poppins-regular",
+              }}
+            >
               {component}
             </h3>
           </div>
@@ -100,5 +107,8 @@ const Container = styled.div`
     display: flex;
     align-items: center;
     justify-content: flex-end;
+  }
+  button {
+    cursor: pointer;
   }
 `;

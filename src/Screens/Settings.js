@@ -1,23 +1,25 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import lock from "../assets/Images/lock.svg";
-import Register from "../Components/EnrollSchool/Register";
-import SchoolInformation from "../Components/EnrollSchool/SchoolInformation";
-import Payment from "../Components/EnrollSchool/Payment";
-import Complete from "../Components/EnrollSchool/Complete";
-import ContactUs from "../Components/EnrollSchool/ContactUs";
-import registerImage from "../assets/Images/registerImage.svg";
+import toast, { Toaster } from "react-hot-toast";
+
 import cardCheck from "../assets/Images/cardCheck.svg";
 import Header from "../Components/Header";
 import user from "../assets/Images/userImg.png";
 import userIcon from "../assets/Images/user.svg";
 import mailIcon from "../assets/Images/mail.svg";
 import contact from "../assets/Images/contact.svg";
-import {useSelector} from "react-redux";
-import {getDatabase, onValue, ref, update} from "firebase/database";
-import app, {storage} from "../firebase";
-import {deleteObject, getDownloadURL, ref as sRef, uploadBytesResumable} from "firebase/storage";
+import { setProfilePic } from "../Redux/actions";
+import { useSelector, useDispatch } from "react-redux";
+import { getDatabase, onValue, ref, update } from "firebase/database";
+import app, { storage } from "../firebase";
+import {
+  deleteObject,
+  getDownloadURL,
+  ref as sRef,
+  uploadBytesResumable,
+} from "firebase/storage";
 
 const db = getDatabase(app);
 
@@ -30,334 +32,352 @@ function Settings({ navigation }) {
   const [password, setPassword] = useState("");
   const [file, setFile] = useState("");
   const [percent, setPercent] = useState(0);
-  const [imageUri,setImageUri] = useState('')
-  const [prevImageUri,setPrevImageUri] = useState('')
-
-  useEffect(()=>{
-    const dbRef = ref(db, "users/admin/"+key);
+  const [imageUri, setImageUri] = useState("");
+  const [prevImageUri, setPrevImageUri] = useState("");
+  const dispatch = useDispatch();
+  useEffect(() => {
+    const dbRef = ref(db, "users/admin/" + key);
     onValue(dbRef, (snapshot) => {
-     console.log('setting',snapshot.val().imageUri.imageUri)
-      setImageUri(snapshot.val().imageUri.imageUri)
-      setPrevImageUri(snapshot.val().imageUri.imageUri)
+      console.log("setting", snapshot.val().imageUri.imageUri);
+      setImageUri(snapshot.val().imageUri.imageUri);
+      setPrevImageUri(snapshot.val().imageUri.imageUri);
     });
+  }, []);
 
-  },[])
-
-  const [bankInfo, setBankInfo]=useState({
-    accountName:'',
-    accountNumber:'',
-    bankName:'allied',
-    routingNumber:'123',
-    imageUrl:''
-  })
+  const [bankInfo, setBankInfo] = useState({
+    accountName: "",
+    accountNumber: "",
+    bankName: "allied",
+    routingNumber: "123",
+    imageUrl: "",
+  });
 
   // Handles input change event and updates state
   function handleChange(event) {
     setFile(event.target.files[0]);
+    handleUpload(event.target.files[0]);
   }
 
-
   // handle upload
-  function handleUpload() {
-    if (!file) {
+  function handleUpload(image) {
+    if (!image) {
       alert("Please choose a file first!");
     }
 
-    const storageRef = sRef(storage, `/profiles/${file.name}`);
-    const uploadTask = uploadBytesResumable(storageRef, file);
+    const storageRef = sRef(storage, `/profiles/${image.name}`);
+    const uploadTask = uploadBytesResumable(storageRef, image);
 
     uploadTask.on(
-        "state_changed",
-        (snapshot) => {
-          const percent = Math.round(
-              (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-          );
+      "state_changed",
+      (snapshot) => {
+        const percent = Math.round(
+          (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+        );
 
-          // update progress
-          setPercent(percent);
-        },
-        (err) => console.log(err),
-        () => {
-          // download url
-          getDownloadURL(uploadTask.snapshot.ref).then((url) => {
-            console.log("url", url);
-           // setBankInfo({ ...bankInfo, imageUrl: url });
-            update(ref(db,"users/admin/" + key + "/imageUri"),{imageUri:url})
-            setImageUri(url)
-
-            let url1 = prevImageUri+"";
-
-            // note below url will be different for every project, So update it if new firebase app is made from client
-            const baseUrl = "https://firebasestorage.googleapis.com/v0/b/school-management-system-79f54.appspot.com/o/";
-
-            var imagePath = url1.replace(baseUrl,"");
-
-            const indexOfEndPath = imagePath.indexOf("?");
-
-            imagePath = imagePath.substring(0,indexOfEndPath);
-
-            imagePath = imagePath.replace("%2F","/");
-            console.log("omage name", imagePath)
-
-            deleteObject(sRef(storage,imagePath)).then(() => {
-              console.log(' File deleted successfully');
-            }).catch((error) => {
-              console.log("delete error:", error)
-            });
+        // update progress
+        setPercent(percent);
+      },
+      (err) => console.log(err),
+      () => {
+        // download url
+        getDownloadURL(uploadTask.snapshot.ref).then((url) => {
+          console.log("url", url);
+          // setBankInfo({ ...bankInfo, imageUrl: url });
+          update(ref(db, "users/admin/" + key + "/imageUri"), {
+            imageUri: url,
           });
-        }
+          setImageUri(url);
+
+          let url1 = prevImageUri + "";
+          dispatch(setProfilePic(prevImageUri));
+          // note below url will be different for every project, So update it if new firebase app is made from client
+          const baseUrl =
+            "https://firebasestorage.googleapis.com/v0/b/school-management-system-79f54.appspot.com/o/";
+
+          var imagePath = url1.replace(baseUrl, "");
+
+          const indexOfEndPath = imagePath.indexOf("?");
+
+          imagePath = imagePath.substring(0, indexOfEndPath);
+
+          imagePath = imagePath.replace("%2F", "/");
+          console.log("omage name", imagePath);
+
+          deleteObject(sRef(storage, imagePath))
+            .then(() => {
+              console.log(" File deleted successfully");
+            })
+            .catch((error) => {
+              console.log("delete error:", error);
+            });
+        });
+      }
     );
   }
 
   const onAccountInputHandler = (e) => {
-    const{name, value} = e.target;
-    setBankInfo({...bankInfo,[name]:value})
-  }
-
+    const { name, value } = e.target;
+    setBankInfo({ ...bankInfo, [name]: value });
+  };
 
   const updatePaymentHandler = () => {
-    update(ref(db, "users/admin/" + key + "/bankInfo"), bankInfo)
-        .then(() => {
-          console.log("payment data updated successfully")
-        })
+    update(ref(db, "users/admin/" + key + "/bankInfo"), bankInfo).then(() => {
+      console.log("payment data updated successfully");
+    });
+  };
 
-
-  }
-
-  const updateClickHandler = () =>{
-
+  const updateClickHandler = () => {
     update(ref(db, "users/admin/" + key), {
       firstName,
       lastName,
       email,
       password,
-      confirmPass:password,
-    })
-        .then(() => {
-          console.log("user data updated successfully")
-        })
-
-  }
+      confirmPass: password,
+    }).then(() => {
+      console.log("user data updated successfully");
+    });
+  };
 
   return (
-      <>
-        <Header />
-        <Container>
-          <h3 style={{ marginLeft: "100px" }}>Settings</h3>
+    <>
+      <Header />
+      <Container>
+        <div className="mainBody">
+          <h3
+            style={{ alignSelf: "flex-start", fontFamily: "poppins-regular" }}
+          >
+            Settings
+          </h3>
           <div className="headerButtonsContainer">
             <button
-                className="headerButton"
-                onClick={() => setButtonPresed("Personal")}
+              style={{
+                outline:
+                  buttonPressed == "Personal"
+                    ? "2px solid #2291f1"
+                    : "2px solid #0e374666",
+                color: buttonPressed == "Personal" ? "#2291f1" : "#0e374666",
+              }}
+              className="headerButton"
+              onClick={() => setButtonPresed("Personal")}
             >
               Personal Information
             </button>
             <button
-                className="headerButton"
-                onClick={() => setButtonPresed("Account")}
+              style={{
+                outline:
+                  buttonPressed == "Account"
+                    ? "2px solid #2291f1"
+                    : "2px solid #0e374666",
+                color: buttonPressed == "Account" ? "#2291f1" : "#0e374666",
+              }}
+              className="headerButton"
+              onClick={() => setButtonPresed("Account")}
             >
               Payment Details
             </button>
           </div>
           {buttonPressed == "Personal" ? (
-              <>
-                {" "}
-                <div className="userData">
-                  <div className="info">
-                    <div>
-                      <img
-                          width={50}
-                          height={50}
-                          src={imageUri}
-                          style={{ borderRadius: 30 }}
-                      />
-                    </div>
-                    <div className="data">
-                      <input
-                          style={{ outline: "none" }}
-                          placeholder="enter name"
-                          type="file"
-                          accept="image/*"
-                          onChange={handleChange}
-                      />
-
-                    </div>
+            <>
+              {" "}
+              <div className="userData">
+                <div className="info">
+                  <div>
+                    <img
+                      width={50}
+                      height={50}
+                      src={imageUri}
+                      style={{ borderRadius: 30 }}
+                    />
                   </div>
-                  <button
-                      className="uploadButton"
-                      onClick={() => {
-                       // setButtonPresed("Account")
-                        handleUpload()
-                      }}
-                  >
-                    Upload<br/>
-                    <p>{percent} "% done"</p>
-                  </button>
-                </div>
-                <div className="userContact">
-                  <div className="inputRow">
-                    <div className="inputsContainer">
-                      <img width={25} height={25} src={userIcon} />
-                      <input
-                          type="textbox"
-                          id="firstname"
-                          name="firstname"
-                          className="input"
-                          placeholder="firstname"
-                          value={firstName}
-                          onChange={(e) => setFirstName(e.target.value)}
-                      />
-                    </div>
-                    <div className="inputsContainer">
-                      <img width={25} height={25} src={userIcon} />
-                      <input
-                          type="textbox"
-                          id="lastname"
-                          name="lastname"
-                          className="input"
-                          placeholder="lastname"
-                          value={lastName}
-                          onChange={(e) => setLastName(e.target.value)}
-                      />
-                    </div>
-                  </div>
-                  <div className="inputRow">
-                    <div className="inputsContainer">
-                      <img width={25} height={25} src={mailIcon} />
-                      <input
-                          type="textbox"
-                          id="email"
-                          name="email"
-                          className="input"
-                          placeholder="email"
-                          value={email}
-                          onChange={(e) => setEmail(e.target.value)}
-                      />
-                    </div>
-                    <div className="inputsContainer">
-                      <img width={25} height={25} src={lock} />
-                      <input
-                          type="textbox"
-                          id="password"
-                          name="password"
-                          className="input"
-                          placeholder="password"
-                          value={password}
-                          onChange={(e) => setPassword(e.target.value)}
-                      />
-                    </div>
-                  </div>
-                  <div className="inputRow">
-                    <div className="inputButton">
-                      <input
-                          type="button"
-                          id="lastname"
-                          name="lastname"
-                          className="input"
-                          value="Update"
-                          onClick={updateClickHandler}
-
-                          // value={userType}
-                      />
-                    </div>
+                  <div className="data">
+                    <input
+                      style={{ outline: "none", marginLeft: "20px" }}
+                      placeholder="enter name"
+                      type="file"
+                      accept="image/*"
+                      onChange={handleChange}
+                    />
                   </div>
                 </div>
-              </>
-          ) : (
-              <div className="paymentContainer">
-                <h3>Payment Information</h3>
-                <div
-                    className="cardDetailContainer"
-                    style={{
-                      backgroundColor: "rgba(218, 221, 225, 0.4)",
-                      paddingInline: "5%",
-                      width: "90%",
-                    }}
-                >
-                  <input  type='text' className="cardNumber" />
-                  {/*<div className="cardNumber">{`2334   -   2424   -   2424   -   5666`}</div>*/}
-                  <img style={{ width: "30px", height: "30px" }} src={cardCheck} />
-                </div>
-                <div className="cardDetailContainer">
-                  <div
-                      style={{
-                        height: "100%",
-                        display: "flex",
-                        flexDirection: "column",
-                        justifyContent: "space-evenly",
-                      }}
-                  >
-                    <h4>CVV Number</h4>
-                    <h6 style={{ color: "rgba(14, 55, 70, 0.4)" }}>
-                      Enter the 3 or 4 digit number on the card
-                    </h6>
-                  </div>
-                  <input
-                      name="accountNumber"
-                      value={bankInfo.accountNumber}
-                      onChange={onAccountInputHandler}
-                      style={{
-                        backgroundColor: "rgba(218, 221, 225, 0.4)",
-                        width: "30%",
-                        height: "100%",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        outline: "none",
-                        paddingLeft: "20px",
-                        borderWidth: 0,
-                      }}
-                  />
-                </div>
-
-                <div className="cardDetailContainer">
-                  <div
-                      style={{
-                        height: "100%",
-                        display: "flex",
-                        flexDirection: "column",
-                        justifyContent: "space-evenly",
-                      }}
-                  >
-                    <h4>Expiry Date</h4>
-                    <h6 style={{ color: "rgba(14, 55, 70, 0.4)" }}>
-                      Enter the expiration date on the card
-                    </h6>
-                  </div>
-                  <input
-                      name="accountName"
-                      value={bankInfo.accountName}
-                      onChange={onAccountInputHandler}
-                      style={{
-                        backgroundColor: "rgba(218, 221, 225, 0.4)",
-                        width: "30%",
-                        height: "100%",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        outline: "none",
-                        paddingLeft: "20px",
-                        borderWidth: 0,
-                      }}
-                  />
-                </div>
-                <button
-                    className="cardDetailContainer"
-                    style={{
-                      backgroundColor: "#2291F1",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      borderWidth: 0,
-                    }}
-
-                    onClick={updatePaymentHandler}
-                >
-                  <h4 style={{ color: "white" }}> Update</h4>
-                </button>
               </div>
+              <div className="userContact">
+                <div className="inputRow">
+                  <div className="inputsContainer">
+                    <img width={25} height={25} src={userIcon} />
+                    <input
+                      type="textbox"
+                      id="firstname"
+                      name="firstname"
+                      className="input"
+                      placeholder="firstname"
+                      value={firstName}
+                      onChange={(e) => setFirstName(e.target.value)}
+                    />
+                  </div>
+                  <div className="inputsContainer">
+                    <img width={25} height={25} src={userIcon} />
+                    <input
+                      type="textbox"
+                      id="lastname"
+                      name="lastname"
+                      className="input"
+                      placeholder="lastname"
+                      value={lastName}
+                      onChange={(e) => setLastName(e.target.value)}
+                    />
+                  </div>
+                </div>
+                <div className="inputRow">
+                  <div className="inputsContainer">
+                    <img width={25} height={25} src={mailIcon} />
+                    <input
+                      type="textbox"
+                      id="email"
+                      name="email"
+                      className="input"
+                      placeholder="email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                    />
+                  </div>
+                  <div className="inputsContainer">
+                    <img width={25} height={25} src={lock} />
+                    <input
+                      type="textbox"
+                      id="password"
+                      name="password"
+                      className="input"
+                      placeholder="password"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                    />
+                  </div>
+                </div>
+                <div className="inputRow">
+                  <div className="inputButton">
+                    <input
+                      type="button"
+                      id="lastname"
+                      name="lastname"
+                      className="input"
+                      value="Update"
+                      onClick={updateClickHandler}
+
+                      // value={userType}
+                    />
+                  </div>
+                </div>
+              </div>
+            </>
+          ) : (
+            <div className="paymentContainer">
+              <div
+                className="cardDetailContainer"
+                style={{
+                  backgroundColor: "rgba(218, 221, 225, 0.4)",
+                  marginTop: "20%",
+                  paddingInline: "5%",
+                  width: "90%",
+                }}
+              >
+                <input type="text" className="cardNumber" />
+                {/*<div classNameCVV="cardNumber">{`2334   -   2424   -   2424   -   5666`}</div>*/}
+                <img
+                  style={{ width: "30px", height: "30px" }}
+                  src={cardCheck}
+                />
+              </div>
+              <div className="cardDetailContainer">
+                <div
+                  style={{
+                    height: "100%",
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "space-evenly",
+                  }}
+                >
+                  <h4 style={{ fontFamily: "poppins-regular" }}>CVV Number</h4>
+                  <h6
+                    style={{
+                      fontFamily: "poppins-regular",
+                      color: "rgba(14, 55, 70, 0.4)",
+                    }}
+                  >
+                    Enter the 3 or 4 digit number on the card
+                  </h6>
+                </div>
+                <input
+                  name="accountNumber"
+                  value={bankInfo.accountNumber}
+                  onChange={onAccountInputHandler}
+                  style={{
+                    backgroundColor: "rgba(218, 221, 225, 0.4)",
+                    width: "30%",
+                    height: "100%",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    outline: "none",
+                    paddingLeft: "20px",
+                    borderWidth: 0,
+                  }}
+                />
+              </div>
+
+              <div className="cardDetailContainer">
+                <div
+                  style={{
+                    height: "100%",
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "space-evenly",
+                  }}
+                >
+                  <h4 style={{ fontFamily: "poppins-regular" }}>Expiry Date</h4>
+                  <h6
+                    style={{
+                      fontFamily: "poppins-regular",
+                      color: "rgba(14, 55, 70, 0.4)",
+                    }}
+                  >
+                    Enter the expiration date on the card
+                  </h6>
+                </div>
+                <input
+                  name="accountName"
+                  value={bankInfo.accountName}
+                  onChange={onAccountInputHandler}
+                  style={{
+                    backgroundColor: "rgba(218, 221, 225, 0.4)",
+                    width: "30%",
+                    height: "100%",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    outline: "none",
+                    paddingLeft: "20px",
+                    borderWidth: 0,
+                  }}
+                />
+              </div>
+              <button
+                className="cardDetailContainer"
+                style={{
+                  backgroundColor: "#2291F1",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  borderWidth: 0,
+                }}
+                onClick={updatePaymentHandler}
+              >
+                <h4 style={{ color: "white" }}> Update</h4>
+              </button>
+            </div>
           )}
-        </Container>
-      </>
+        </div>
+      </Container>
+    </>
   );
 }
 
@@ -369,12 +389,24 @@ const Container = styled.div`
   height: 87vh;
   overflow: hidden;
   display: flex;
+  align-items: center;
+  justify-content: center;
   flex-direction: column;
+  .mainBody {
+    width: 80%;
+    // padding-inline: 1vw;
+    height: 87vh;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    flex-direction: column;
+  }
   .paymentContainer {
-    width: 50%;
+    width: 60%;
     height: 100%;
     display: flex;
-    margin-inline: 25%;
+    align-items: flex-start;
     flex-direction: column;
   }
   .cardDetailContainer {
@@ -385,8 +417,7 @@ const Container = styled.div`
     justify-content: space-between;
     margin-top: 25px;
   }
-  .cardNumber {
-  }
+
   .headerButtonsContainer {
     width: 40%;
     height: 7%;
@@ -394,7 +425,6 @@ const Container = styled.div`
     align-items: center;
     justify-content: space-between;
     border-radius: 12px;
-    margin-left: 100px;
   }
   .headerButton {
     width: 45%;
@@ -406,15 +436,6 @@ const Container = styled.div`
     border: none;
     outline: none;
     cursor: pointer;
-  }
-
-  .headerButton:nth-child(1) {
-    color: #2291f1;
-    outline: 2px solid #2291f1;
-  }
-  .headerButton:nth-child(2) {
-    color: #0e374666;
-    outline: 2px solid #0e374666;
   }
 
   .userData {
@@ -489,13 +510,13 @@ const Container = styled.div`
   }
   .inputButton {
     height: 50%;
-    width: 60%;
+    width: 80%;
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 5px;
     // margin:0 auto;
-    margin-left: 30px;
+    margin-left: 50px;
   }
   .input {
     height: 100%;

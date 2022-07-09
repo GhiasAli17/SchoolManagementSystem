@@ -1,7 +1,10 @@
 import React from "react";
 import styled from "styled-components";
+import setLogedinEmail from "../../Redux/actions";
+import { useSelector, useDispatch } from "react-redux";
 
 function HomeLeftChild({ enrolAlumni, enrollSchollHandler }) {
+  const dispatch = useDispatch();
   return (
     <Container>
       <div className="headingTextContainer">
@@ -28,7 +31,10 @@ function HomeLeftChild({ enrolAlumni, enrollSchollHandler }) {
       <div className="regButtons">
         <div className="btnDiv">
           <button
-            onClick={() => enrollSchollHandler()}
+            onClick={() => {
+              enrollSchollHandler();
+              dispatch(setLogedinEmail(""));
+            }}
             className="blueBack button"
           >
             <h3 className="enrollText whiteText">Enroll School</h3>
@@ -36,7 +42,13 @@ function HomeLeftChild({ enrolAlumni, enrollSchollHandler }) {
           </button>
         </div>
         <div className="btnDiv">
-          <button onClick={() => enrolAlumni()} className="button">
+          <button
+            onClick={() => {
+              enrolAlumni();
+              dispatch(setLogedinEmail(""));
+            }}
+            className="button"
+          >
             <h3 className="enrollText blueText">Join your School</h3>
             <h4 className="text blueText">(for school alumni)</h4>
           </button>
@@ -81,6 +93,7 @@ const Container = styled.div`
     font-weight: bold;
     text-align: center;
   }
+
   .button {
     min-width: 100%;
     min-height: 100%;
@@ -90,6 +103,7 @@ const Container = styled.div`
     flex-direction: column;
     border-radius: 5px;
     border-color: #2291f1;
+    cursor: pointer;
   }
   .blueBack {
     background-color: #2291f1;
@@ -110,24 +124,30 @@ const Container = styled.div`
     font-size: 30px;
     font-weight: 400;
     color: rgba(14, 55, 70, 0.4);
+    font-family: "poppins-regular";
   }
   .needsText {
     font-size: 50px;
     margin: 5px;
+    font-family: "poppins-regular";
   }
   .leftMargin {
     margin-left: 3%;
   }
   .donatedText {
     font-size: 15px;
+    font-family: "poppins-regular";
   }
   .enrollText {
     font-size: 20px;
+    font-family: "poppins-regular";
+
     font-weight: 500;
   }
   .text {
     font-size: 17px;
     font-weight: 500;
+    font-family: "poppins-regular";
   }
   .whiteText {
     color: white;

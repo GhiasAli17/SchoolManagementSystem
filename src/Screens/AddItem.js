@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import Header from "../Components/Header";
 import { FaAngleRight } from "react-icons/fa";
@@ -22,6 +22,7 @@ function AddItem() {
 
   const [file, setFile] = useState("");
   const [percent, setPercent] = useState(0);
+  const [check, setCheck] = useState(false);
 
   const [itemInfo, setItemInfo] = useState({
     itemName: "",
@@ -30,48 +31,68 @@ function AddItem() {
     itemDescription: "",
     imageUrl: "",
   });
-
+  useEffect(() => {
+    return () => toast.dismiss();
+  }, []);
   const { key } = useSelector((state) => state.persistedReducer);
 
   const onChangeHandler = (event) => {
     const { name, value } = event.target;
-    setItemInfo({ ...itemInfo, [name]: value });
+    if (name != "itemCost") {
+      setItemInfo({ ...itemInfo, [name]: value });
+    } else {
+      var letters = /^$|^[0-9\b]+$/;
+      if (value.match(letters)) {
+        setItemInfo({ ...itemInfo, [name]: value });
+      } else {
+        toast.custom(
+          <div
+            style={{
+              marginTop: "5%",
+              width: "100%",
+              height: "6vh",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "flex-start",
+            }}
+          >
+            <div
+              style={{
+                alignSelf: "flex-start",
+                width: "30%",
+                height: "100%",
+                borderLeftWidth: "8px",
+                borderColor: "red",
+                borderStyle: "solid",
+                borderBottomWidth: 0,
+                borderRightWidth: 0,
+                borderTopWidth: 0,
+                borderRadius: 5,
+                backgroundColor: "#F5F5F5",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <h3
+                style={{
+                  color: "#515C6F",
+                  fontFamily: "GraphikMedium",
+                  fontWeight: "100",
+                  fontSize: "12px",
+                }}
+              >
+                invalid key presed
+              </h3>
+            </div>
+          </div>,
+          { duration: 1000 }
+        );
+      }
+    }
   };
 
   // Handles input change event and updates state
-  function handleChange(event) {
-    setFile(event.target.files[0]);
-  }
-
-  // handle upload
-  function handleUpload() {
-    if (!file) {
-      alert("Please choose a file first!");
-    }
-
-    const storageRef = sRef(storage, `/files/${file.name}`);
-    const uploadTask = uploadBytesResumable(storageRef, file);
-
-    uploadTask.on(
-      "state_changed",
-      (snapshot) => {
-        const percent = Math.round(
-          (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-        );
-
-        // update progress
-        setPercent(percent);
-      },
-      (err) => console.log(err),
-      () => {
-        // download url
-        getDownloadURL(uploadTask.snapshot.ref).then((url) => {
-          console.log("url", url);
-          setItemInfo({ ...itemInfo, imageUrl: url });
-        });
-      }
-    );
-  }
 
   console.log("hello");
   const onSubmitHandler = () => {
@@ -180,16 +201,19 @@ function AddItem() {
   };
   function handleChange(event) {
     setFile(event.target.files[0]);
+    handleUpload(event.target.files[0]);
+    setCheck(true);
   }
 
   // handle upload
-  function handleUpload() {
-    if (!file) {
+  function handleUpload(image) {
+    if (!image) {
+      setCheck(false);
       alert("Please choose a file first!");
     }
 
-    const storageRef = sRef(storage, `/files/${file.name}`);
-    const uploadTask = uploadBytesResumable(storageRef, file);
+    const storageRef = sRef(storage, `/files/${image.name}`);
+    const uploadTask = uploadBytesResumable(storageRef, image);
 
     uploadTask.on(
       "state_changed",
@@ -207,6 +231,7 @@ function AddItem() {
         getDownloadURL(uploadTask.snapshot.ref).then((url) => {
           console.log("url", url);
           setItemInfo({ ...itemInfo, imageUrl: url });
+          setCheck(false);
         });
       }
     );
@@ -238,133 +263,139 @@ function AddItem() {
       value: itemInfo.itemDescription,
     },
   ];
-  return (
-    <>
-      <Header />
-      <Container>
-        <div className="headingText">
-          <h3>Add New Item</h3>
-        </div>
-        <div className="addItemContainer">
-          {InputsList.map((item) => {
-            return (
-              <div id={item.id} className="inputsConatiner">
-                <div style={{ display: "flex" }}>
-                  <h6>{item.title}</h6>
-                  <h6 style={{ color: "red" }}>*</h6>
+  if (check)
+    return (
+      <div
+        style={{
+          position: "absolute",
+          top: 0,
+          bottom: 0,
+          left: 0,
+          right: 0,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        Loading...
+      </div>
+    );
+  else {
+    return (
+      <>
+        <Header />
+        <Container>
+          <div className="headingText">
+            <h3 style={{ fontFamily: "poppins-regular" }}>Add New Item</h3>
+          </div>
+          <div className="addItemContainer">
+            {InputsList.map((item) => {
+              return (
+                <div id={item.id} className="inputsConatiner">
+                  <div style={{ display: "flex" }}>
+                    <h6>{item.title}</h6>
+                    <h6 style={{ color: "red" }}>*</h6>
+                  </div>
+                  <input
+                    className="inputDiv"
+                    style={{ outline: "none" }}
+                    name={item.name}
+                    value={item.value}
+                    onChange={item.onch}
+                  />
                 </div>
-                <input
-                  className="inputDiv"
-                  style={{ outline: "none" }}
-                  placeholder={item.ph}
-                  name={item.name}
-                  value={item.value}
-                  onChange={item.onch}
-                />
+              );
+            })}
+            <div className="inputsConatiner select">
+              <div style={{ display: "flex" }}>
+                <h6>cost</h6>
+                <h6 style={{ color: "red" }}>*</h6>
               </div>
-            );
-          })}
-          <div className="inputsConatiner select">
-            <div style={{ display: "flex" }}>
-              <h6>cost</h6>
-              <h6 style={{ color: "red" }}>*</h6>
-            </div>
 
-            <input
-              className="inputDiv"
-              style={{
-                outline: "none",
-                marginLeft: 70,
-                height: "80%",
-                width: "40%",
-              }}
-              placeholder="Enter Cost"
-              name="itemCost"
-              value={itemInfo.itemCost}
-              onChange={onChangeHandler}
-            />
-          </div>
-          <div
-            className="inputsConatiner"
-            style={{
-              borderColor: "rgba(218, 221, 225, 0.4)",
-              height: "15%",
-              marginTop: 50,
-              borderStyle: "solid",
-              flexDirection: "column",
-            }}
-          >
-            <div className="h5Div">
-              <h5>Upload Item Image</h5>
-            </div>
-            <div className="inputDiv" style={{ borderWidth: 0 }}>
               <input
-                style={{ outline: "none" }}
-                placeholder="enter name"
-                type="file"
-                accept="image/*"
-                onChange={handleChange}
-              />
-              <button
+                className="inputDiv"
                 style={{
-                  width: "18%",
-                  borderRadius: 2,
-                  height: "45%",
-                  borderStyle: "solid",
-                  borderColor: "black",
-                  borderWidth: 1,
-                  backgroundColor: "",
+                  outline: "none",
+                  marginLeft: 70,
+                  height: "80%",
+                  width: "40%",
                 }}
-                onClick={handleUpload}
-              >
-                <h6 style={{ color: "black", margin: 0, fontWeight: "300" }}>
-                  Upload
-                </h6>
-              </button>
-              <p>{percent} "% done"</p>
+                name="itemCost"
+                value={itemInfo.itemCost}
+                onChange={onChangeHandler}
+              />
             </div>
-          </div>
-          <div
-            className="inputsConatiner"
-            style={{
-              borderWidth: 0,
-              alignItems: "center",
-              justifyContent: "flex-end",
-              marginTop: 50,
-            }}
-          >
             <div
+              className="inputsConatiner"
               style={{
-                width: "20%",
-                height: "50%",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
+                borderColor: "rgba(218, 221, 225, 0.4)",
+                height: "15%",
+                marginTop: 50,
+                borderStyle: "solid",
+                flexDirection: "column",
               }}
             >
-              <button onClick={onSubmitHandler}>Submit</button>
+              <div className="h5Div">
+                <h5>Upload Item Image</h5>
+              </div>
+              <div
+                className="inputDiv"
+                style={{
+                  borderWidth: 0,
+                  marginLeft: "40px",
+                  backgroundColor: "transparent",
+                }}
+              >
+                <input
+                  style={{ outline: "none" }}
+                  type="file"
+                  accept="image/*"
+                  onChange={handleChange}
+                />
+              </div>
+            </div>
+            <div
+              className="inputsConatiner"
+              style={{
+                borderWidth: 0,
+                alignItems: "center",
+                justifyContent: "flex-end",
+                marginTop: 50,
+              }}
+            >
+              <div
+                style={{
+                  width: "20%",
+                  height: "80%",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <button onClick={onSubmitHandler}>Submit</button>
+              </div>
             </div>
           </div>
-        </div>
 
-        <Toaster />
-      </Container>
-    </>
-  );
+          <Toaster />
+        </Container>
+      </>
+    );
+  }
 }
 
 export default AddItem;
 
 const Container = styled.div`
   //background-color: burlywood;
-  height: 90vh;
+  height: 87vh;
   width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
   .inputsConatiner {
-    height: 10%;
+    height: 8%;
     width: 50%;
     display: flex;
     align-items: center;
@@ -382,6 +413,7 @@ const Container = styled.div`
     justify-content: center;
     padding-left: 20px !important;
     border-radius: 7px;
+    background-color: rgba(218, 221, 225, 0.4);
     border: 1px solid rgba(218, 221, 225, 0.4);
   }
   .addItemContainer {
@@ -390,7 +422,7 @@ const Container = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: flex-start;
+    justify-content: space-evenly;
   }
   .headingText {
     //background-color: azure;

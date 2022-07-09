@@ -4,8 +4,15 @@ import Header from "../Components/Header";
 import { FaAngleRight } from "react-icons/fa";
 import { useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
-import {deleteObject} from 'firebase/storage'
-import { getDatabase, ref, set, onValue, push,update  } from "firebase/database";
+import { deleteObject } from "firebase/storage";
+import {
+  getDatabase,
+  ref,
+  set,
+  onValue,
+  push,
+  update,
+} from "firebase/database";
 import { useNavigate } from "react-router-dom";
 import app, { storage } from "../firebase";
 import {
@@ -22,24 +29,24 @@ const db = getDatabase(app);
 function UpdateItem() {
   const location = useLocation();
 
-
   const { itemkey, desc, studentname, cost, itemname, image } = location.state;
   //console.log(location.state.amount);
   let navigate = useNavigate();
 
-    let url = image+"";
+  let url = image + "";
 
-    // note below url will be different for every project, So update it if new firebase app is made from client
-    const baseUrl = "https://firebasestorage.googleapis.com/v0/b/school-management-system-79f54.appspot.com/o/";
+  // note below url will be different for every project, So update it if new firebase app is made from client
+  const baseUrl =
+    "https://firebasestorage.googleapis.com/v0/b/school-management-system-79f54.appspot.com/o/";
 
-    var imagePath = url.replace(baseUrl,"");
+  var imagePath = url.replace(baseUrl, "");
 
-    const indexOfEndPath = imagePath.indexOf("?");
+  const indexOfEndPath = imagePath.indexOf("?");
 
-    imagePath = imagePath.substring(0,indexOfEndPath);
+  imagePath = imagePath.substring(0, indexOfEndPath);
 
-    imagePath = imagePath.replace("%2F","/");
-    console.log("omage name", imagePath)
+  imagePath = imagePath.replace("%2F", "/");
+  console.log("omage name", imagePath);
 
   const [file, setFile] = useState("");
   const [percent, setPercent] = useState(0);
@@ -163,7 +170,7 @@ function UpdateItem() {
         { duration: 1000 }
       );
     } else {
-      update(ref(db, "School/" + key + "/items/"+itemkey), {
+      update(ref(db, "School/" + key + "/items/" + itemkey), {
         itemName,
         itemCost,
         stdName,
@@ -171,12 +178,15 @@ function UpdateItem() {
         imageUrl,
       })
         .then(() => {
-          console.log("data updated successfully",imagePath);
-            deleteObject(sRef(storage,imagePath)).then(() => {
-                console.log(' File deleted successfully');
-            }).catch((error) => {
-                console.log("delete error:", error)
+          console.log("data updated successfully", imagePath);
+          deleteObject(sRef(storage, imagePath))
+            .then(() => {
+              console.log(" File deleted successfully");
+            })
+            .catch((error) => {
+              console.log("delete error:", error);
             });
+          navigate("/SchoolLogin");
           toast.custom(
             <div
               style={{
@@ -229,16 +239,17 @@ function UpdateItem() {
   };
   function handleChange(event) {
     setFile(event.target.files[0]);
+    handleUpload(event.target.files[0]);
   }
 
   // handle upload
-  function handleUpload() {
-    if (!file) {
+  function handleUpload(image) {
+    if (!image) {
       alert("Please choose a file first!");
     }
 
-    const storageRef = sRef(storage, `/files/${file.name}`);
-    const uploadTask = uploadBytesResumable(storageRef, file);
+    const storageRef = sRef(storage, `/files/${image.name}`);
+    const uploadTask = uploadBytesResumable(storageRef, image);
 
     uploadTask.on(
       "state_changed",
@@ -300,7 +311,7 @@ function UpdateItem() {
       <Header />
       <Container>
         <div className="headingText">
-          <h3>Update Item</h3>
+          <h3 style={{ fontFamily: "poppins-regular" }}>Update Item</h3>
         </div>
         <div className="addItemContainer">
           {InputsList.map((item) => {
@@ -362,23 +373,6 @@ function UpdateItem() {
                 accept="image/*"
                 onChange={handleChange}
               />
-              <button
-                style={{
-                  width: "18%",
-                  borderRadius: 2,
-                  height: "45%",
-                  borderStyle: "solid",
-                  borderColor: "black",
-                  borderWidth: 1,
-                  backgroundColor: "",
-                }}
-                onClick={handleUpload}
-              >
-                <h6 style={{ color: "black", margin: 0, fontWeight: "300" }}>
-                  Upload
-                </h6>
-              </button>
-              <p>{percent} "% done"</p>
             </div>
           </div>
           <div
@@ -393,7 +387,7 @@ function UpdateItem() {
             <div
               style={{
                 width: "20%",
-                height: "50%",
+                height: "80%",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
@@ -414,7 +408,7 @@ export default UpdateItem;
 
 const Container = styled.div`
   //background-color: burlywood;
-  height: 90vh;
+  height: 80vh;
   width: 100%;
   display: flex;
   flex-direction: column;

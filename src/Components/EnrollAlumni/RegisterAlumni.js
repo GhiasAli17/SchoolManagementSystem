@@ -240,6 +240,7 @@ const Container = styled.div`
     flex-direction: column;
     background-color: white;
     border: 1px solid #2291f1;
+    cursor: pointer;
   }
   .blueBack {
     background-color: #2291f1;

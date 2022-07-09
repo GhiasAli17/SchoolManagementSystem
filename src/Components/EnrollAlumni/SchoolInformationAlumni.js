@@ -6,6 +6,7 @@ import toast, { Toaster } from "react-hot-toast";
 import app from "../../firebase";
 import school from "../../assets/Images/school.svg";
 import contact from "../../assets/Images/contact.svg";
+import graduate from "../../assets/Images/graduate.svg";
 
 const db = getDatabase(app);
 
@@ -203,7 +204,7 @@ function SchoolInformationAlumni(props) {
   const InputsList = [
     {
       id: 1,
-      image: school,
+      image: graduate,
       name: "graduationyear",
       value: alumniSchoolInfo.graduationyear,
       onch: onChangeHandler,
@@ -311,6 +312,7 @@ const Container = styled.div`
     flex-direction: column;
     background-color: white;
     border: 1px solid #2291f1;
+    cursor: pointer;
   }
   .blueBack {
     background-color: #2291f1;

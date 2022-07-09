@@ -61,7 +61,6 @@ function SchoolPanel() {
     (item, index) => {
       console.log(`item image ${item.imageUrl}`);
 
-
       return (
         <div className="rows">
           <div
@@ -72,14 +71,17 @@ function SchoolPanel() {
               justifyContent: "flex-start",
             }}
           >
-            <input style={{ outline: "none" }} type="checkbox" />
+            <input
+              style={{ cursor: "pointer", outline: "none" }}
+              type="checkbox"
+            />
           </div>
           <div
             style={{
               width: "15%",
               display: " flex",
               alignItems: "center",
-              justifyContent: "space-between",
+              justifyContent: "flex-start",
             }}
           >
             {item.imageUrl ? (
@@ -140,7 +142,7 @@ function SchoolPanel() {
           >
             <img
               src={trsh}
-              style={{ width: 20, height: 20 }}
+              style={{ cursor: "pointer", width: 20, height: 20 }}
               onClick={() => {
                 setModalVisible(true);
                 setDeletedId(item.itemKey);
@@ -149,7 +151,7 @@ function SchoolPanel() {
 
             <img
               src={edit}
-              style={{ width: 20, height: 20 }}
+              style={{ cursor: "pointer", width: 20, height: 20 }}
               onClick={() => {
                 navigate("/UpdateItem", {
                   state: {
@@ -174,7 +176,23 @@ function SchoolPanel() {
     navigate("/additem");
   }
   const HaederList = ["nill", "Items", "Cost", "Student", "Description", "nil"];
-  if (!check) return <div>Loading...</div>;
+  if (!check)
+    return (
+      <div
+        style={{
+          position: "absolute",
+          top: 0,
+          bottom: 0,
+          left: 0,
+          right: 0,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        Loading...
+      </div>
+    );
   else
     return (
       <>
@@ -183,15 +201,19 @@ function SchoolPanel() {
         <Container>
           <div className="nav">
             <div className="leftDiv">
-              <h3>Needs</h3>
+              <h3 style={{ fontFamily: "poppins-regular" }}>Needs</h3>
             </div>
             <div className="rightDiv">
               <button onClick={() => addHandler()} className="button">
-                <h4 style={{ color: "#2291F1" }}>Add New</h4>
+                <h4 style={{ color: "#2291F1", fontFamily: "poppins-regular" }}>
+                  Add New
+                </h4>
               </button>
 
               <button onClick={() => navigate("/accounts")} className="button">
-                <h4 style={{ color: "#2291F1" }}>Accounts Requests</h4>
+                <h4 style={{ color: "#2291F1", fontFamily: "poppins-regular" }}>
+                  Accounts Requests
+                </h4>
               </button>
             </div>
           </div>
@@ -207,6 +229,7 @@ function SchoolPanel() {
                         display: " flex",
                         alignItems: "center",
                         justifyContent: "center",
+                        fontFamily: "poppins-regular",
                       }}
                     >
                       {item == "nill" || item == "nil" ? null : <h6>{item}</h6>}
@@ -230,7 +253,12 @@ function SchoolPanel() {
               }}
             >
               <img src={noitems} />
-              <h4 style={{ color: "rgba(14, 55, 70, 0.4)" }}>
+              <h4
+                style={{
+                  color: "rgba(14, 55, 70, 0.4)",
+                  fontFamily: "poppins-regular",
+                }}
+              >
                 You did not have any item in your list Click "Add new" to add
                 your school needs
               </h4>
@@ -290,6 +318,7 @@ function SchoolPanel() {
                   marginLeft: "3%",
                   fontWeight: "500",
                   color: "rgba(255, 0, 0, 0.14)",
+                  fontFamily: "poppins-regular",
                 }}
               >
                 Are you sure to delete this Item
@@ -307,7 +336,9 @@ function SchoolPanel() {
                   borderRadius: 10,
                 }}
               >
-                <h4 style={{ color: "white" }}>Confirm Delete</h4>
+                <h4 style={{ color: "white", fontFamily: "poppins-regular" }}>
+                  Confirm Delete
+                </h4>
               </button>
             </div>
           </Modal>
@@ -357,6 +388,7 @@ const Container = styled.div`
     align-items: center;
     justify-content: center;
     background-color: rgba(34, 145, 241, 0.14);
+    cursor: pointer;
   }
   .rightDiv {
     //background-color: yellow;
@@ -372,6 +404,7 @@ const Container = styled.div`
     display: flex;
     align-items: center;
     justify-content: space-between;
+    border-bottom: 1px solid #dadde1;
   }
   .input {
     width: 30px;
@@ -384,7 +417,7 @@ const Container = styled.div`
     overflow: auto;
   }
   .schoolPanelHeaderContainer {
-    height: 7%;
+    height: 10%;
     background-color: rgba(34, 145, 241, 0.14);
     display: flex;
     margin-top: 20;
@@ -412,7 +445,6 @@ const Container = styled.div`
     border-radius: 5px;
   }
   .paragraphDiv {
-    //background-color: red;
     height: 10%;
     width: 100%;
     display: flex;
