@@ -8,14 +8,14 @@ import { getStorage, ref as sRef } from "firebase/storage";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyBbcYpIBg1NbKggon1ckOksv_gZ8KGdsrQ",
-  authDomain: "school-management-system-79f54.firebaseapp.com",
-  projectId: "school-management-system-79f54",
+  apiKey: process.env.REACT_APP_API_KEY,
+  authDomain: process.env.REACT_APP_AUTHDOMAIN,
+  projectId: process.env.REACT_APP_PROJECTID,
   databaseURL:
     "https://school-management-system-79f54-default-rtdb.firebaseio.com/",
-  storageBucket: "school-management-system-79f54.appspot.com",
-  messagingSenderId: "822665751452",
-  appId: "1:822665751452:web:b59b61daeb8b1a458bb659",
+  storageBucket: process.env.REACT_APP_STORAGEBUCKET,
+  messagingSenderId: process.env.REACT_APP_MESSAGINGSENDERID,
+  appId: process.env.REACT_APP_APPID,
 };
 
 // Initialize Firebase

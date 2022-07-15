@@ -6,6 +6,8 @@ import {
   SET_ALUMNI_KEY,
   SET_ALUMNI_SCHOOLNAME,
   SET_PROFILE,
+  SET_USER_DATA,
+  SET_USERNAME,
 } from "./actions";
 const inittialstate = {
   data: "",
@@ -15,6 +17,8 @@ const inittialstate = {
   userType: "",
   amount: "",
   profilepic: "",
+  userData: "",
+  username: "",
 };
 function userReducer(state = inittialstate, action) {
   switch (action.type) {
@@ -24,6 +28,12 @@ function userReducer(state = inittialstate, action) {
     case SET_KEY:
       console.log(action.payload.key);
       return { ...state, key: action.payload.key };
+    case SET_USERNAME:
+      console.log(action.payload.key);
+      return { ...state, username: action.payload.username };
+    case SET_USER_DATA:
+      console.log(action.payload.key);
+      return { ...state, userData: action.payload.userData };
     case SET_ALUMNI_KEY:
       console.log(` alumni key  ${action.payload.alumnikey}`);
       return { ...state, alumnikey: action.payload.alumnikey };

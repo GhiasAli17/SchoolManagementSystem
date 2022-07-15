@@ -1,23 +1,18 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { getDatabase, ref, set, onValue, push } from "firebase/database";
+import { getDatabase, ref, push } from "firebase/database";
 import { useNavigate } from "react-router-dom";
-
+import toast, { Toaster } from "react-hot-toast";
+import { useDispatch } from "react-redux";
 
 import app from "../../firebase";
-
-import toast, { Toaster } from "react-hot-toast";
-import user from "../../assets/Images/user.svg";
-import mail from "../../assets/Images/mail.svg";
-import lock from "../../assets/Images/lock.svg";
-import {setKey} from "../../Redux/actions";
-import {useDispatch} from "react-redux";
-
+import { setKey } from "../../Redux/actions";
+import { User, Mail, Lock } from "../../assets/Images/Index";
 
 const db = getDatabase(app);
 
 function Register(props) {
-    const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -156,13 +151,13 @@ function Register(props) {
           email,
           password,
           confirmPass,
-            approve:false,
-            imageUri:''
+          approve: false,
+          imageUri: "",
         });
 
         console.log("key", key.key);
         props.ongetval(key.key);
-        dispatch(setKey(key.key))
+        dispatch(setKey(key.key));
 
         props.onClick(val);
       }
@@ -172,7 +167,7 @@ function Register(props) {
   const InputsList = [
     {
       id: 1,
-      image: user,
+      image: User,
       value: firstName,
       name: "firstName",
       onch: onChangeHandler,
@@ -180,7 +175,7 @@ function Register(props) {
     },
     {
       id: 2,
-      image: user,
+      image: User,
       value: lastName,
       name: "lastName",
 
@@ -189,7 +184,7 @@ function Register(props) {
     },
     {
       id: 3,
-      image: mail,
+      image: Mail,
       value: email,
       name: "email",
 
@@ -198,7 +193,7 @@ function Register(props) {
     },
     {
       id: 4,
-      image: lock,
+      image: Lock,
       value: password,
       name: "password",
 
@@ -207,7 +202,7 @@ function Register(props) {
     },
     {
       id: 5,
-      image: lock,
+      image: Lock,
       value: confirmPass,
       name: "confirmPass",
 

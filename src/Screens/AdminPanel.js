@@ -2,7 +2,6 @@ import React, { useMemo, useEffect, useCallback, useState } from "react";
 import styled from "styled-components";
 import Header from "../Components/Header";
 import { useNavigate } from "react-router-dom";
-import app from "../firebase";
 import {
   getDatabase,
   ref,
@@ -12,19 +11,18 @@ import {
   update,
 } from "firebase/database";
 import { useSelector } from "react-redux";
-import Modal from "react-modal";
-import back from "../assets/Images/back.png";
 
-import deleteItem from "../imgs/delete.png";
-import DropDown from "../assets/Images/DropDown.svg";
+import app from "../firebase";
+import { Back, DropDown } from "../assets/Images/Index";
 
 const db = getDatabase(app);
 
 function AdminPanel() {
   const [modalVisible, setModalVisible] = useState("");
+  const [filterData, setFilterData] = useState([]);
 
   const [deleteCheck, setdeleteCheck] = useState(false);
-  const HaederList = ["Name", "Email", "Phone Number", "Status"];
+  const HaederList = ["Name", "Email", "Key", "Status"];
   const StatusList = ["Pending"];
   const DeleteItem = (id) => {
     console.log(id);
@@ -33,6 +31,7 @@ function AdminPanel() {
   const [dummyCheck, setDummyCheck] = useState(false);
   const [buttonPressed, setButtonPresed] = useState("Pending");
   const [data, setLogedinEmail] = useState([]);
+
   const { key, alumniSchoolName } = useSelector(
     (state) => state.persistedReducer
   );
@@ -47,6 +46,7 @@ function AdminPanel() {
     set(ref(db, "users/admin/" + alKey + "/approve"), true);
     dummyCheck ? setDummyCheck(false) : setDummyCheck(true);
     setLogedinEmail([]);
+    setFilterData([]);
   };
 
   const onDisapproveHandler = (alKey) => {
@@ -55,6 +55,7 @@ function AdminPanel() {
     set(ref(db, "School/" + alKey), null);
     deleteCheck ? setdeleteCheck(false) : setdeleteCheck(true);
     setLogedinEmail([]);
+    setFilterData([]);
   };
   console.log(`modalllllllllllllllllllllllllllllllllll ${modalVisible}`);
   useEffect(() => {
@@ -70,6 +71,7 @@ function AdminPanel() {
           if (!childData.approve) {
             childData["alumniKey"] = childKey;
             setLogedinEmail((prev) => [...prev, childData]);
+            setFilterData((prev) => [...prev, childData]);
           }
         });
         setCheck(true);
@@ -80,6 +82,7 @@ function AdminPanel() {
     );
   }, [deleteCheck, dummyCheck]);
   const addTodo = (item, index) => {
+    console.log(`1111111111111111111111 ${item}`);
     return (
       <div className="rows">
         <div
@@ -115,7 +118,7 @@ function AdminPanel() {
           }}
         >
           {" "}
-          <h4 className="cutText">{item.password}</h4>
+          <h4 className="cutText">{item.alumniKey}</h4>
         </div>
 
         <div
@@ -141,7 +144,7 @@ function AdminPanel() {
             </div>
             <img
               src={DropDown}
-              style={{ width: "10px", height: "10px" }}
+              style={{ width: "10px", height: "10px", cursor: "pointer" }}
               onClick={() => {
                 modalVisible == item.alumniKey
                   ? setModalVisible("")
@@ -159,6 +162,7 @@ function AdminPanel() {
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
+                  cursor: "pointer",
                 }}
               >
                 <h6 onClick={() => onApproveHandler(item.alumniKey)}>
@@ -171,7 +175,7 @@ function AdminPanel() {
                   height: "50%",
                   display: "flex",
                   alignItems: "center",
-
+                  cursor: "pointer",
                   justifyContent: "center",
                 }}
               >
@@ -210,7 +214,7 @@ function AdminPanel() {
   else
     return (
       <>
-        <Header />
+        <Header data={data} setFilterData={setFilterData} />
 
         <Container>
           <div className="nav">
@@ -241,16 +245,9 @@ function AdminPanel() {
             })}
           </div>
           <div className="innerDiv">
-            {data.map((item, index) => {
+            {filterData.map((item, index) => {
               return addTodo(item, index);
             })}
-          </div>
-          <div className="backButton">
-            <img
-              src={back}
-              onClick={() => navigate("/SchoolLogin")}
-              style={{ cursor: "pointer" }}
-            />
           </div>
         </Container>
       </>

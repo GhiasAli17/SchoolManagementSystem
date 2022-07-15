@@ -1,11 +1,9 @@
 import React from "react";
 import styled from "styled-components";
-import bag from "../../assets/Images/bag.svg";
-import cycle from "../../assets/Images/cycle.svg";
-import books from "../../assets/Images/books.svg";
-import table from "../../assets/Images/table.svg";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+
+import { Bag, Cycle, Books, Table } from "../../assets/Images/Index";
 
 function HomeRightChild() {
   let navigate = useNavigate();
@@ -15,6 +13,8 @@ function HomeRightChild() {
     if (data != "") {
       if (userType == "Alumni") {
         navigate("/AlumniLogin");
+      } else if (userType == "SuperAdmin") {
+        console.log(null);
       } else {
         navigate("/SchoolLogin");
       }
@@ -23,18 +23,18 @@ function HomeRightChild() {
   return (
     <Container onClick={() => clickHandler()}>
       <div className="firstImagesColumn">
-        <img src={cycle} style={{ width: 160, height: 160, marginTop: 20 }} />
+        <img src={Cycle} style={{ width: 160, height: 160, marginTop: 20 }} />
 
-        <img src={bag} style={{ width: 160, height: 160, marginTop: 20 }} />
+        <img src={Bag} style={{ width: 160, height: 160, marginTop: 20 }} />
       </div>
       <div className="secondImagesColumn">
         <img
-          src={books}
+          src={Books}
           style={{ width: 160, height: 160, marginBottom: 20 }}
         />
 
         <img
-          src={table}
+          src={Table}
           style={{ width: 160, height: 160, marginBottom: 20 }}
         />
       </div>

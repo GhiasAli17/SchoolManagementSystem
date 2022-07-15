@@ -7,8 +7,8 @@ import SchoolInformation from "../Components/EnrollSchool/SchoolInformation";
 import Payment from "../Components/EnrollSchool/Payment";
 import Complete from "../Components/EnrollSchool/Complete";
 import ContactUs from "../Components/EnrollSchool/ContactUs";
-import registerImage from "../assets/Images/registerImage.svg";
-import logo from "../assets/Images/logo.png";
+import { Logo, RegisterImage } from "../assets/Images/Index";
+
 function EnrollSchool({ navigation }) {
   const navigate = useNavigate();
 
@@ -30,11 +30,12 @@ function EnrollSchool({ navigation }) {
       <Container>
         <div className="leftChild">
           <div>
-            <img src={logo} style={{ width: "70px", height: "60px" }} />
+            <img src={Logo} style={{ width: "70px", height: "60px" }} />
             <h3
               style={{
                 fontSize: 20,
                 margin: 0,
+                marginLeft: "20px",
                 marginTop: 10,
                 fontFamily: "poppins-regular",
               }}
@@ -59,7 +60,7 @@ function EnrollSchool({ navigation }) {
           ) : null}
         </div>
         <div className="rightChild">
-          <img src={registerImage} id="img" />
+          <img src={RegisterImage} id="img" />
         </div>
       </Container>
     </>
@@ -81,7 +82,7 @@ const Container = styled.div`
     position: fixed;
     bottom: 0;
     background-position-x: right;
-    background: url(${registerImage});
+    background: url(${RegisterImage});
     background-repeat: no-repeat;
     width: 100%;
     height: 100%;

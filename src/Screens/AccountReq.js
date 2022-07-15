@@ -1,8 +1,7 @@
-import React, { useMemo, useEffect, useCallback, useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import Header from "../Components/Header";
 import { useNavigate } from "react-router-dom";
-import app from "../firebase";
 import {
   getDatabase,
   ref,
@@ -12,10 +11,9 @@ import {
   update,
 } from "firebase/database";
 import { useSelector } from "react-redux";
-import Modal from "react-modal";
 
-import deleteItem from "../imgs/delete.png";
-import DropDown from "../assets/Images/DropDown.svg";
+import app from "../firebase";
+import { NoItems, DropDown } from "../assets/Images/Index";
 
 const db = getDatabase(app);
 
@@ -249,7 +247,9 @@ function AccountsReq() {
 
         <Container>
           <div className="nav">
-            <h3 style={{ fontFamily: "poppins-regular" }}>School Dashboard</h3>
+            <h3 style={{ fontFamily: "poppins-regular" }}>
+              Alumni Registrations requests
+            </h3>
           </div>
           <div
             style={{
@@ -258,28 +258,53 @@ function AccountsReq() {
               height: "10%",
             }}
           ></div>
-          <div className="schoolPanelHeaderContainer">
-            {HaederList.map((item) => {
-              return (
-                <div
-                  key={item}
-                  style={{
-                    width: "15%",
-                    display: " flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                  }}
-                >
-                  {item == "nill" || item == "nil" ? null : <h6>{item}</h6>}
-                </div>
-              );
-            })}
-          </div>
-          <div className="innerDiv">
-            {data.map((item, index) => {
-              return addTodo(item, index);
-            })}
-          </div>
+          {data.length > 0 ? (
+            <>
+              <div className="schoolPanelHeaderContainer">
+                {HaederList.map((item) => {
+                  return (
+                    <div
+                      key={item}
+                      style={{
+                        width: "15%",
+                        display: " flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                      }}
+                    >
+                      {item == "nill" || item == "nil" ? null : <h6>{item}</h6>}
+                    </div>
+                  );
+                })}
+              </div>
+              <div className="innerDiv">
+                {data.map((item, index) => {
+                  return addTodo(item, index);
+                })}
+              </div>
+            </>
+          ) : (
+            <div
+              style={{
+                width: "100%",
+                height: "100%",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <img src={NoItems} />
+              <h4
+                style={{
+                  color: "rgba(14, 55, 70, 0.4)",
+                  fontFamily: "poppins-regular",
+                }}
+              >
+                There is no Registartion Request
+              </h4>
+            </div>
+          )}
           <div className="backButton" style={{ cursor: "pointer" }}>
             <button onClick={() => navigate("/SchoolLogin")}>move back</button>
           </div>

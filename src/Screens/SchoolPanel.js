@@ -1,4 +1,4 @@
-import React, { useMemo, useEffect, useCallback, useState } from "react";
+import React, { useEffect, useCallback, useState } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import Modal from "react-modal";
@@ -6,12 +6,9 @@ import { getDatabase, ref, set, onValue } from "firebase/database";
 import { useSelector } from "react-redux";
 
 import Header from "../Components/Header";
-import dummyimage from "../assets/Images/dummyimage.png";
-import trsh from "../assets/Images/trsh.png";
-
 import app from "../firebase";
-import edit from "../assets/Images/edit.svg";
-import noitems from "../assets/Images/noitems.svg";
+import { NoItems, Edit, TrashIcon, DummyImage } from "../assets/Images/Index";
+
 const db = getDatabase(app);
 
 function SchoolPanel() {
@@ -91,7 +88,7 @@ function SchoolPanel() {
               />
             ) : (
               <img
-                src={dummyimage}
+                src={DummyImage}
                 style={{ marginRight: "20px", width: "40px", height: "40px" }}
               />
             )}
@@ -141,7 +138,7 @@ function SchoolPanel() {
             }}
           >
             <img
-              src={trsh}
+              src={TrashIcon}
               style={{ cursor: "pointer", width: 20, height: 20 }}
               onClick={() => {
                 setModalVisible(true);
@@ -150,7 +147,7 @@ function SchoolPanel() {
             />
 
             <img
-              src={edit}
+              src={Edit}
               style={{ cursor: "pointer", width: 20, height: 20 }}
               onClick={() => {
                 navigate("/UpdateItem", {
@@ -252,7 +249,7 @@ function SchoolPanel() {
                 justifyContent: "center",
               }}
             >
-              <img src={noitems} />
+              <img src={NoItems} />
               <h4
                 style={{
                   color: "rgba(14, 55, 70, 0.4)",

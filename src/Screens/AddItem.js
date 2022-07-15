@@ -1,19 +1,18 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import Header from "../Components/Header";
-import { FaAngleRight } from "react-icons/fa";
 import { getDatabase, ref, set, onValue, push } from "firebase/database";
 import { useNavigate } from "react-router-dom";
-import app, { storage } from "../firebase";
 import {
   getStorage,
   ref as sRef,
   uploadBytesResumable,
   getDownloadURL,
 } from "firebase/storage";
-
 import toast, { Toaster } from "react-hot-toast";
 import { useSelector } from "react-redux";
+
+import app, { storage } from "../firebase";
 
 const db = getDatabase(app);
 
@@ -372,7 +371,9 @@ function AddItem() {
                   justifyContent: "center",
                 }}
               >
-                <button onClick={onSubmitHandler}>Submit</button>
+                <button onClick={onSubmitHandler}>
+                  <h6 style={{ color: "white", margin: 0 }}>Submit</h6>
+                </button>
               </div>
             </div>
           </div>

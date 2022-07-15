@@ -1,21 +1,20 @@
-import React, { useMemo, useEffect, useCallback, useState } from "react";
+import React, { useEffect, useCallback, useState } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
-import Modal from "react-modal";
-import { getDatabase, ref, set, onValue } from "firebase/database";
+import { getDatabase, ref, onValue } from "firebase/database";
 import { useDispatch, useSelector } from "react-redux";
 
+import { DummyImage, NoItems } from "../assets/Images/Index";
 import Header from "../Components/Header";
-import dummyimage from "../assets/Images/dummyimage.png";
-import trsh from "../assets/Images/trsh.png";
-
 import app from "../firebase";
-import noitems from "../assets/Images/noitems.svg";
+
 const db = getDatabase(app);
 
 function AlumniPanel() {
   const [check, setCheck] = useState(false);
   const [data, setData] = useState([]);
+  const [filterData, setFilterData] = useState([]);
+
   const [showItem, setShowItem] = useState(false);
 
   const { alumniSchoolname } = useSelector((state) => state.persistedReducer);
@@ -50,6 +49,7 @@ function AlumniPanel() {
   useEffect(() => {
     console.log("hello");
     setData([]);
+    setFilterData([]);
 
     onValue(
       starCountRef,
@@ -65,6 +65,7 @@ function AlumniPanel() {
               if (innerChildsnapshot.val() == alumniSchoolname) {
                 console.log("child data should bee called", childData);
                 setData((prev) => [...prev, childData]);
+                setFilterData((prev) => [...prev, childData]);
               }
             });
           });
@@ -109,7 +110,7 @@ function AlumniPanel() {
               />
             ) : (
               <img
-                src={dummyimage}
+                src={DummyImage}
                 style={{ marginRight: "20px", width: "40px", height: "40px" }}
               />
             )}
@@ -156,6 +157,7 @@ function AlumniPanel() {
               display: " flex",
               alignItems: "center",
               justifyContent: "space-evenly",
+              cursor: "pointer",
             }}
           >
             <button
@@ -204,15 +206,15 @@ function AlumniPanel() {
   else
     return (
       <>
-        <Header />
+        <Header data={data} setFilterData={setFilterData} />
 
         <Container>
           <div className="nav">
             <div className="leftDiv">
-              <h3>Needs</h3>
+              <h3 style={{ fontFamily: "poppins-regular" }}>Needs</h3>
             </div>
           </div>
-          {data.length > 0 ? (
+          {filterData.length > 0 ? (
             <div className="innerDiv">
               <div className="AlumniPanelHeaderContainer">
                 {HaederList.map((item) => {
@@ -231,7 +233,7 @@ function AlumniPanel() {
                   );
                 })}
               </div>
-              {data.map((item, index) => {
+              {filterData.map((item, index) => {
                 return addTodo(item, index);
               })}
             </div>
@@ -246,7 +248,7 @@ function AlumniPanel() {
                 justifyContent: "center",
               }}
             >
-              <img src={noitems} />
+              <img src={NoItems} />
               <h4 style={{ color: "rgba(14, 55, 70, 0.4)" }}>
                 This school does not have any listed Needs
               </h4>
@@ -286,6 +288,7 @@ const Container = styled.div`
   .leftDiv {
     height: 70%;
     width: 50%;
+    padding-left: 2.5%;
     display: flex;
     align-items: center;
     justify-content: flex-start;
@@ -344,6 +347,7 @@ const Container = styled.div`
     border: 0px;
     color: white;
     border-radius: 5px;
+    cursor: pointer;
   }
   .paragraphDiv {
     //background-color: red;

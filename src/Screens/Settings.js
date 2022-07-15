@@ -1,19 +1,8 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
-import lock from "../assets/Images/lock.svg";
-import toast, { Toaster } from "react-hot-toast";
-
-import cardCheck from "../assets/Images/cardCheck.svg";
-import Header from "../Components/Header";
-import user from "../assets/Images/userImg.png";
-import userIcon from "../assets/Images/user.svg";
-import mailIcon from "../assets/Images/mail.svg";
-import contact from "../assets/Images/contact.svg";
-import { setProfilePic } from "../Redux/actions";
 import { useSelector, useDispatch } from "react-redux";
 import { getDatabase, onValue, ref, update } from "firebase/database";
-import app, { storage } from "../firebase";
 import {
   deleteObject,
   getDownloadURL,
@@ -21,10 +10,20 @@ import {
   uploadBytesResumable,
 } from "firebase/storage";
 
+import { setUserData } from "../Redux/actions";
+import Header from "../Components/Header";
+import { setUserName, setProfilePic } from "../Redux/actions";
+import app, { storage } from "../firebase";
+import { Mail, User, CardCheck, Lock } from "../assets/Images/Index";
+
 const db = getDatabase(app);
 
 function Settings({ navigation }) {
-  const { key } = useSelector((state) => state.persistedReducer);
+  const { key, userData, data, userType } = useSelector(
+    (state) => state.persistedReducer
+  );
+  let navigate = useNavigate();
+
   const [buttonPressed, setButtonPresed] = useState("Personal");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -36,12 +35,17 @@ function Settings({ navigation }) {
   const [prevImageUri, setPrevImageUri] = useState("");
   const dispatch = useDispatch();
   useEffect(() => {
+    setEmail(userData.email);
+    setPassword(userData.password);
+    setFirstName(userData.firstName);
+    setLastName(userData.lastName);
     const dbRef = ref(db, "users/admin/" + key);
     onValue(dbRef, (snapshot) => {
       console.log("setting", snapshot.val().imageUri.imageUri);
       setImageUri(snapshot.val().imageUri.imageUri);
       setPrevImageUri(snapshot.val().imageUri.imageUri);
     });
+    //setEmail(userData.)
   }, []);
 
   const [bankInfo, setBankInfo] = useState({
@@ -89,7 +93,7 @@ function Settings({ navigation }) {
           setImageUri(url);
 
           let url1 = prevImageUri + "";
-          dispatch(setProfilePic(prevImageUri));
+          dispatch(setProfilePic(url));
           // note below url will be different for every project, So update it if new firebase app is made from client
           const baseUrl =
             "https://firebasestorage.googleapis.com/v0/b/school-management-system-79f54.appspot.com/o/";
@@ -123,6 +127,7 @@ function Settings({ navigation }) {
   const updatePaymentHandler = () => {
     update(ref(db, "users/admin/" + key + "/bankInfo"), bankInfo).then(() => {
       console.log("payment data updated successfully");
+      navigate("/");
     });
   };
 
@@ -134,7 +139,41 @@ function Settings({ navigation }) {
       password,
       confirmPass: password,
     }).then(() => {
+      let role = "";
+
       console.log("user data updated successfully");
+      if (userType == "Admin") role = "admin";
+      else {
+        role = "alumni";
+      }
+      const starCountRef = ref(db, "users/" + role);
+      onValue(
+        starCountRef,
+        (snapshot) => {
+          let alumniEmail, alumniPassword;
+          let approveCheck = false;
+          let SchoolName = "";
+          snapshot.forEach((childSnapshot) => {
+            const childData = childSnapshot.val();
+            console.log("child data Login", childData);
+            if (data == childData.email) {
+              dispatch(setUserName(childData.firstName));
+              dispatch(setUserData(childData));
+
+              // SchoolName = childData.schoolName;
+            }
+
+            // ...
+          });
+
+          // setCheck(true)
+        },
+        {
+          onlyOnce: false,
+        }
+      );
+      dispatch(setUserName(firstName));
+      navigate("/");
     });
   };
 
@@ -171,7 +210,11 @@ function Settings({ navigation }) {
                 color: buttonPressed == "Account" ? "#2291f1" : "#0e374666",
               }}
               className="headerButton"
-              onClick={() => setButtonPresed("Account")}
+              onClick={() => {
+                userType == "Admin"
+                  ? setButtonPresed("Account")
+                  : console.log("Alumni not allowed to payemnt form");
+              }}
             >
               Payment Details
             </button>
@@ -203,7 +246,7 @@ function Settings({ navigation }) {
               <div className="userContact">
                 <div className="inputRow">
                   <div className="inputsContainer">
-                    <img width={25} height={25} src={userIcon} />
+                    <img width={25} height={25} src={User} />
                     <input
                       type="textbox"
                       id="firstname"
@@ -215,7 +258,7 @@ function Settings({ navigation }) {
                     />
                   </div>
                   <div className="inputsContainer">
-                    <img width={25} height={25} src={userIcon} />
+                    <img width={25} height={25} src={User} />
                     <input
                       type="textbox"
                       id="lastname"
@@ -229,7 +272,7 @@ function Settings({ navigation }) {
                 </div>
                 <div className="inputRow">
                   <div className="inputsContainer">
-                    <img width={25} height={25} src={mailIcon} />
+                    <img width={25} height={25} src={Mail} />
                     <input
                       type="textbox"
                       id="email"
@@ -241,7 +284,7 @@ function Settings({ navigation }) {
                     />
                   </div>
                   <div className="inputsContainer">
-                    <img width={25} height={25} src={lock} />
+                    <img width={25} height={25} src={Lock} />
                     <input
                       type="textbox"
                       id="password"
@@ -255,16 +298,19 @@ function Settings({ navigation }) {
                 </div>
                 <div className="inputRow">
                   <div className="inputButton">
-                    <input
-                      type="button"
-                      id="lastname"
-                      name="lastname"
+                    <button
                       className="input"
-                      value="Update"
+                      style={{
+                        color: "white",
+                        backgroundColor: "#2291F1",
+                        borderWidth: 0,
+                      }}
                       onClick={updateClickHandler}
 
                       // value={userType}
-                    />
+                    >
+                      Update
+                    </button>
                   </div>
                 </div>
               </div>
@@ -284,7 +330,7 @@ function Settings({ navigation }) {
                 {/*<div classNameCVV="cardNumber">{`2334   -   2424   -   2424   -   5666`}</div>*/}
                 <img
                   style={{ width: "30px", height: "30px" }}
-                  src={cardCheck}
+                  src={CardCheck}
                 />
               </div>
               <div className="cardDetailContainer">
@@ -368,10 +414,15 @@ function Settings({ navigation }) {
                   alignItems: "center",
                   justifyContent: "center",
                   borderWidth: 0,
+                  cursor: "pointer",
                 }}
-                onClick={updatePaymentHandler}
+                onClick={() => {
+                  buttonPressed == "Personal"
+                    ? updateClickHandler()
+                    : updatePaymentHandler();
+                }}
               >
-                <h4 style={{ color: "white" }}> Update</h4>
+                <h4 style={{ color: "white", cursor: "pointer" }}> Update</h4>
               </button>
             </div>
           )}
@@ -401,6 +452,9 @@ const Container = styled.div`
     align-items: center;
     justify-content: space-evenly;
     flex-direction: column;
+  }
+  button {
+    cursor: pointer;
   }
   .paymentContainer {
     width: 60%;
@@ -525,6 +579,7 @@ const Container = styled.div`
     border: none;
     border-radius: 5px;
     padding-left: 20px !important;
+    outline: none;
   }
   .input[type="button"] {
     width: 80%;

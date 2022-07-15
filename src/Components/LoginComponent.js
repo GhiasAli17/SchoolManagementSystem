@@ -1,21 +1,21 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import { getDatabase, ref, set, onValue, push } from "firebase/database";
+import { getDatabase, ref, onValue } from "firebase/database";
 import { useNavigate } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
 import { useSelector, useDispatch } from "react-redux";
 
 import setLogedinEmail, {
   setAlumniSchoolName,
-  setImageUri,
+  setUserName,
+  setLoginUserType,
+  setUserData,
   setKey,
 } from "../Redux/actions";
-import { setLoginUserType } from "../Redux/actions";
+
 import app from "../firebase";
-import mail from "../assets/Images/mail.svg";
-import lock from "../assets/Images/lock.svg";
-import Alumni from "../assets/Images/Alumni.svg";
-import school from "../assets/Images/school.svg";
+
+import { School, Alumni, Lock, Mail } from "../assets/Images/Index";
 const db = getDatabase(app);
 function LoginComponent(props) {
   const dispatch = useDispatch();
@@ -25,7 +25,6 @@ function LoginComponent(props) {
   const { data, key, alumnikey } = useSelector(
     (state) => state.persistedReducer
   );
-  console.log(`data ${key}`);
   let navigate = useNavigate();
 
   const [email, setEmail] = useState("");
@@ -40,8 +39,12 @@ function LoginComponent(props) {
   const handleAdmin = () => {
     setUserType("Admin");
   };
+  useEffect(() => {
+    return () => {
+      console.log("cleaned up");
+    };
+  }, []);
   const onChangeHandler = (event) => {
-    console.log("name", event.target.name);
     const inputName = event.target.name;
     const inputValue = event.target.value;
     switch (inputName) {
@@ -122,10 +125,11 @@ function LoginComponent(props) {
           snapshot.forEach((childSnapshot) => {
             const childKey = childSnapshot.key;
             const childData = childSnapshot.val();
-            console.log("child data Login", childKey);
-
+            console.log("child data Login", childData);
+            dispatch(setUserData(childData));
             if (email == childData.email && password == childData.password) {
               alumniEmail = childData.email;
+              dispatch(setUserName(childData.firstName));
               alumniPassword = childData.password;
               keyvalue = childKey;
               approveCheck = childData.approve;
@@ -133,9 +137,9 @@ function LoginComponent(props) {
                 ref(db, "users/" + role + "/" + childKey + "/schoolInfo"),
                 (innerSnapShot) => {
                   innerSnapShot.forEach((innerChildSnapshot) => {
-                    console.log("inner snap", innerChildSnapshot.val());
                     SchoolName = innerChildSnapshot.val();
                   });
+                  console.log(`data is this ${innerSnapShot}`);
                 }
               );
 
@@ -157,7 +161,6 @@ function LoginComponent(props) {
                   dispatch(setLogedinEmail(email));
                   dispatch(setAlumniSchoolName(SchoolName));
                   dispatch(setLoginUserType("Alumni"));
-                  console.log("setAlumniSchoolName", SchoolName);
                   navigate("/AlumniLogin");
                 } else {
                   console.log("Sorry!, you are not approved");
@@ -266,7 +269,6 @@ function LoginComponent(props) {
             if (alumniEmail == email) {
               if (userType == "Alumni") {
                 if (approveCheck) {
-                  console.log("sch", SchoolName);
                   dispatch(setAlumniSchoolName(SchoolName));
                   navigate("/AlumniLogin");
                 } else {
@@ -471,7 +473,7 @@ function LoginComponent(props) {
   return (
     <Container>
       <div className="inputsConatiner">
-        <img src={mail} style={{ width: "30px", height: "30px" }} />
+        <img src={Mail} style={{ width: "30px", height: "30px" }} />
         <input
           className="inputDiv"
           style={{ outline: "none" }}
@@ -482,7 +484,7 @@ function LoginComponent(props) {
         />
       </div>
       <div className="inputsConatiner">
-        <img src={lock} style={{ width: "30px", height: "30px" }} />
+        <img src={Lock} style={{ width: "30px", height: "30px" }} />
         <input
           className="inputDiv"
           style={{ outline: "none" }}
@@ -503,7 +505,7 @@ function LoginComponent(props) {
       >
         <div style={{ flexDirection: "row" }}>
           <input
-            style={{ outline: "none" }}
+            style={{ cursor: "pointer", outline: "none" }}
             type="checkbox"
             id="topping"
             name="topping"
@@ -512,14 +514,14 @@ function LoginComponent(props) {
             onChange={handleAdmin}
           />
           <img
-            src={school}
+            src={School}
             style={{ marginInline: "12px", width: "15px", height: "15px" }}
           />
           <h5 style={{ color: "#2291F1" }}>School</h5>
         </div>
         <div style={{ flexDirection: "row" }}>
           <input
-            style={{ outline: "none" }}
+            style={{ cursor: "pointer", outline: "none" }}
             type="checkbox"
             id="topping"
             name="topping"
@@ -537,6 +539,7 @@ function LoginComponent(props) {
       <button
         className="inputsConatiner button blueBack"
         onClick={() => nextHandler()}
+        style={{ cursor: "pointer" }}
       >
         <h3 className="whiteText">Login</h3>
       </button>

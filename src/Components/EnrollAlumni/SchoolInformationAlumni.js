@@ -1,18 +1,21 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import { getDatabase, ref, set, onValue, push } from "firebase/database";
+import { getDatabase, ref, set, onValue } from "firebase/database";
 import toast, { Toaster } from "react-hot-toast";
 
 import app from "../../firebase";
-import school from "../../assets/Images/school.svg";
-import contact from "../../assets/Images/contact.svg";
-import graduate from "../../assets/Images/graduate.svg";
+import { School, Contact, Graduate } from "../../assets/Images/Index";
 
 const db = getDatabase(app);
 
 function SchoolInformationAlumni(props) {
   const key = props.getKey;
   const [schoolNamesList, setSchoolNamesList] = useState([]);
+  const [alumniSchoolInfo, setAlumniSchoolInfo] = useState({
+    schoolName: "",
+    graduationyear: "",
+    alumniNumber: "",
+  });
 
   useEffect(() => {
     onValue(ref(db, "School"), (snapshot) => {
@@ -23,11 +26,6 @@ function SchoolInformationAlumni(props) {
     });
   }, []);
 
-  const [alumniSchoolInfo, setAlumniSchoolInfo] = useState({
-    schoolName: "",
-    graduationyear: "",
-    alumniNumber: "",
-  });
   function backHandler() {
     var val = "register";
     var val = "register";
@@ -204,7 +202,7 @@ function SchoolInformationAlumni(props) {
   const InputsList = [
     {
       id: 1,
-      image: graduate,
+      image: Graduate,
       name: "graduationyear",
       value: alumniSchoolInfo.graduationyear,
       onch: onChangeHandler,
@@ -212,7 +210,7 @@ function SchoolInformationAlumni(props) {
     },
     {
       id: 2,
-      image: contact,
+      image: Contact,
       onch: onChangeHandler,
       ph: "Enter phone number",
       name: "alumniNumber",
@@ -238,7 +236,7 @@ function SchoolInformationAlumni(props) {
           );
         })}
         <div className="inputsConatiner select">
-          <img src={school} style={{ width: "30px", height: "30px" }} />
+          <img src={School} style={{ width: "30px", height: "30px" }} />
 
           <select
             id={"xyz"}

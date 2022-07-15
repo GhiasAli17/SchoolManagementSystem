@@ -2,8 +2,10 @@ export const SET_DATA = "SET_DATA";
 
 export const SET_KEY = "SET_KEY";
 export const SET_PROFILE = "SET_PROFILE";
+export const SET_USERNAME = "SET_USERNAME";
 
 export const SET_ALUMNI_KEY = "SET_ALUMNI_KEY";
+export const SET_USER_DATA = "SET_USER_DATA";
 
 export const SET_ALUMNI_SCHOOLNAME = "SET_ALUMNI_SCHOOLNAME";
 export const SET_USE_TYPE = "SET_USE_TYPE";
@@ -18,7 +20,14 @@ export const setAmount = (amount) => (dispatch) => {
     },
   });
 };
-
+export const setUserName = (username) => (dispatch) => {
+  dispatch({
+    type: SET_USERNAME,
+    payload: {
+      username: username,
+    },
+  });
+};
 export const setAlumniSchoolName = (alumniSchoolname) => (dispatch) => {
   dispatch({
     type: SET_ALUMNI_SCHOOLNAME,
@@ -32,6 +41,14 @@ export const setProfilePic = (profilepic) => (dispatch) => {
     type: SET_PROFILE,
     payload: {
       profilepic: profilepic,
+    },
+  });
+};
+export const setUserData = (userData) => (dispatch) => {
+  dispatch({
+    type: SET_USER_DATA,
+    payload: {
+      userData: userData,
     },
   });
 };

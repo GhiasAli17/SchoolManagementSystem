@@ -1,28 +1,19 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import Header from "../Components/Header";
-import { FaAngleRight } from "react-icons/fa";
 import { useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { deleteObject } from "firebase/storage";
+import { getDatabase, ref, update } from "firebase/database";
 import {
-  getDatabase,
-  ref,
-  set,
-  onValue,
-  push,
-  update,
-} from "firebase/database";
-import { useNavigate } from "react-router-dom";
-import app, { storage } from "../firebase";
-import {
-  getStorage,
   ref as sRef,
   uploadBytesResumable,
   getDownloadURL,
 } from "firebase/storage";
-
 import toast, { Toaster } from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
+
+import app, { storage } from "../firebase";
+import Header from "../Components/Header";
 
 const db = getDatabase(app);
 

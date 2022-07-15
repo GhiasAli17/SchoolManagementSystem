@@ -5,9 +5,7 @@ import { useNavigate } from "react-router-dom";
 import RegisterAlumni from "../Components/EnrollAlumni/RegisterAlumni";
 import SchoolInformationAlumni from "../Components/EnrollAlumni/SchoolInformationAlumni";
 import CompleteAlumni from "../Components/EnrollAlumni/CompleteAlumni";
-import logo from "../assets/Images/logo.png";
-
-import registerImage from "../assets/Images/registerImage.svg";
+import { RegisterImage, Logo } from "../assets/Images/Index";
 
 function EnrollAlumni() {
   const navigate = useNavigate();
@@ -31,11 +29,13 @@ function EnrollAlumni() {
       <Container>
         <div className="leftChild">
           <div style={{ marginLeft: "5%" }}>
-            <img src={logo} style={{ width: "70px", height: "60px" }} />
+            <img src={Logo} style={{ width: "70px", height: "60px" }} />
             <h3
               style={{
                 fontSize: 20,
                 margin: 0,
+                marginLeft: "20px",
+
                 marginTop: 10,
                 fontFamily: "poppins-regular",
               }}
@@ -52,7 +52,7 @@ function EnrollAlumni() {
           ) : null}
         </div>
         <div className="rightChild">
-          <img src={registerImage} id="img" />
+          <img src={RegisterImage} id="img" />
         </div>
       </Container>
     </>
@@ -74,7 +74,7 @@ const Container = styled.div`
     position: fixed;
     bottom: 0;
     background-position-x: right;
-    background: url(${registerImage});
+    background: url(${RegisterImage});
     background-repeat: no-repeat;
     width: 100%;
     height: 100%;

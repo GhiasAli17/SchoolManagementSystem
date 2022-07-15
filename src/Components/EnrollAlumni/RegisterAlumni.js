@@ -7,18 +7,13 @@ import { useNavigate } from "react-router-dom";
 
 import app from "../../firebase";
 import { setAlumniKey } from "../../Redux/actions";
-import user from "../../assets/Images/user.svg";
-import mail from "../../assets/Images/mail.svg";
-import lock from "../../assets/Images/lock.svg";
+import { User, Mail, Lock } from "../../assets/Images/Index";
 
 const db = getDatabase(app);
 
 function RegisterAlumni(props) {
   const navigate = useNavigate();
-
   const dispatch = useDispatch();
-  // set data in redux
-
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
@@ -123,7 +118,7 @@ function RegisterAlumni(props) {
   const InputsList = [
     {
       id: 1,
-      image: user,
+      image: User,
       value: firstName,
       name: "firstName",
       onch: onChangeHandler,
@@ -131,7 +126,7 @@ function RegisterAlumni(props) {
     },
     {
       id: 2,
-      image: user,
+      image: User,
       value: lastName,
       name: "lastName",
 
@@ -140,7 +135,7 @@ function RegisterAlumni(props) {
     },
     {
       id: 3,
-      image: mail,
+      image: Mail,
       value: email,
       name: "email",
 
@@ -149,7 +144,7 @@ function RegisterAlumni(props) {
     },
     {
       id: 4,
-      image: lock,
+      image: Lock,
       value: password,
       name: "password",
 
@@ -158,7 +153,7 @@ function RegisterAlumni(props) {
     },
     {
       id: 5,
-      image: lock,
+      image: Lock,
       value: confirmPass,
       name: "confirmPass",
 

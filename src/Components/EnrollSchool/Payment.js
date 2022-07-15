@@ -1,19 +1,16 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import toast, { Toaster } from "react-hot-toast";
-import user from "../../assets/Images/user.svg";
-import document from "../../assets/Images/document.svg";
-import bank from "../../assets/Images/bank.svg";
-import {useSelector} from "react-redux";
-import {getDatabase, ref, set} from "firebase/database";
+import { useSelector } from "react-redux";
+import { getDatabase, ref, set } from "firebase/database";
+
 import app from "../../firebase";
+import { User, Document, Bank } from "../../assets/Images/Index";
+
 const db = getDatabase(app);
 
-
 function Payment(props) {
-
-
-  const{key}=useSelector(state => state.persistedReducer)
+  const { key } = useSelector((state) => state.persistedReducer);
   const [bankInfo, setBankInfo] = useState({
     bankName: "",
     accountName: "",
@@ -35,8 +32,6 @@ function Payment(props) {
         if (value >= 0 && value < 9999999999) {
           setBankInfo({ ...bankInfo, [name]: value });
         } else {
-          //  let isnum = /^\d+$/. test(value)
-
           toast.custom(
             <div
               style={{
@@ -179,16 +174,15 @@ function Payment(props) {
         { duration: 1000 }
       );
     } else {
+      //data will be inserted from here
 
-        //data will be inserted from here
-
-        set(ref(db, "users/admin/" + key + "/bankInfo"), bankInfo)
-            .then(() => {
-                console.log("account data saved successfully");
-            })
-            .catch((err) => {
-                console.log(err);
-            });
+      set(ref(db, "users/admin/" + key + "/bankInfo"), bankInfo)
+        .then(() => {
+          console.log("account data saved successfully");
+        })
+        .catch((err) => {
+          console.log(err);
+        });
       var val = "complete";
       props.onClick(val);
     }
@@ -196,7 +190,7 @@ function Payment(props) {
   const InputsList = [
     {
       id: 1,
-      image: bank,
+      image: Bank,
       value: bankInfo.bankName,
       name: "bankName",
       onch: onChangeHandler,
@@ -204,7 +198,7 @@ function Payment(props) {
     },
     {
       id: 2,
-      image: bank,
+      image: Bank,
       value: bankInfo.routingNumber,
       name: "routingNumber",
 
@@ -213,7 +207,7 @@ function Payment(props) {
     },
     {
       id: 3,
-      image: user,
+      image: User,
       value: bankInfo.accountName,
       name: "accountName",
 
@@ -222,7 +216,7 @@ function Payment(props) {
     },
     {
       id: 4,
-      image: document,
+      image: Document,
       value: bankInfo.accountNumber,
       name: "accountNumber",
 

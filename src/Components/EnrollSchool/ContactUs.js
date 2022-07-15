@@ -1,87 +1,84 @@
-import React from 'react';
-import styled from 'styled-components';
+import React from "react";
+import styled from "styled-components";
 
 function ContactUs() {
-    return (
-        <Container>
-            <div className='paragraphDiv'>
-                <div className='h4Div'>
-                    <h4>Your enrollment is pending verification</h4>
-                </div>
-            </div>
+  return (
+    <Container>
+      <div className="paragraphDiv">
+        <div className="h4Div">
+          <h4>Your enrollment is pending verification</h4>
+        </div>
+      </div>
 
-            <div className='btnMainDiv'>
-                <div className='btnInnerDiv'>
-                    <div className='btnDiv'>
-                        <button>Contact us</button>
-                    </div>
-                </div>
-            </div>
+      <div className="btnMainDiv">
+        <div className="btnInnerDiv">
+          <div className="btnDiv">
+            <button>Contact us</button>
+          </div>
+        </div>
+      </div>
 
-            <div className='pMainDiv'>
-                <div className='pInnerDiv'>
-                    <p>StudentBook does not sell your information to anyone</p>
-                </div>
-            </div>
-
-        </Container>
-    )
+      <div className="pMainDiv">
+        <div className="pInnerDiv">
+          <p>StudentBook does not sell your information to anyone</p>
+        </div>
+      </div>
+    </Container>
+  );
 }
 
 export default ContactUs;
 
 const Container = styled.div`
-
-background-color: white;
-height: 78vh;
-width: 100%;
-display: flex;
-flex-direction: column;
-align-items: center;
-justify-content: space-between;
-.paragraphDiv {
+  background-color: white;
+  height: 78vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  .paragraphDiv {
     //background-color: yellow;
     height: 60%;
     width: 94%;
     display: flex;
     align-items: center;
     //justify-content: center;
-}
-.h4Div {
+  }
+  .h4Div {
     //background-color: aqua;
     height: 90%;
     width: 40%;
     display: flex;
     align-items: center;
     justify-content: center;
-}
-h4 {
+  }
+  h4 {
     text-align: center;
-}
-.btnMainDiv {
+  }
+  .btnMainDiv {
     //background-color: aqua;
     height: 18%;
     width: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
-}
-.btnInnerDiv {
+  }
+  .btnInnerDiv {
     //background-color: red;
     height: 100%;
     width: 92%;
     display: flex;
     align-items: center;
     justify-content: space-between;
-}
-.btnDiv {
+  }
+  .btnDiv {
     //background-color: gray;
     height: 50%;
     width: 16%;
     //border: 1px solid black;
-    
-}
-button {
+  }
+  button {
     background-color: gray;
     height: 100%;
     width: 100%;
@@ -89,26 +86,24 @@ button {
     font-size: 20px;
     border-radius: 5px;
     border: 0px;
-}
-.pMainDiv {
+  }
+  .pMainDiv {
     //background-color: brown;
     height: 14%;
     width: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
-}
-.pInnerDiv {
+  }
+  .pInnerDiv {
     //background-color: yellowgreen;
     height: 100%;
     width: 94%;
     display: flex;
     align-items: flex-start;
     justify-content: flex-end;
-}
-p {
+  }
+  p {
     text-align: right;
-}
-
-
-`
+  }
+`;

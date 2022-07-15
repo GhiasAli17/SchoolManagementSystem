@@ -1,20 +1,30 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { FaSearch, FaUserCircle } from "react-icons/fa";
+import { FaSearch } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import Modal from "react-modal";
 import { useLocation } from "react-router-dom";
-import logo from "../assets/Images/logo.png";
-import { setProfilePic } from "../Redux/actions";
-import setLogedinEmail from "../Redux/actions";
 
-import DropDown from "../assets/Images/DropDown.svg";
-import LogOut from "../assets/Images/LogOut.svg";
-import Settings from "../assets/Images/Settings.svg";
-import useravatar from "../assets/Images/useravatar.png";
+import {
+  setProfilePic,
+  setLogedinEmail,
+  setUserName,
+  setUserData,
+} from "../Redux/actions";
+import {
+  UserAvatar,
+  Settings,
+  LogOut,
+  DropDown,
+  AdminIcon,
+  Logo,
+} from "../assets/Images/Index";
 
-function Header() {
+function Header(props) {
+  if (props) {
+    console.log(`headr props data is this${props.data}`);
+  }
   const dispatch = useDispatch();
   const { userType, profilepic } = useSelector(
     (state) => state.persistedReducer
@@ -24,7 +34,33 @@ function Header() {
   const location = useLocation();
   let navigate = useNavigate();
 
-  const { data, key } = useSelector((state) => state.persistedReducer);
+  const { data, key, username } = useSelector(
+    (state) => state.persistedReducer
+  );
+  const searchData = (searchVal) => {
+    if (props) {
+      const newdata = props.data.filter((item) => {
+        if (item.itemName) {
+          const itemdata = item.itemName
+            ? item.itemName.toUpperCase()
+            : "".toUpperCase();
+
+          const textdata = searchVal.toUpperCase();
+          return itemdata.indexOf(textdata) > -1;
+        } else {
+          const itemdata = item.firstName
+            ? item.firstName.toUpperCase()
+            : "".toUpperCase();
+
+          const textdata = searchVal.toUpperCase();
+          return itemdata.indexOf(textdata) > -1;
+        }
+      });
+      props.setFilterData(newdata);
+    } else {
+      props.setFilterData(props.data);
+    }
+  };
 
   useEffect(() => {
     console.log(location);
@@ -49,8 +85,8 @@ function Header() {
     <Container>
       <div className="innerDiv">
         <div className="leftDiv">
-          <div className="logoContainer" onClick={() => navigate("/home")}>
-            <img src={logo} style={{ width: "100px", height: "60px" }} />
+          <div className="logoContainer" onClick={() => navigate("/")}>
+            <img src={Logo} style={{ width: "100px", height: "60px" }} />
           </div>
         </div>
         <div className="rightDiv">
@@ -65,6 +101,7 @@ function Header() {
               }}
               placeholder="Search"
               className="searchInput"
+              onChange={(e) => searchData(e.target.value)}
             />
           </div>
 
@@ -125,14 +162,14 @@ function Header() {
                     }}
                   >
                     {" "}
-                    {data}
+                    {username}
                   </h3>
                 </div>
                 <div className="buttonContainer">
                   <div onClick={() => navigate("/")}>
                     {profilepic == "" ? (
                       <img
-                        src={useravatar}
+                        src={UserAvatar}
                         style={{
                           width: "35px",
                           height: "35px",
@@ -200,21 +237,39 @@ function Header() {
             outline: "none",
           }}
         >
-          <div
-            style={{
-              minWidth: "100%",
-              height: "50%",
-              display: "flex",
-              alignItems: "center",
-              borderBottom: "1px solid #ccc",
-              justifyContent: "space-evenly",
-              cursor: "pointer",
-            }}
-            onClick={() => navigate("/settings")}
-          >
-            <img src={Settings} style={{ width: "20px", height: "20px" }} />
-            <h6 style={{ margin: 0, color: "#0E3746" }}>Settings</h6>
-          </div>
+          {userType != "SuperAdmin" ? (
+            <div
+              style={{
+                minWidth: "100%",
+                height: "50%",
+                display: "flex",
+                alignItems: "center",
+                borderBottom: "1px solid #ccc",
+                justifyContent: "space-evenly",
+                cursor: "pointer",
+              }}
+              onClick={() => navigate("/settings")}
+            >
+              <img src={Settings} style={{ width: "20px", height: "20px" }} />
+              <h6 style={{ margin: 0, color: "#0E3746" }}>Settings</h6>
+            </div>
+          ) : (
+            <div
+              style={{
+                minWidth: "100%",
+                height: "50%",
+                display: "flex",
+                alignItems: "center",
+                borderBottom: "1px solid #ccc",
+                justifyContent: "space-evenly",
+                cursor: "pointer",
+              }}
+              onClick={() => navigate("/AdminPanel")}
+            >
+              <img src={AdminIcon} style={{ width: "20px", height: "20px" }} />
+              <h6 style={{ margin: 0, color: "#0E3746" }}>Dashboard</h6>
+            </div>
+          )}
           <div
             style={{
               width: "100%",
@@ -227,6 +282,9 @@ function Header() {
             onClick={() => {
               dispatch(setLogedinEmail(""));
               navigate("/");
+              dispatch(setProfilePic(""));
+              dispatch(setUserData(""));
+              dispatch(setUserName(""));
               setModalVisible(false);
             }}
           >
@@ -319,7 +377,6 @@ const Container = styled.div`
     height: 60%;
     width: 100%;
     margin-inline: 5px;
-    padding-inline: 15px;
     align-items: center;
     display: flex;
     justify-content: center;

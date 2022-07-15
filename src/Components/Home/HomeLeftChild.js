@@ -1,7 +1,8 @@
 import React from "react";
 import styled from "styled-components";
+import { useDispatch } from "react-redux";
+
 import setLogedinEmail from "../../Redux/actions";
-import { useSelector, useDispatch } from "react-redux";
 
 function HomeLeftChild({ enrolAlumni, enrollSchollHandler }) {
   const dispatch = useDispatch();

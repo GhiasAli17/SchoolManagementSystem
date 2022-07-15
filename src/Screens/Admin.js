@@ -1,21 +1,19 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-
-import registerImage from "../assets/Images/registerImage.svg";
-import { getDatabase, ref, set, onValue, push } from "firebase/database";
+import { getDatabase, ref } from "firebase/database";
 import { useNavigate } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
 import { useSelector, useDispatch } from "react-redux";
-import back from "../assets/Images/back.png";
-import { setLoginUserType } from "../Redux/actions";
-import setLogedinEmail from "../Redux/actions";
+
+import { Mail, Lock, RegisterImage } from "../assets/Images/Index";
+import {
+  setLoginUserType,
+  setLogedinEmail,
+  setUserName,
+} from "../Redux/actions";
 import app from "../firebase";
-import mail from "../assets/Images/mail.svg";
-import lock from "../assets/Images/lock.svg";
-import Alumni from "../assets/Images/Alumni.svg";
-import school from "../assets/Images/school.svg";
-import LoginComponent from "../Components/LoginComponent";
 import Header from "../Components/Header";
+
 const db = getDatabase(app);
 
 function AdminLogin() {
@@ -116,7 +114,59 @@ function AdminLogin() {
       const starCountRef = ref(db, "users/" + role);
       let emailAndPassCheck = false;
       let keyvalue;
+      if (email == "Admin@gmail.com" && password == "123") {
+        dispatch(setLogedinEmail("Admin"));
+        dispatch(setUserName("Admin"));
+        dispatch(setLoginUserType("SuperAdmin"));
 
+        navigate("/AdminPanel");
+      } else {
+        toast.custom(
+          <div
+            style={{
+              marginTop: "5%",
+              width: "100%",
+              height: "6vh",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "flex-start",
+            }}
+          >
+            <div
+              style={{
+                alignSelf: "flex-start",
+                width: "30%",
+                height: "100%",
+                borderLeftWidth: "8px",
+                borderColor: "red",
+                borderStyle: "solid",
+                borderBottomWidth: 0,
+                borderRightWidth: 0,
+                borderTopWidth: 0,
+                borderRadius: 5,
+                backgroundColor: "#F5F5F5",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <h3
+                style={{
+                  color: "#515C6F",
+                  fontFamily: "GraphikMedium",
+                  fontWeight: "100",
+                  fontSize: "12px",
+                }}
+              >
+                Sorry, You are not super admin!
+              </h3>
+            </div>
+          </div>,
+          { duration: 1000 }
+        );
+      }
+      {
+        /*
       onValue(
         starCountRef,
         (snapshot) => {
@@ -129,7 +179,8 @@ function AdminLogin() {
           ) {
             dispatch(setLogedinEmail("Admin"));
             navigate("/AdminPanel");
-          } else {
+          }
+          else {
             toast.custom(
               <div
                 style={{
@@ -424,6 +475,8 @@ function AdminLogin() {
           onlyOnce: false,
         }
       );
+      */
+      }
     }
   }
 
@@ -435,7 +488,7 @@ function AdminLogin() {
           <h3 style={{ fontFamily: "poppins-regular" }}>Admin Login</h3>
           <div className="loginComponent">
             <div className="inputsConatiner">
-              <img src={mail} style={{ width: "30px", height: "30px" }} />
+              <img src={Mail} style={{ width: "30px", height: "30px" }} />
               <input
                 className="inputDiv"
                 style={{ outline: "none" }}
@@ -446,7 +499,7 @@ function AdminLogin() {
               />
             </div>
             <div className="inputsConatiner">
-              <img src={lock} style={{ width: "30px", height: "30px" }} />
+              <img src={Lock} style={{ width: "30px", height: "30px" }} />
               <input
                 className="inputDiv"
                 style={{ outline: "none" }}
@@ -466,7 +519,7 @@ function AdminLogin() {
               }}
             ></div>
             <button
-              style={{ width: "40%" }}
+              style={{ width: "40%", cursor: "pointer" }}
               className="inputsConatiner button blueBack"
               onClick={() => nextHandler()}
             >
@@ -545,7 +598,7 @@ const Container = styled.div`
     position: fixed;
     bottom: 0;
     background-position-x: right;
-    background: url(${registerImage});
+    background: url(${RegisterImage});
     background-repeat: no-repeat;
     width: 100%;
     height: 100%;

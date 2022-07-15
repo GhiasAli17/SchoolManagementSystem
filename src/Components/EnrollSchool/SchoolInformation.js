@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { getDatabase, ref, set, onValue, push } from "firebase/database";
-import app from "../../firebase";
+import { getDatabase, ref, set } from "firebase/database";
 import toast, { Toaster } from "react-hot-toast";
-import user from "../../assets/Images/user.svg";
-import school from "../../assets/Images/school.svg";
-import contact from "../../assets/Images/contact.svg";
+
+import { User, School, Contact } from "../../assets/Images/Index";
+import app from "../../firebase";
+
 const db = getDatabase(app);
 
 function SchoolInformation(props) {
@@ -198,7 +198,7 @@ function SchoolInformation(props) {
   const InputsList = [
     {
       id: 1,
-      image: school,
+      image: School,
       value: schoolInfo.schoolName,
       name: "schoolName",
       onch: onChangeHandler,
@@ -206,7 +206,7 @@ function SchoolInformation(props) {
     },
     {
       id: 2,
-      image: school,
+      image: School,
       value: schoolInfo.schoolAddress,
       name: "schoolAddress",
       onch: onChangeHandler,
@@ -214,7 +214,7 @@ function SchoolInformation(props) {
     },
     {
       id: 3,
-      image: user,
+      image: User,
       value: schoolInfo.principalName,
       name: "principalName",
       onch: onChangeHandler,
@@ -222,7 +222,7 @@ function SchoolInformation(props) {
     },
     {
       id: 4,
-      image: user,
+      image: User,
       value: schoolInfo.relationship,
       name: "relationship",
       onch: onChangeHandler,
@@ -230,7 +230,7 @@ function SchoolInformation(props) {
     },
     {
       id: 5,
-      image: contact,
+      image: Contact,
       value: schoolInfo.phoneNumber,
       name: "phoneNumber",
       onch: onChangeHandler,

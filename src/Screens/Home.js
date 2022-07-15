@@ -1,12 +1,11 @@
 import React from "react";
 import styled from "styled-components";
-import Header from "../Components/Header";
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+
 import HomeLeftChild from "../Components/Home/HomeLeftChild";
 import HomeRightChild from "../Components/Home/HomeRightChild";
-import { useNavigate } from "react-router-dom";
-import setLogedinEmail from "../Redux/actions";
-import { useSelector, useDispatch } from "react-redux";
-import logo from "../assets/Images/logo.png";
+import Header from "../Components/Header";
 
 function HomePgae() {
   const navigate = useNavigate();

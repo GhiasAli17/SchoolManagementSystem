@@ -1,11 +1,10 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-
-import registerImage from "../assets/Images/registerImage.svg";
-import logo from "../assets/Images/logo.png";
 import { useNavigate } from "react-router-dom";
 
+import { Logo, RegisterImage } from "../assets/Images/Index";
 import LoginComponent from "../Components/LoginComponent";
+
 function Login() {
   const [component, setcomponent] = useState("register");
   let navigate = useNavigate();
@@ -20,7 +19,7 @@ function Login() {
         <div className="leftChild">
           <div style={{ cursor: "pointer" }}>
             <img
-              src={logo}
+              src={Logo}
               style={{ cursor: "pointer", width: "70px", height: "60px" }}
               onClick={() => navigate("/")}
             />
@@ -38,7 +37,7 @@ function Login() {
           <LoginComponent onClick={componentHandler} />
         </div>
         <div className="rightChild">
-          <img src={registerImage} id="img" />
+          <img src={RegisterImage} id="img" />
         </div>
       </Container>
     </>
@@ -60,7 +59,7 @@ const Container = styled.div`
     position: fixed;
     bottom: 0;
     background-position-x: right;
-    background: url(${registerImage});
+    background: url(${RegisterImage});
     background-repeat: no-repeat;
     width: 100%;
     height: 100%;
