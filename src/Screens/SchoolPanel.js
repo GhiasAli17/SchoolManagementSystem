@@ -388,7 +388,6 @@ const Container = styled.div`
     cursor: pointer;
   }
   .rightDiv {
-    //background-color: yellow;
     height: 70%;
     width: 50%;
     display: flex;
