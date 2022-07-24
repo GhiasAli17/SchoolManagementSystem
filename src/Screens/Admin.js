@@ -31,7 +31,7 @@ function AdminLogin() {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [userType, setUserType] = useState("supperadmin");
+  const [userType, setUserType] = useState("superadmin");
   const [isChecked, setIsChecked] = useState(false);
   const [check, setCheck] = useState(false);
 
@@ -110,11 +110,11 @@ function AdminLogin() {
       // else {
       //     role = "alumni";
       // }
-      role = "supperadmin";
+      role = "superadmin";
       const starCountRef = ref(db, "users/" + role);
       let emailAndPassCheck = false;
       let keyvalue;
-      if (email == "Admin@gmail.com" && password == "123") {
+      if (email == "admin@gmail.com" && password == "123") {
         dispatch(setLogedinEmail("Admin"));
         dispatch(setUserName("Admin"));
         dispatch(setLoginUserType("SuperAdmin"));
