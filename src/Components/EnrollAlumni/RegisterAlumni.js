@@ -21,7 +21,7 @@ function RegisterAlumni(props) {
   const [confirmPass, setConfirmPass] = useState("");
 
   const onChangeHandler = (event) => {
-    console.log("name", event.target.name);
+    console.log("nasme", event.target.name);
     const inputName = event.target.name;
     const inputValue = event.target.value;
     switch (inputName) {
