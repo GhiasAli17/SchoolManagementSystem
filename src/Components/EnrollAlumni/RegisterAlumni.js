@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { getDatabase, ref, push } from "firebase/database";
+import {getDatabase, ref, push, onValue} from "firebase/database";
 import toast, { Toaster } from "react-hot-toast";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 import app from "../../firebase";
 import { setAlumniKey } from "../../Redux/actions";
 import { User, Mail, Lock } from "../../assets/Images/Index";
+import {useEffect} from "react";
 
 const db = getDatabase(app);
 
@@ -20,7 +21,33 @@ function RegisterAlumni(props) {
   const [password, setPassword] = useState("");
   const [confirmPass, setConfirmPass] = useState("");
 
-  const onChangeHandler = (event) => {
+    const [alreadyRegisteredEmails, setAlreadyRegisteredEmails] =  useState([])
+    var emailist = [];
+
+    useEffect(()=> {
+        onValue(
+            ref(db, "users/alumni"),
+            (snapshot) => {
+                emailist = []
+                snapshot.forEach((childSnapshot) => {
+
+                    emailist.push(childSnapshot.val().email)
+                    setAlreadyRegisteredEmails(emailist);
+
+
+                });
+                // setAlreadyRegisteredEmails(emailist);
+                console.log('child dfdslskfjsdslkfjsds', alreadyRegisteredEmails)
+            },
+            {
+                onlyOnce: false,
+            }
+        );
+
+    },[])
+
+
+    const onChangeHandler = (event) => {
     console.log("name", event.target.name);
     const inputName = event.target.name;
     const inputValue = event.target.value;
@@ -32,7 +59,18 @@ function RegisterAlumni(props) {
         setLastName(inputValue);
         break;
       case "email":
-        setEmail(inputValue);
+          let emailCheck = false;
+          for(let i=0;i<alreadyRegisteredEmails.length;i++){
+              if(inputValue == alreadyRegisteredEmails[i]){
+                  emailCheck = true;
+                  break;
+              }
+          }
+          if(!emailCheck)
+              setEmail(inputValue);
+          else{
+              alert("User is already registered!")
+          }
         break;
       case "password":
         setPassword(inputValue);

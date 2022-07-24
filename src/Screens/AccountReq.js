@@ -56,7 +56,6 @@ function AccountsReq() {
 
   // ---------
   //----------
-  console.log(`modalllllllllllllllllllllllllllllllllll ${modalVisible}`);
   useEffect(() => {
     onValue(
       starCountRef,
@@ -302,7 +301,7 @@ function AccountsReq() {
                   fontFamily: "Poppins-Regular",
                 }}
               >
-                There is no Registartion Request
+                There is no Registration Requests
               </h4>
             </div>
           )}

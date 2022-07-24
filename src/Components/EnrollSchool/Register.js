@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, {useEffect, useState} from "react";
 import styled from "styled-components";
-import { getDatabase, ref, push } from "firebase/database";
+import { getDatabase, ref, push, onValue } from "firebase/database";
 import { useNavigate } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
 import { useDispatch } from "react-redux";
@@ -19,6 +19,30 @@ function Register(props) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPass, setConfirmPass] = useState("");
+  const [alreadyRegisteredEmails, setAlreadyRegisteredEmails] =  useState([])
+  var emailist = [];
+
+  useEffect(()=> {
+      onValue(
+          ref(db, "users/admin"),
+          (snapshot) => {
+              emailist = []
+              snapshot.forEach((childSnapshot) => {
+
+                  emailist.push(childSnapshot.val().email)
+                  setAlreadyRegisteredEmails(emailist);
+
+
+              });
+              // setAlreadyRegisteredEmails(emailist);
+              console.log('child dfdslskfjsdslkfjsds', alreadyRegisteredEmails)
+          },
+          {
+              onlyOnce: false,
+          }
+      );
+
+  },[])
 
   const onChangeHandler = (event) => {
     console.log("name", event.target.name);
@@ -33,7 +57,18 @@ function Register(props) {
         setLastName(inputValue);
         break;
       case "email":
+        let emailCheck = false;
+        for(let i=0;i<alreadyRegisteredEmails.length;i++){
+            if(inputValue == alreadyRegisteredEmails[i]){
+                emailCheck = true;
+                break;
+            }
+        }
+        if(!emailCheck)
         setEmail(inputValue);
+        else{
+            alert("User is already registered!")
+        }
         break;
       case "password":
         setPassword(inputValue);
@@ -145,6 +180,25 @@ function Register(props) {
         );
       } else {
         var val = "schoolInformation";
+
+        ////////////////////////////////
+
+          onValue(
+              ref(db, "users/admin"),
+              (snapshot) => {
+                  snapshot.forEach((childSnapshot) => {
+                      console.log('child dfdslkfjdslkfjds', childSnapshot)
+                  });
+              },
+              {
+                  onlyOnce: false,
+              }
+          );
+
+
+          /////////////////////////////
+
+
         var key = push(ref(db, "users/admin"), {
           firstName,
           lastName,
