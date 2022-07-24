@@ -502,6 +502,7 @@ function LoginComponent(props) {
           flexDirection: "row",
           marginTop: "30px",
           marginBottom: "30px",
+
           width: "70%",
         }}
       >
