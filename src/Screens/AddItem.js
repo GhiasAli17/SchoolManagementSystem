@@ -285,7 +285,7 @@ function AddItem() {
         <Header />
         <Container>
           <div className="headingText">
-            <h3 style={{ fontFamily: "poppins-regular" }}>Add New Item</h3>
+            <h3 style={{ fontFamily: "Poppins-Regular" }}>Add New Item</h3>
           </div>
           <div className="addItemContainer">
             {InputsList.map((item) => {
@@ -371,7 +371,7 @@ function AddItem() {
                   justifyContent: "center",
                 }}
               >
-                <button onClick={onSubmitHandler}>
+                <button style={{ cursor: "pointer" }} onClick={onSubmitHandler}>
                   <h6 style={{ color: "white", margin: 0 }}>Submit</h6>
                 </button>
               </div>

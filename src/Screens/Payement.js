@@ -7,6 +7,7 @@ import {
   useStripe,
 } from "@stripe/react-stripe-js";
 import styled from "styled-components";
+import { useLocation } from "react-router-dom";
 
 import "./styles.css";
 
@@ -104,7 +105,7 @@ const ResetButton = ({ onClick }) => (
   </button>
 );
 
-const CheckoutForm = () => {
+const CheckoutForm = ({ amount }) => {
   const stripe = useStripe();
   const elements = useElements();
   const [error, setError] = useState(null);
@@ -222,7 +223,7 @@ const CheckoutForm = () => {
       </fieldset>
       {error && <ErrorMessage>{error.message}</ErrorMessage>}
       <SubmitButton processing={processing} error={error} disabled={!stripe}>
-        Pay $25
+        Pay ${amount}
       </SubmitButton>
     </form>
   );
@@ -241,20 +242,32 @@ const ELEMENTS_OPTIONS = {
 const stripePromise = loadStripe("pk_test_6pRNASCoBOKtIshFeQd4XMUh");
 
 const StripeContainer = () => {
+  const location = useLocation();
+
   return (
     <Container>
-      <Elements stripe={stripePromise} options={ELEMENTS_OPTIONS}>
-        <CheckoutForm />
-      </Elements>
+      <div className="LeftDiv">
+        <Elements stripe={stripePromise} options={ELEMENTS_OPTIONS}>
+          <CheckoutForm amount={location.state.amount} />
+        </Elements>
+      </div>
     </Container>
   );
 };
 
 export default StripeContainer;
 const Container = styled.div`
-  width: 500px;
-  height: 400px;
+  width: 100vw;
+  height: 80vh;
   position: relative;
+  display: flex;
+  .LeftDiv {
+    width: 50vw;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
   * {
     box-sizing: border-box;
   }
@@ -266,28 +279,6 @@ const Container = styled.div`
     appearance: none;
     outline: none;
     border-style: none;
-  }
-
-  html {
-    background-color: #6772e5;
-    font-size: 16px;
-    font-family: Roboto, Open Sans, Segoe UI, sans-serif;
-    font-weight: 500;
-    font-style: normal;
-    text-rendering: optimizeLegibility;
-    height: 100%;
-  }
-
-  body {
-    height: 100%;
-    margin: 0;
-  }
-
-  #root {
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
   }
 
   @keyframes fade {
@@ -310,10 +301,10 @@ const Container = styled.div`
     margin: 0 15px 20px;
     padding: 0;
     border-style: none;
-    background-color: #7795f8;
+    background-color: rgba(218, 221, 225, 0.4);
     will-change: opacity, transform;
     box-shadow: 0 6px 9px rgba(50, 50, 93, 0.06), 0 2px 5px rgba(0, 0, 0, 0.08),
-      inset 0 1px 0 #829fff;
+      inset 0 1px 0 rgba(218, 221, 225, 0.4);
     border-radius: 4px;
   }
 
@@ -323,7 +314,7 @@ const Container = styled.div`
     -ms-flex-align: center;
     align-items: center;
     margin-left: 15px;
-    border-top: 1px solid #819efc;
+    border-top: 1px solid grey;
   }
 
   .FormRow:first-child {
@@ -334,7 +325,7 @@ const Container = styled.div`
     width: 15%;
     min-width: 70px;
     padding: 11px 0;
-    color: #c4f0ff;
+    color: grey;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -358,7 +349,7 @@ const Container = styled.div`
     font-size: 16px;
     width: 100%;
     padding: 11px 15px 11px 0;
-    color: #fff;
+    color: #2291f1;
     background-color: transparent;
     animation: 1ms void-animation-out;
   }
@@ -382,9 +373,7 @@ const Container = styled.div`
     width: calc(100% - 30px);
     height: 40px;
     margin: 40px 15px 0;
-    background-color: #f6a4eb;
-    box-shadow: 0 6px 9px rgba(50, 50, 93, 0.06), 0 2px 5px rgba(0, 0, 0, 0.08),
-      inset 0 1px 0 #ffb9f6;
+    background-color: #2291f1;
     border-radius: 4px;
     color: #fff;
     font-weight: 600;

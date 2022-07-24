@@ -485,7 +485,7 @@ function AdminLogin() {
       <Header />
       <Container>
         <div className="leftChild">
-          <h3 style={{ fontFamily: "poppins-regular" }}>Admin Login</h3>
+          <h3 style={{ fontFamily: "Poppins-Regular" }}>Admin Login</h3>
           <div className="loginComponent">
             <div className="inputsConatiner">
               <img src={Mail} style={{ width: "30px", height: "30px" }} />

@@ -68,7 +68,7 @@ const Container = styled.div`
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    margin-bottom: 20;
+    margin: 0 0 20px 40px;
   }
   h2 {
     text-align: center;

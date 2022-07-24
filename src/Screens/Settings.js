@@ -183,7 +183,7 @@ function Settings({ navigation }) {
       <Container>
         <div className="mainBody">
           <h3
-            style={{ alignSelf: "flex-start", fontFamily: "poppins-regular" }}
+            style={{ alignSelf: "flex-start", fontFamily: "Poppins-Regular" }}
           >
             Settings
           </h3>
@@ -342,10 +342,10 @@ function Settings({ navigation }) {
                     justifyContent: "space-evenly",
                   }}
                 >
-                  <h4 style={{ fontFamily: "poppins-regular" }}>CVV Number</h4>
+                  <h4 style={{ fontFamily: "Poppins-Regular" }}>CVV Number</h4>
                   <h6
                     style={{
-                      fontFamily: "poppins-regular",
+                      fontFamily: "Poppins-Regular",
                       color: "rgba(14, 55, 70, 0.4)",
                     }}
                   >
@@ -379,10 +379,10 @@ function Settings({ navigation }) {
                     justifyContent: "space-evenly",
                   }}
                 >
-                  <h4 style={{ fontFamily: "poppins-regular" }}>Expiry Date</h4>
+                  <h4 style={{ fontFamily: "Poppins-Regular" }}>Expiry Date</h4>
                   <h6
                     style={{
-                      fontFamily: "poppins-regular",
+                      fontFamily: "Poppins-Regular",
                       color: "rgba(14, 55, 70, 0.4)",
                     }}
                   >

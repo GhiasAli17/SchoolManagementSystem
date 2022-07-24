@@ -37,7 +37,7 @@ function EnrollSchool({ navigation }) {
                 margin: 0,
                 marginLeft: "20px",
                 marginTop: 10,
-                fontFamily: "poppins-regular",
+                fontFamily: "Poppins-Regular",
               }}
             >
               {component}

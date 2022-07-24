@@ -28,7 +28,7 @@ function Login() {
                 fontSize: 20,
                 margin: 0,
                 marginTop: 10,
-                fontFamily: "poppins-regular",
+                fontFamily: "Poppins-Regular",
               }}
             >
               Login

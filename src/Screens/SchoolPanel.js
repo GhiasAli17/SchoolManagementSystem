@@ -198,17 +198,17 @@ function SchoolPanel() {
         <Container>
           <div className="nav">
             <div className="leftDiv">
-              <h3 style={{ fontFamily: "poppins-regular" }}>Needs</h3>
+              <h3 style={{ fontFamily: "Poppins-Regular" }}>Needs</h3>
             </div>
             <div className="rightDiv">
               <button onClick={() => addHandler()} className="button">
-                <h4 style={{ color: "#2291F1", fontFamily: "poppins-regular" }}>
+                <h4 style={{ color: "#2291F1", fontFamily: "Poppins-Regular" }}>
                   Add New
                 </h4>
               </button>
 
               <button onClick={() => navigate("/accounts")} className="button">
-                <h4 style={{ color: "#2291F1", fontFamily: "poppins-regular" }}>
+                <h4 style={{ color: "#2291F1", fontFamily: "Poppins-Regular" }}>
                   Accounts Requests
                 </h4>
               </button>
@@ -226,7 +226,7 @@ function SchoolPanel() {
                         display: " flex",
                         alignItems: "center",
                         justifyContent: "center",
-                        fontFamily: "poppins-regular",
+                        fontFamily: "Poppins-Regular",
                       }}
                     >
                       {item == "nill" || item == "nil" ? null : <h6>{item}</h6>}
@@ -253,7 +253,7 @@ function SchoolPanel() {
               <h4
                 style={{
                   color: "rgba(14, 55, 70, 0.4)",
-                  fontFamily: "poppins-regular",
+                  fontFamily: "Poppins-Regular",
                 }}
               >
                 You did not have any item in your list Click "Add new" to add
@@ -315,7 +315,7 @@ function SchoolPanel() {
                   marginLeft: "3%",
                   fontWeight: "500",
                   color: "rgba(255, 0, 0, 0.14)",
-                  fontFamily: "poppins-regular",
+                  fontFamily: "Poppins-Regular",
                 }}
               >
                 Are you sure to delete this Item
@@ -333,7 +333,7 @@ function SchoolPanel() {
                   borderRadius: 10,
                 }}
               >
-                <h4 style={{ color: "white", fontFamily: "poppins-regular" }}>
+                <h4 style={{ color: "white", fontFamily: "Poppins-Regular" }}>
                   Confirm Delete
                 </h4>
               </button>

@@ -15,6 +15,7 @@ import {
 import {
   UserAvatar,
   Settings,
+  SearchIcon,
   LogOut,
   DropDown,
   AdminIcon,
@@ -91,7 +92,16 @@ function Header(props) {
         </div>
         <div className="rightDiv">
           <div className="searchDiv">
-            <FaSearch size={13} className="searchIcon" />
+            <img
+              src={SearchIcon}
+              style={{
+                width: "20px",
+                height: "20px",
+                marginLeft: "20px",
+                marginRight: "6px",
+                borderRadius: "20px",
+              }}
+            />{" "}
             <input
               id="inputID"
               style={{
@@ -111,11 +121,12 @@ function Header(props) {
                 <button
                   className="headerButtons"
                   onClick={() => navigate("/admin")}
+                  style={{ backgroundColor: "white" }}
                 >
                   {" "}
                   <h3
                     style={{
-                      color: "white",
+                      color: "#0E3746",
                       alignSelf: "center",
                       justifySelf: "center",
                       fontSize: 15,
@@ -128,7 +139,7 @@ function Header(props) {
                 </button>
                 <button
                   className="headerButtons"
-                  onClick={() => navigate("/SchoolLogin")}
+                  onClick={() => navigate("/login")}
                 >
                   <h3
                     style={{
@@ -280,12 +291,12 @@ function Header(props) {
               cursor: "pointer",
             }}
             onClick={() => {
-              dispatch(setLogedinEmail(""));
-              navigate("/");
               dispatch(setProfilePic(""));
               dispatch(setUserData(""));
               dispatch(setUserName(""));
               setModalVisible(false);
+              dispatch(setLogedinEmail(""));
+              navigate("/");
             }}
           >
             <img src={LogOut} style={{ width: "20px", height: "20px" }} />

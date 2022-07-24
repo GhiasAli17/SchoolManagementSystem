@@ -166,7 +166,7 @@ function AccountsReq() {
             </div>
             <img
               src={DropDown}
-              style={{ width: "10px", height: "10px" }}
+              style={{ cursor: "pointer", width: "10px", height: "10px" }}
               onClick={() => {
                 modalVisible == item.alumniKey
                   ? setModalVisible("")
@@ -184,6 +184,7 @@ function AccountsReq() {
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
+                  cursor: "pointer",
                 }}
               >
                 <h6
@@ -200,7 +201,7 @@ function AccountsReq() {
                   height: "50%",
                   display: "flex",
                   alignItems: "center",
-
+                  cursor: "pointer",
                   justifyContent: "center",
                 }}
               >
@@ -247,7 +248,7 @@ function AccountsReq() {
 
         <Container>
           <div className="nav">
-            <h3 style={{ fontFamily: "poppins-regular" }}>
+            <h3 style={{ fontFamily: "Poppins-Regular" }}>
               Alumni Registrations requests
             </h3>
           </div>
@@ -298,15 +299,25 @@ function AccountsReq() {
               <h4
                 style={{
                   color: "rgba(14, 55, 70, 0.4)",
-                  fontFamily: "poppins-regular",
+                  fontFamily: "Poppins-Regular",
                 }}
               >
                 There is no Registartion Request
               </h4>
             </div>
           )}
-          <div className="backButton" style={{ cursor: "pointer" }}>
-            <button onClick={() => navigate("/SchoolLogin")}>move back</button>
+          <div
+            className="backButton"
+            style={{ borderRadius: "10px", overflow: "hidden" }}
+          >
+            <button
+              style={{
+                cursor: "pointer",
+              }}
+              onClick={() => navigate(-1)}
+            >
+              move back
+            </button>
           </div>
         </Container>
       </>

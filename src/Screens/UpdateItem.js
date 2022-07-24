@@ -302,7 +302,7 @@ function UpdateItem() {
       <Header />
       <Container>
         <div className="headingText">
-          <h3 style={{ fontFamily: "poppins-regular" }}>Update Item</h3>
+          <h3 style={{ fontFamily: "Poppins-Regular" }}>Update Item</h3>
         </div>
         <div className="addItemContainer">
           {InputsList.map((item) => {

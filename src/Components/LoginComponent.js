@@ -477,7 +477,7 @@ function LoginComponent(props) {
         <input
           className="inputDiv"
           style={{ outline: "none" }}
-          placeholder="enter email"
+          placeholder="Email"
           name="email"
           value={email}
           onChange={onChangeHandler}
@@ -489,7 +489,7 @@ function LoginComponent(props) {
           className="inputDiv"
           style={{ outline: "none" }}
           type="password"
-          placeholder="enter password"
+          placeholder="Password"
           name="password"
           value={password}
           onChange={onChangeHandler}
@@ -500,6 +500,8 @@ function LoginComponent(props) {
           display: "flex",
           justifyContent: "space-evenly",
           flexDirection: "row",
+          marginTop: "30px",
+          marginBottom: "30px",
           width: "70%",
         }}
       >
@@ -558,7 +560,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: space-evenly;
+  justify-content: flex-start;
   margin-top: 20px;
 
   .inputsConatiner {
@@ -566,6 +568,7 @@ const Container = styled.div`
     width: 60%;
     display: flex;
     align-items: center;
+    margin-top: 20px;
     justify-content: space-between;
   }
   .select {
@@ -597,5 +600,9 @@ const Container = styled.div`
     padding-left: 20px !important;
     border-radius: 7px;
     border: 1px solid rgba(218, 221, 225, 0.4);
+  }
+  .inputDiv::placeholder {
+    color: rgba(14, 55, 70, 0.4);
+    opacity: 1;
   }
 `;

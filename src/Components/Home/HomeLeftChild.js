@@ -2,22 +2,33 @@ import React from "react";
 import styled from "styled-components";
 import { useDispatch } from "react-redux";
 
-import setLogedinEmail from "../../Redux/actions";
+import {
+  setLogedinEmail,
+  setUserData,
+  setUserName,
+  setLoginUserType,
+} from "../../Redux/actions";
 
 function HomeLeftChild({ enrolAlumni, enrollSchollHandler }) {
   const dispatch = useDispatch();
   return (
     <Container>
-      <div className="headingTextContainer">
+      <div className="">
         <div className="bigNeedsDiv">
           <div style={{ display: "flex" }}>
             <h1 className="needsText">Big</h1>
-            <h1 className="needsText" style={{ color: "#2291F1" }}>
+            <h1
+              className="needsText"
+              style={{ color: "#2291F1", marginLeft: "10px" }}
+            >
               Needs
             </h1>
           </div>
           <div style={{ display: "flex" }}>
-            <h1 className="needsText leftMargin" style={{ color: "#2291F1" }}>
+            <h1
+              className="needsText leftMargin"
+              style={{ color: "#2291F1", marginRight: "10px" }}
+            >
               Small
             </h1>
             <h1 className="needsText">payments</h1>
@@ -35,6 +46,9 @@ function HomeLeftChild({ enrolAlumni, enrollSchollHandler }) {
             onClick={() => {
               enrollSchollHandler();
               dispatch(setLogedinEmail(""));
+              dispatch(setLoginUserType(""));
+              dispatch(setUserData(""));
+              dispatch(setUserName(""));
             }}
             className="blueBack button"
           >
@@ -47,8 +61,12 @@ function HomeLeftChild({ enrolAlumni, enrollSchollHandler }) {
             onClick={() => {
               enrolAlumni();
               dispatch(setLogedinEmail(""));
+              dispatch(setLoginUserType(""));
+              dispatch(setUserData(""));
+              dispatch(setUserName(""));
             }}
             className="button"
+            style={{ marginLeft: "20px" }}
           >
             <h3 className="enrollText blueText">Join your School</h3>
             <h4 className="text blueText">(for school alumni)</h4>
@@ -65,15 +83,15 @@ const Container = styled.div`
   background-color: white;
   height: 100%;
   width: 100%;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
   padding: 15px;
   .regButtons {
     width: 100%;
     flex: 1;
-    align-items: center;
     display: flex;
-    justify-content: space-evenly;
+    justify-content: flex-start;
   }
   .headingTextContainer {
     width: 100%;
@@ -85,9 +103,9 @@ const Container = styled.div`
   .bigNeedsDiv {
     width: 100%;
     display: flex;
-    margin-top: 5%;
     flex-direction: column;
     align-items: flex-start;
+    margin: 20px 0 0 0;
   }
   h1 {
     font-size: 50px;
@@ -122,33 +140,36 @@ const Container = styled.div`
     width: 70%;
   }
   .detailText {
-    font-size: 30px;
+    font-size: 25px;
     font-weight: 400;
     color: rgba(14, 55, 70, 0.4);
-    font-family: "poppins-regular";
+    margin: 30px 0 30px 0;
+
+    font-family: "Poppins-Regular";
   }
   .needsText {
     font-size: 50px;
-    margin: 5px;
-    font-family: "poppins-regular";
+    margin-inline: 5px;
+    margin: 0px;
+    font-family: "Poppins-Regular";
   }
   .leftMargin {
     margin-left: 3%;
   }
   .donatedText {
     font-size: 15px;
-    font-family: "poppins-regular";
+    font-family: "Poppins-Regular";
   }
   .enrollText {
     font-size: 20px;
-    font-family: "poppins-regular";
+    font-family: "Poppins-Regular";
 
     font-weight: 500;
   }
   .text {
     font-size: 17px;
     font-weight: 500;
-    font-family: "poppins-regular";
+    font-family: "Poppins-Regular";
   }
   .whiteText {
     color: white;
@@ -159,9 +180,8 @@ const Container = styled.div`
   .btnDiv {
     border-radius: 5px;
     height: 5%;
-    width: 40%;
+    width: 37%;
     display: flex;
-    background-color: green;
   }
   @media screen and (max-width: 750px) {
     .needsText {

@@ -42,6 +42,8 @@ export default HomePgae;
 const Container = styled.div`
   flex: 1;
   display: flex;
+  justify-content: space-between;
+  padding: 50px 10px 0 10px;
   .leftDiv {
     height: 100%;
     width: 50%;
@@ -49,7 +51,7 @@ const Container = styled.div`
   }
   .rightDiv {
     height: 100%;
-    width: 50%;
+    width: 40%;
   }
 
   h3 {

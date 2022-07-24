@@ -128,6 +128,7 @@ function AdminPanel() {
             alignItems: "center",
             justifyContent: "center",
             flexDirection: "row",
+            position: "relative",
           }}
         >
           <div style={{ display: "flex", alignItems: "center" }}>
@@ -218,7 +219,7 @@ function AdminPanel() {
 
         <Container>
           <div className="nav">
-            <h3 style={{ fontFamily: "poppins-regular" }}>Admin Dashboard</h3>
+            <h3 style={{ fontFamily: "Poppins-Regular" }}>Admin Dashboard</h3>
           </div>
           <div
             style={{

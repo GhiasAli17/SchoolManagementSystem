@@ -211,7 +211,7 @@ function AlumniPanel() {
         <Container>
           <div className="nav">
             <div className="leftDiv">
-              <h3 style={{ fontFamily: "poppins-regular" }}>Needs</h3>
+              <h3 style={{ fontFamily: "Poppins-Regular" }}>Needs</h3>
             </div>
           </div>
           {filterData.length > 0 ? (
@@ -309,6 +309,7 @@ const Container = styled.div`
     display: flex;
     align-items: center;
     justify-content: space-between;
+    border-bottom: 1px solid #dadde1;
   }
   .input {
     width: 30px;
