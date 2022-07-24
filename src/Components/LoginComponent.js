@@ -108,10 +108,36 @@ function LoginComponent(props) {
     } else {
       let role = "";
 
+       //  onValue(
+       //      ref(db, "users/admin"),
+       //      (snapshot) => {
+       //          snapshot.forEach((childSnapshot) => {
+       //              if(childSnapshot.val().email == email){
+       //                  role = "admin";
+       //                  setUserType("Admin");
+       //              }
+       //          })
+       //      })
+       // if(role=="")
+       //  onValue(
+       //      ref(db, "users/alumni"),
+       //      (snapshot) => {
+       //          snapshot.forEach((childSnapshot) => {
+       //              if(childSnapshot.val().email == email){
+       //                  role = "alumni";
+       //                  setUserType("Alumni");
+       //
+       //              }
+       //          })
+       //      })
+
       if (userType == "Admin") role = "admin";
       else {
         role = "alumni";
       }
+
+        console.log("role ----", role)
+        //role="alumni"
       const starCountRef = ref(db, "users/" + role);
       let emailAndPassCheck = false;
       let keyvalue;
@@ -119,7 +145,9 @@ function LoginComponent(props) {
       onValue(
         starCountRef,
         (snapshot) => {
-          let alumniEmail, alumniPassword;
+            console.log('inside role--',role)
+
+            let alumniEmail, alumniPassword;
           let approveCheck = false;
           let SchoolName = "";
           snapshot.forEach((childSnapshot) => {
@@ -467,7 +495,7 @@ function LoginComponent(props) {
         }
       );
     }
-    event.preventDefault();
+    // event.preventDefault();
   }
 
   return (
