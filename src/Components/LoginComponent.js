@@ -106,394 +106,395 @@ function LoginComponent(props) {
         { duration: 1000 }
       );
     } else {
-      let role = "";
+        let role = "";
 
-       //  onValue(
-       //      ref(db, "users/admin"),
-       //      (snapshot) => {
-       //          snapshot.forEach((childSnapshot) => {
-       //              if(childSnapshot.val().email == email){
-       //                  role = "admin";
-       //                  setUserType("Admin");
-       //              }
-       //          })
-       //      })
-       // if(role=="")
-       //  onValue(
-       //      ref(db, "users/alumni"),
-       //      (snapshot) => {
-       //          snapshot.forEach((childSnapshot) => {
-       //              if(childSnapshot.val().email == email){
-       //                  role = "alumni";
-       //                  setUserType("Alumni");
-       //
-       //              }
-       //          })
-       //      })
+        //  onValue(
+        //      ref(db, "users/admin"),
+        //      (snapshot) => {
+        //          snapshot.forEach((childSnapshot) => {
+        //              if(childSnapshot.val().email == email){
+        //                  role = "admin";
+        //                  setUserType("Admin");
+        //              }
+        //          })
+        //      })
+        // if(role=="")
+        //  onValue(
+        //      ref(db, "users/alumni"),
+        //      (snapshot) => {
+        //          snapshot.forEach((childSnapshot) => {
+        //              if(childSnapshot.val().email == email){
+        //                  role = "alumni";
+        //                  setUserType("Alumni");
+        //
+        //              }
+        //          })
+        //      })
 
-      if (userType == "Admin") role = "admin";
-      else {
-        role = "alumni";
-      }
+        if (userType == "Admin") role = "admin";
+        else {
+            role = "alumni";
+        }
 
         console.log("role ----", role)
         //role="alumni"
-      const starCountRef = ref(db, "users/" + role);
-      let emailAndPassCheck = false;
-      let keyvalue;
+        const starCountRef = ref(db, "users/" + role);
+        let emailAndPassCheck = false;
+        let keyvalue;
 
-      onValue(
-        starCountRef,
-        (snapshot) => {
-            console.log('inside role--',role)
+        onValue(
+            starCountRef,
+            (snapshot) => {
+                console.log('inside role--', role)
 
-            let alumniEmail, alumniPassword;
-          let approveCheck = false;
-          let SchoolName = "";
-          snapshot.forEach((childSnapshot) => {
-            const childKey = childSnapshot.key;
-            const childData = childSnapshot.val();
-            console.log("child data Login", childData);
-            dispatch(setUserData(childData));
-            if (email == childData.email && password == childData.password) {
-              alumniEmail = childData.email;
-              dispatch(setUserName(childData.firstName));
-              alumniPassword = childData.password;
-              keyvalue = childKey;
-              approveCheck = childData.approve;
-              onValue(
-                ref(db, "users/" + role + "/" + childKey + "/schoolInfo"),
-                (innerSnapShot) => {
-                  innerSnapShot.forEach((innerChildSnapshot) => {
-                    SchoolName = innerChildSnapshot.val();
-                  });
-                  console.log(`data is this ${innerSnapShot}`);
+                let alumniEmail, alumniPassword;
+                let approveCheck = false;
+                let SchoolName = "";
+                snapshot.forEach((childSnapshot) => {
+                    const childKey = childSnapshot.key;
+                    const childData = childSnapshot.val();
+                    console.log("child data Login", childData);
+                    dispatch(setUserData(childData));
+                    if (email == childData.email && password == childData.password) {
+                        alumniEmail = childData.email;
+                        dispatch(setUserName(childData.firstName));
+                        alumniPassword = childData.password;
+                        keyvalue = childKey;
+                        approveCheck = childData.approve;
+                        onValue(
+                            ref(db, "users/" + role + "/" + childKey + "/schoolInfo"),
+                            (innerSnapShot) => {
+                                innerSnapShot.forEach((innerChildSnapshot) => {
+                                    SchoolName = innerChildSnapshot.val();
+                                });
+                                console.log(`data is this ${innerSnapShot}`);
+                            }
+                        );
+
+                        // SchoolName = childData.schoolName;
+                    }
+                    if (email == childData.email) {
+                        alumniEmail = childData.email;
+                    }
+                    if (password == childData.password) {
+                        alumniPassword = childData.password;
+                    }
+
+                    // ...
+                });
+                if (alumniEmail == email) {
+                    if (alumniPassword == password) {
+                        if (userType == "Alumni") {
+                            if (approveCheck) {
+                                dispatch(setLogedinEmail(email));
+                                dispatch(setAlumniSchoolName(SchoolName));
+                                dispatch(setLoginUserType("Alumni"));
+                                navigate("/AlumniLogin");
+                            } else {
+                                console.log("Sorry!, you are not approved");
+                                toast.custom(
+                                    <div
+                                        style={{
+                                            marginTop: "3%",
+                                            width: "100%",
+                                            height: "6vh",
+                                            display: "flex",
+                                            alignItems: "center",
+                                            justifyContent: "flex-start",
+                                        }}
+                                    >
+                                        <div
+                                            style={{
+                                                alignSelf: "flex-start",
+                                                width: "30%",
+                                                height: "100%",
+                                                borderLeftWidth: "8px",
+                                                borderColor: "red",
+                                                borderStyle: "solid",
+                                                borderBottomWidth: 0,
+                                                borderRightWidth: 0,
+                                                borderTopWidth: 0,
+                                                borderRadius: 5,
+                                                backgroundColor: "#F5F5F5",
+                                                display: "flex",
+                                                alignItems: "center",
+                                                justifyContent: "center",
+                                            }}
+                                        >
+                                            <h3
+                                                style={{
+                                                    color: "#515C6F",
+                                                    fontFamily: "GraphikMedium",
+                                                    fontWeight: "100",
+                                                    fontSize: "12px",
+                                                }}
+                                            >
+                                                You are not approved
+                                            </h3>
+                                        </div>
+                                    </div>,
+                                    {duration: 1000}
+                                );
+                            }
+                        } else {
+                            if (approveCheck) {
+                                dispatch(setLogedinEmail(email));
+
+                                dispatch(setKey(keyvalue));
+                                dispatch(setLoginUserType("Admin"));
+
+                                navigate("/SchoolLogin");
+                            } else {
+                                console.log("Sorry!, you are not approved");
+                                toast.custom(
+                                    <div
+                                        style={{
+                                            marginTop: "3%",
+                                            width: "100%",
+                                            height: "6vh",
+                                            display: "flex",
+                                            alignItems: "center",
+                                            justifyContent: "flex-start",
+                                        }}
+                                    >
+                                        <div
+                                            style={{
+                                                alignSelf: "flex-start",
+                                                width: "30%",
+                                                height: "100%",
+                                                borderLeftWidth: "8px",
+                                                borderColor: "red",
+                                                borderStyle: "solid",
+                                                borderBottomWidth: 0,
+                                                borderRightWidth: 0,
+                                                borderTopWidth: 0,
+                                                borderRadius: 5,
+                                                backgroundColor: "#F5F5F5",
+                                                display: "flex",
+                                                alignItems: "center",
+                                                justifyContent: "center",
+                                            }}
+                                        >
+                                            <h3
+                                                style={{
+                                                    color: "#515C6F",
+                                                    fontFamily: "GraphikMedium",
+                                                    fontWeight: "100",
+                                                    fontSize: "12px",
+                                                }}
+                                            >
+                                                You are not approved
+                                            </h3>
+                                        </div>
+                                    </div>,
+                                    {duration: 1000}
+                                );
+                            }
+                        }
+                    }
                 }
-              );
-
-              // SchoolName = childData.schoolName;
-            }
-            if (email == childData.email) {
-              alumniEmail = childData.email;
-            }
-            if (password == childData.password) {
-              alumniPassword = childData.password;
-            }
-
-            // ...
-          });
-          if (alumniEmail == email) {
-            if (alumniPassword == password) {
-              if (userType == "Alumni") {
-                if (approveCheck) {
-                  dispatch(setLogedinEmail(email));
-                  dispatch(setAlumniSchoolName(SchoolName));
-                  dispatch(setLoginUserType("Alumni"));
-                  navigate("/AlumniLogin");
-                } else {
-                  console.log("Sorry!, you are not approved");
-                  toast.custom(
-                    <div
-                      style={{
-                        marginTop: "3%",
-                        width: "100%",
-                        height: "6vh",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "flex-start",
-                      }}
-                    >
-                      <div
-                        style={{
-                          alignSelf: "flex-start",
-                          width: "30%",
-                          height: "100%",
-                          borderLeftWidth: "8px",
-                          borderColor: "red",
-                          borderStyle: "solid",
-                          borderBottomWidth: 0,
-                          borderRightWidth: 0,
-                          borderTopWidth: 0,
-                          borderRadius: 5,
-                          backgroundColor: "#F5F5F5",
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center",
-                        }}
-                      >
-                        <h3
-                          style={{
-                            color: "#515C6F",
-                            fontFamily: "GraphikMedium",
-                            fontWeight: "100",
-                            fontSize: "12px",
-                          }}
+                if (alumniPassword == password) {
+                    if (alumniEmail == email) {
+                        if (userType == "Alumni") {
+                            if (approveCheck) {
+                                dispatch(setAlumniSchoolName(SchoolName));
+                                navigate("/AlumniLogin");
+                            } else {
+                                console.log("Sorry!, you are not approved");
+                                toast.custom(
+                                    <div
+                                        style={{
+                                            marginTop: "3%",
+                                            width: "100%",
+                                            height: "6vh",
+                                            display: "flex",
+                                            alignItems: "center",
+                                            justifyContent: "flex-start",
+                                        }}
+                                    >
+                                        <div
+                                            style={{
+                                                alignSelf: "flex-start",
+                                                width: "30%",
+                                                height: "100%",
+                                                borderLeftWidth: "8px",
+                                                borderColor: "red",
+                                                borderStyle: "solid",
+                                                borderBottomWidth: 0,
+                                                borderRightWidth: 0,
+                                                borderTopWidth: 0,
+                                                borderRadius: 5,
+                                                backgroundColor: "#F5F5F5",
+                                                display: "flex",
+                                                alignItems: "center",
+                                                justifyContent: "center",
+                                            }}
+                                        >
+                                            <h3
+                                                style={{
+                                                    color: "#515C6F",
+                                                    fontFamily: "GraphikMedium",
+                                                    fontWeight: "100",
+                                                    fontSize: "12px",
+                                                }}
+                                            >
+                                                You are not approved
+                                            </h3>
+                                        </div>
+                                    </div>,
+                                    {duration: 1000}
+                                );
+                            }
+                        } else {
+                            if (approveCheck) {
+                                navigate("/SchoolLogin");
+                                dispatch(setKey(keyvalue));
+                            } else {
+                                console.log("Sorry!, you are not approved");
+                                toast.custom(
+                                    <div
+                                        style={{
+                                            marginTop: "3%",
+                                            width: "100%",
+                                            height: "6vh",
+                                            display: "flex",
+                                            alignItems: "center",
+                                            justifyContent: "flex-start",
+                                        }}
+                                    >
+                                        <div
+                                            style={{
+                                                alignSelf: "flex-start",
+                                                width: "30%",
+                                                height: "100%",
+                                                borderLeftWidth: "8px",
+                                                borderColor: "red",
+                                                borderStyle: "solid",
+                                                borderBottomWidth: 0,
+                                                borderRightWidth: 0,
+                                                borderTopWidth: 0,
+                                                borderRadius: 5,
+                                                backgroundColor: "#F5F5F5",
+                                                display: "flex",
+                                                alignItems: "center",
+                                                justifyContent: "center",
+                                            }}
+                                        >
+                                            <h3
+                                                style={{
+                                                    color: "#515C6F",
+                                                    fontFamily: "GraphikMedium",
+                                                    fontWeight: "100",
+                                                    fontSize: "12px",
+                                                }}
+                                            >
+                                                You are not approved
+                                            </h3>
+                                        </div>
+                                    </div>,
+                                    {duration: 1000}
+                                );
+                            }
+                        }
+                    }
+                }
+                if (alumniEmail != email) {
+                    toast.custom(
+                        <div
+                            style={{
+                                marginTop: "5%",
+                                width: "100%",
+                                height: "6vh",
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "flex-start",
+                            }}
                         >
-                          You are not approved
-                        </h3>
-                      </div>
-                    </div>,
-                    { duration: 1000 }
-                  );
-                }
-              } else {
-                if (approveCheck) {
-                  dispatch(setLogedinEmail(email));
-
-                  dispatch(setKey(keyvalue));
-                  dispatch(setLoginUserType("Admin"));
-
-                  navigate("/SchoolLogin");
-                } else {
-                  console.log("Sorry!, you are not approved");
-                  toast.custom(
-                    <div
-                      style={{
-                        marginTop: "3%",
-                        width: "100%",
-                        height: "6vh",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "flex-start",
-                      }}
-                    >
-                      <div
-                        style={{
-                          alignSelf: "flex-start",
-                          width: "30%",
-                          height: "100%",
-                          borderLeftWidth: "8px",
-                          borderColor: "red",
-                          borderStyle: "solid",
-                          borderBottomWidth: 0,
-                          borderRightWidth: 0,
-                          borderTopWidth: 0,
-                          borderRadius: 5,
-                          backgroundColor: "#F5F5F5",
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center",
-                        }}
-                      >
-                        <h3
-                          style={{
-                            color: "#515C6F",
-                            fontFamily: "GraphikMedium",
-                            fontWeight: "100",
-                            fontSize: "12px",
-                          }}
+                            <div
+                                style={{
+                                    alignSelf: "flex-start",
+                                    width: "30%",
+                                    height: "100%",
+                                    borderLeftWidth: "8px",
+                                    borderColor: "red",
+                                    borderStyle: "solid",
+                                    borderBottomWidth: 0,
+                                    borderRightWidth: 0,
+                                    borderTopWidth: 0,
+                                    borderRadius: 5,
+                                    backgroundColor: "#F5F5F5",
+                                    display: "flex",
+                                    alignItems: "center",
+                                    justifyContent: "center",
+                                }}
+                            >
+                                <h3
+                                    style={{
+                                        color: "#515C6F",
+                                        fontFamily: "GraphikMedium",
+                                        fontWeight: "100",
+                                        fontSize: "12px",
+                                    }}
+                                >
+                                    email not found
+                                </h3>
+                            </div>
+                        </div>,
+                        {duration: 1000}
+                    );
+                } else if (alumniPassword != password) {
+                    toast.custom(
+                        <div
+                            style={{
+                                marginTop: "5%",
+                                width: "100%",
+                                height: "6vh",
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "flex-start",
+                            }}
                         >
-                          You are not approved
-                        </h3>
-                      </div>
-                    </div>,
-                    { duration: 1000 }
-                  );
+                            <div
+                                style={{
+                                    alignSelf: "flex-start",
+                                    width: "30%",
+                                    height: "100%",
+                                    borderLeftWidth: "8px",
+                                    borderColor: "red",
+                                    borderStyle: "solid",
+                                    borderBottomWidth: 0,
+                                    borderRightWidth: 0,
+                                    borderTopWidth: 0,
+                                    borderRadius: 5,
+                                    backgroundColor: "#F5F5F5",
+                                    display: "flex",
+                                    alignItems: "center",
+                                    justifyContent: "center",
+                                }}
+                            >
+                                <h3
+                                    style={{
+                                        color: "#515C6F",
+                                        fontFamily: "GraphikMedium",
+                                        fontWeight: "100",
+                                        fontSize: "12px",
+                                    }}
+                                >
+                                    Invalid Password
+                                </h3>
+                            </div>
+                        </div>,
+                        {duration: 1000}
+                    );
                 }
-              }
+
+                // setCheck(true)
+            },
+            {
+                onlyOnce: false,
             }
-          }
-          if (alumniPassword == password) {
-            if (alumniEmail == email) {
-              if (userType == "Alumni") {
-                if (approveCheck) {
-                  dispatch(setAlumniSchoolName(SchoolName));
-                  navigate("/AlumniLogin");
-                } else {
-                  console.log("Sorry!, you are not approved");
-                  toast.custom(
-                    <div
-                      style={{
-                        marginTop: "3%",
-                        width: "100%",
-                        height: "6vh",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "flex-start",
-                      }}
-                    >
-                      <div
-                        style={{
-                          alignSelf: "flex-start",
-                          width: "30%",
-                          height: "100%",
-                          borderLeftWidth: "8px",
-                          borderColor: "red",
-                          borderStyle: "solid",
-                          borderBottomWidth: 0,
-                          borderRightWidth: 0,
-                          borderTopWidth: 0,
-                          borderRadius: 5,
-                          backgroundColor: "#F5F5F5",
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center",
-                        }}
-                      >
-                        <h3
-                          style={{
-                            color: "#515C6F",
-                            fontFamily: "GraphikMedium",
-                            fontWeight: "100",
-                            fontSize: "12px",
-                          }}
-                        >
-                          You are not approved
-                        </h3>
-                      </div>
-                    </div>,
-                    { duration: 1000 }
-                  );
-                }
-              } else {
-                if (approveCheck) {
-                  navigate("/SchoolLogin");
-                  dispatch(setKey(keyvalue));
-                } else {
-                  console.log("Sorry!, you are not approved");
-                  toast.custom(
-                    <div
-                      style={{
-                        marginTop: "3%",
-                        width: "100%",
-                        height: "6vh",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "flex-start",
-                      }}
-                    >
-                      <div
-                        style={{
-                          alignSelf: "flex-start",
-                          width: "30%",
-                          height: "100%",
-                          borderLeftWidth: "8px",
-                          borderColor: "red",
-                          borderStyle: "solid",
-                          borderBottomWidth: 0,
-                          borderRightWidth: 0,
-                          borderTopWidth: 0,
-                          borderRadius: 5,
-                          backgroundColor: "#F5F5F5",
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center",
-                        }}
-                      >
-                        <h3
-                          style={{
-                            color: "#515C6F",
-                            fontFamily: "GraphikMedium",
-                            fontWeight: "100",
-                            fontSize: "12px",
-                          }}
-                        >
-                          You are not approved
-                        </h3>
-                      </div>
-                    </div>,
-                    { duration: 1000 }
-                  );
-                }
-              }
-            }
-          }
-          if (alumniEmail != email) {
-            toast.custom(
-              <div
-                style={{
-                  marginTop: "5%",
-                  width: "100%",
-                  height: "6vh",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "flex-start",
-                }}
-              >
-                <div
-                  style={{
-                    alignSelf: "flex-start",
-                    width: "30%",
-                    height: "100%",
-                    borderLeftWidth: "8px",
-                    borderColor: "red",
-                    borderStyle: "solid",
-                    borderBottomWidth: 0,
-                    borderRightWidth: 0,
-                    borderTopWidth: 0,
-                    borderRadius: 5,
-                    backgroundColor: "#F5F5F5",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                  }}
-                >
-                  <h3
-                    style={{
-                      color: "#515C6F",
-                      fontFamily: "GraphikMedium",
-                      fontWeight: "100",
-                      fontSize: "12px",
-                    }}
-                  >
-                    email not found
-                  </h3>
-                </div>
-              </div>,
-              { duration: 1000 }
-            );
-          } else if (alumniPassword != password) {
-            toast.custom(
-              <div
-                style={{
-                  marginTop: "5%",
-                  width: "100%",
-                  height: "6vh",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "flex-start",
-                }}
-              >
-                <div
-                  style={{
-                    alignSelf: "flex-start",
-                    width: "30%",
-                    height: "100%",
-                    borderLeftWidth: "8px",
-                    borderColor: "red",
-                    borderStyle: "solid",
-                    borderBottomWidth: 0,
-                    borderRightWidth: 0,
-                    borderTopWidth: 0,
-                    borderRadius: 5,
-                    backgroundColor: "#F5F5F5",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                  }}
-                >
-                  <h3
-                    style={{
-                      color: "#515C6F",
-                      fontFamily: "GraphikMedium",
-                      fontWeight: "100",
-                      fontSize: "12px",
-                    }}
-                  >
-                    Invalid Password
-                  </h3>
-                </div>
-              </div>,
-              { duration: 1000 }
-            );
-          }
 
-          // setCheck(true)
-        },
-        {
-          onlyOnce: false,
-        }
-      );
+    )
     }
     // event.preventDefault();
   }
