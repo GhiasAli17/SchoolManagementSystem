@@ -50,8 +50,8 @@ function AdminPanel() {
 
     const onDisapproveHandler = (alKey) => {
         console.log("disaprove called", alKey);
-        set(ref(db, "users/admin/" + alKey), null);
-        set(ref(db,"School/"+alKey),null);
+        set(ref(db, "users/admin/" + alKey + "/approve"), "rejected");
+        //set(ref(db,"School/"+alKey),null);
         deleteCheck ? setdeleteCheck(false) : setdeleteCheck(true);
         setLogedinEmail([]);
     };
@@ -175,7 +175,7 @@ function AdminPanel() {
                                     justifyContent: "center",
                                 }}
                             >
-                                <h6 onClick={()=>onDisapproveHandler(item.alumnikey)}>Reject</h6>
+                                <h6 onClick={()=>onDisapproveHandler(item.alumniKey)}>Reject</h6>
                             </div>
                         </div>
                     ) : null}

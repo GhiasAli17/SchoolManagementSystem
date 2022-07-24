@@ -51,7 +51,7 @@ function AccountsReq() {
 
     const onDisapproveHandler = (alKey) => {
         console.log("disaprove called", alKey);
-        set(ref(db, "users/alumni/" + alKey), null);
+        set(ref(db, "users/alumni/" + alKey + "/approve"), "rejected");
         deleteCheck ? setdeleteCheck(false) : setdeleteCheck(true);
         setLogedinEmail([]);
     };
