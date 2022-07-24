@@ -66,6 +66,7 @@ function AdminPanel() {
 
                     console.log("admin data", childData);
 
+
                     if(!childData.approve){
                         childData["alumniKey"] = childKey;
                         setLogedinEmail((prev) => [...prev, childData]);
