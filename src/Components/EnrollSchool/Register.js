@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { getDatabase, ref, push, onValue } from "firebase/database";
 import { useNavigate } from "react-router-dom";
@@ -19,30 +19,28 @@ function Register(props) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPass, setConfirmPass] = useState("");
-  const [alreadyRegisteredEmails, setAlreadyRegisteredEmails] =  useState([])
+  const [emailCheck, setEmailCheck] = useState(false);
+
+  const [alreadyRegisteredEmails, setAlreadyRegisteredEmails] = useState([]);
   var emailist = [];
 
-  useEffect(()=> {
-      onValue(
-          ref(db, "users/admin"),
-          (snapshot) => {
-              emailist = []
-              snapshot.forEach((childSnapshot) => {
-
-                  emailist.push(childSnapshot.val().email)
-                  setAlreadyRegisteredEmails(emailist);
-
-
-              });
-              // setAlreadyRegisteredEmails(emailist);
-              console.log('child dfdslskfjsdslkfjsds', alreadyRegisteredEmails)
-          },
-          {
-              onlyOnce: false,
-          }
-      );
-
-  },[])
+  useEffect(() => {
+    onValue(
+      ref(db, "users/admin"),
+      (snapshot) => {
+        emailist = [];
+        snapshot.forEach((childSnapshot) => {
+          emailist.push(childSnapshot.val().email);
+          setAlreadyRegisteredEmails(emailist);
+        });
+        // setAlreadyRegisteredEmails(emailist);
+        console.log("child dfdslskfjsdslkfjsds", alreadyRegisteredEmails);
+      },
+      {
+        onlyOnce: false,
+      }
+    );
+  }, []);
 
   const onChangeHandler = (event) => {
     console.log("name", event.target.name);
@@ -57,18 +55,14 @@ function Register(props) {
         setLastName(inputValue);
         break;
       case "email":
-        let emailCheck = false;
-        for(let i=0;i<alreadyRegisteredEmails.length;i++){
-            if(inputValue == alreadyRegisteredEmails[i]){
-                emailCheck = true;
-                break;
-            }
+        for (let i = 0; i < alreadyRegisteredEmails.length; i++) {
+          if (inputValue == alreadyRegisteredEmails[i]) {
+            setEmailCheck(true);
+            setEmail(inputValue);
+            break;
+          }
         }
-        if(!emailCheck)
-        setEmail(inputValue);
-        else{
-            alert("User is already registered!")
-        }
+        if (!emailCheck) setEmail(inputValue);
         break;
       case "password":
         setPassword(inputValue);
@@ -134,7 +128,7 @@ function Register(props) {
         { duration: 1000 }
       );
     } else {
-      if (password != confirmPass) {
+      if (emailCheck) {
         toast.custom(
           <div
             style={{
@@ -172,48 +166,92 @@ function Register(props) {
                   fontSize: "12px",
                 }}
               >
-                password should be same
+                Email already registered
               </h3>
             </div>
           </div>,
           { duration: 1000 }
         );
       } else {
-        var val = "schoolInformation";
+        if (password != confirmPass) {
+          toast.custom(
+            <div
+              style={{
+                marginTop: "5%",
+                width: "100%",
+                height: "6vh",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "flex-start",
+              }}
+            >
+              <div
+                style={{
+                  alignSelf: "flex-start",
+                  width: "30%",
+                  height: "100%",
+                  borderLeftWidth: "8px",
+                  borderColor: "red",
+                  borderStyle: "solid",
+                  borderBottomWidth: 0,
+                  borderRightWidth: 0,
+                  borderTopWidth: 0,
+                  borderRadius: 5,
+                  backgroundColor: "#F5F5F5",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <h3
+                  style={{
+                    color: "#515C6F",
+                    fontFamily: "GraphikMedium",
+                    fontWeight: "100",
+                    fontSize: "12px",
+                  }}
+                >
+                  password should be same
+                </h3>
+              </div>
+            </div>,
+            { duration: 1000 }
+          );
+        } else {
+          var val = "schoolInformation";
 
-        ////////////////////////////////
+          ////////////////////////////////
 
           onValue(
-              ref(db, "users/admin"),
-              (snapshot) => {
-                  snapshot.forEach((childSnapshot) => {
-                      console.log('child dfdslkfjdslkfjds', childSnapshot)
-                  });
-              },
-              {
-                  onlyOnce: false,
-              }
+            ref(db, "users/admin"),
+            (snapshot) => {
+              snapshot.forEach((childSnapshot) => {
+                console.log("child dfdslkfjdslkfjds", childSnapshot);
+              });
+            },
+            {
+              onlyOnce: false,
+            }
           );
-
 
           /////////////////////////////
 
+          var key = push(ref(db, "users/admin"), {
+            firstName,
+            lastName,
+            email,
+            password,
+            confirmPass,
+            approve: false,
+            imageUri: "",
+          });
 
-        var key = push(ref(db, "users/admin"), {
-          firstName,
-          lastName,
-          email,
-          password,
-          confirmPass,
-          approve: false,
-          imageUri: "",
-        });
+          console.log("key", key.key);
+          props.ongetval(key.key);
+          dispatch(setKey(key.key));
 
-        console.log("key", key.key);
-        props.ongetval(key.key);
-        dispatch(setKey(key.key));
-
-        props.onClick(val);
+          props.onClick(val);
+        }
       }
     }
   }
@@ -270,7 +308,7 @@ function Register(props) {
       {InputsList.map((item) => {
         return (
           <div id={item.id} className="inputsConatiner">
-            <img src={item.image} style={{ width: "30px", height: "30px" }} />
+            <img src={item.image} style={{ width: "25px", height: "25px" }} />
             {item.name == "password" || item.name == "confirmPass" ? (
               <input
                 className="inputDiv"
@@ -357,5 +395,10 @@ const Container = styled.div`
     padding-left: 20px !important;
     border-radius: 7px;
     border: 1px solid rgba(218, 221, 225, 0.4);
+    background-color: rgba(218, 221, 225, 0.4);
+  }
+  .inputDiv::placeholder {
+    color: rgba(14, 55, 70, 0.4);
+    opacity: 1;
   }
 `;

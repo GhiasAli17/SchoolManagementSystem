@@ -329,7 +329,7 @@ function Settings({ navigation }) {
                 <input type="text" className="cardNumber" />
                 {/*<div classNameCVV="cardNumber">{`2334   -   2424   -   2424   -   5666`}</div>*/}
                 <img
-                  style={{ width: "30px", height: "30px" }}
+                  style={{ width: "25px", height: "25px" }}
                   src={CardCheck}
                 />
               </div>

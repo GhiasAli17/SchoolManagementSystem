@@ -22,7 +22,7 @@ function SchoolInformation(props) {
   console.log("key in shcool Info", props.getKey);
 
   function backHandler() {
-    var val = "register";
+    var val = "Register";
     props.onClick(val);
   }
 
@@ -242,7 +242,7 @@ function SchoolInformation(props) {
       {InputsList.map((item) => {
         return (
           <div id={item.id} className="inputsConatiner">
-            <img src={item.image} style={{ width: "30px", height: "30px" }} />
+            <img src={item.image} style={{ width: "25px", height: "25px" }} />
             <input
               className="inputDiv"
               style={{ outline: "none" }}
@@ -318,5 +318,10 @@ const Container = styled.div`
     padding-left: 20px !important;
     border-radius: 7px;
     border: 1px solid rgba(218, 221, 225, 0.4);
+    background-color: rgba(218, 221, 225, 0.4);
+  }
+  .inputDiv::placeholder {
+    color: rgba(14, 55, 70, 0.4);
+    opacity: 1;
   }
 `;

@@ -473,7 +473,7 @@ function LoginComponent(props) {
   return (
     <Container>
       <div className="inputsConatiner">
-        <img src={Mail} style={{ width: "30px", height: "30px" }} />
+        <img src={Mail} style={{ width: "25px", height: "25px" }} />
         <input
           className="inputDiv"
           style={{ outline: "none" }}
@@ -484,7 +484,7 @@ function LoginComponent(props) {
         />
       </div>
       <div className="inputsConatiner">
-        <img src={Lock} style={{ width: "30px", height: "30px" }} />
+        <img src={Lock} style={{ width: "25px", height: "25px" }} />
         <input
           className="inputDiv"
           style={{ outline: "none" }}
@@ -498,51 +498,73 @@ function LoginComponent(props) {
       <div
         style={{
           display: "flex",
-          justifyContent: "space-evenly",
+          justifyContent: "space-between",
           flexDirection: "row",
           marginTop: "30px",
           marginBottom: "30px",
-
-          width: "70%",
+          width: "60%",
         }}
       >
-        <div style={{ flexDirection: "row" }}>
-          <input
-            style={{ cursor: "pointer", outline: "none" }}
-            type="checkbox"
-            id="topping"
-            name="topping"
-            value={userType}
-            checked={userType == "Admin"}
-            onChange={handleAdmin}
-          />
-          <img
-            src={School}
-            style={{ marginInline: "12px", width: "15px", height: "15px" }}
-          />
-          <h5 style={{ color: "#2291F1" }}>School</h5>
-        </div>
-        <div style={{ flexDirection: "row" }}>
-          <input
-            style={{ cursor: "pointer", outline: "none" }}
-            type="checkbox"
-            id="topping"
-            name="topping"
-            value={userType}
-            checked={userType == "Alumni"}
-            onChange={handleAlumni}
-          />
-          <img
-            src={Alumni}
-            style={{ marginInline: "12px", width: "15px", height: "15px" }}
-          />
-          <h5 style={{ color: "#2291F1" }}>Alumni</h5>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            flexDirection: "row",
+            marginTop: "30px",
+            marginBottom: "30px",
+            width: "80%",
+          }}
+        >
+          <div
+            style={{
+              flexDirection: "row",
+              display: "flex",
+              alignItems: "center",
+            }}
+          >
+            <input
+              style={{ cursor: "pointer", outline: "none" }}
+              type="checkbox"
+              id="topping"
+              name="topping"
+              value={userType}
+              checked={userType == "Admin"}
+              onChange={handleAdmin}
+            />
+            <img
+              src={School}
+              style={{ marginInline: "12px", width: "15px", height: "15px" }}
+            />
+            <h5 style={{ color: "#2291F1" }}>School</h5>
+          </div>
+          <div
+            style={{
+              flexDirection: "row",
+              display: "flex",
+              alignItems: "center",
+            }}
+          >
+            <input
+              style={{ cursor: "pointer", outline: "none" }}
+              type="checkbox"
+              id="topping"
+              name="topping"
+              value={userType}
+              checked={userType == "Alumni"}
+              onChange={handleAlumni}
+            />
+            <img
+              src={Alumni}
+              style={{ marginInline: "10px", width: "15px", height: "15px" }}
+            />
+            <h5 style={{ color: "#2291F1" }}>Alumni</h5>
+          </div>
         </div>
       </div>
       <button
         className="inputsConatiner button blueBack"
         onClick={() => nextHandler()}
-        style={{ cursor: "pointer" }}
+        style={{ cursor: "pointer", borderRadius: "5px" }}
       >
         <h3 className="whiteText">Login</h3>
       </button>
@@ -601,6 +623,11 @@ const Container = styled.div`
     padding-left: 20px !important;
     border-radius: 7px;
     border: 1px solid rgba(218, 221, 225, 0.4);
+    background-color: rgba(218, 221, 225, 0.4);
+  }
+  .inputDiv::placeholder {
+    color: rgba(14, 55, 70, 0.4);
+    opacity: 1;
   }
   .inputDiv::placeholder {
     color: rgba(14, 55, 70, 0.4);

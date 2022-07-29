@@ -488,7 +488,7 @@ function AdminLogin() {
           <h3 style={{ fontFamily: "Poppins-Regular" }}>Admin Login</h3>
           <div className="loginComponent">
             <div className="inputsConatiner">
-              <img src={Mail} style={{ width: "30px", height: "30px" }} />
+              <img src={Mail} style={{ width: "25px", height: "25px" }} />
               <input
                 className="inputDiv"
                 style={{ outline: "none" }}
@@ -499,7 +499,7 @@ function AdminLogin() {
               />
             </div>
             <div className="inputsConatiner">
-              <img src={Lock} style={{ width: "30px", height: "30px" }} />
+              <img src={Lock} style={{ width: "25px", height: "25px" }} />
               <input
                 className="inputDiv"
                 style={{ outline: "none" }}
@@ -593,6 +593,11 @@ const Container = styled.div`
     padding-left: 20px !important;
     border-radius: 7px;
     border: 1px solid rgba(218, 221, 225, 0.4);
+    background-color: rgba(218, 221, 225, 0.4);
+  }
+  .inputDiv::placeholder {
+    color: rgba(14, 55, 70, 0.4);
+    opacity: 1;
   }
   .bgImage {
     position: fixed;

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import {getDatabase, ref, push, onValue} from "firebase/database";
+import { getDatabase, ref, push, onValue } from "firebase/database";
 import toast, { Toaster } from "react-hot-toast";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 import app from "../../firebase";
 import { setAlumniKey } from "../../Redux/actions";
 import { User, Mail, Lock } from "../../assets/Images/Index";
-import {useEffect} from "react";
+import { useEffect } from "react";
 
 const db = getDatabase(app);
 
@@ -21,33 +21,28 @@ function RegisterAlumni(props) {
   const [password, setPassword] = useState("");
   const [confirmPass, setConfirmPass] = useState("");
 
-    const [alreadyRegisteredEmails, setAlreadyRegisteredEmails] =  useState([])
-    var emailist = [];
+  const [alreadyRegisteredEmails, setAlreadyRegisteredEmails] = useState([]);
+  var emailist = [];
 
-    useEffect(()=> {
-        onValue(
-            ref(db, "users/alumni"),
-            (snapshot) => {
-                emailist = []
-                snapshot.forEach((childSnapshot) => {
+  useEffect(() => {
+    onValue(
+      ref(db, "users/alumni"),
+      (snapshot) => {
+        emailist = [];
+        snapshot.forEach((childSnapshot) => {
+          emailist.push(childSnapshot.val().email);
+          setAlreadyRegisteredEmails(emailist);
+        });
+        // setAlreadyRegisteredEmails(emailist);
+        console.log("child dfdslskfjsdslkfjsds", alreadyRegisteredEmails);
+      },
+      {
+        onlyOnce: false,
+      }
+    );
+  }, []);
 
-                    emailist.push(childSnapshot.val().email)
-                    setAlreadyRegisteredEmails(emailist);
-
-
-                });
-                // setAlreadyRegisteredEmails(emailist);
-                console.log('child dfdslskfjsdslkfjsds', alreadyRegisteredEmails)
-            },
-            {
-                onlyOnce: false,
-            }
-        );
-
-    },[])
-
-
-    const onChangeHandler = (event) => {
+  const onChangeHandler = (event) => {
     console.log("name", event.target.name);
     const inputName = event.target.name;
     const inputValue = event.target.value;
@@ -59,18 +54,17 @@ function RegisterAlumni(props) {
         setLastName(inputValue);
         break;
       case "email":
-          let emailCheck = false;
-          for(let i=0;i<alreadyRegisteredEmails.length;i++){
-              if(inputValue == alreadyRegisteredEmails[i]){
-                  emailCheck = true;
-                  break;
-              }
+        let emailCheck = false;
+        for (let i = 0; i < alreadyRegisteredEmails.length; i++) {
+          if (inputValue == alreadyRegisteredEmails[i]) {
+            emailCheck = true;
+            break;
           }
-          if(!emailCheck)
-              setEmail(inputValue);
-          else{
-              alert("User is already registered!")
-          }
+        }
+        if (!emailCheck) setEmail(inputValue);
+        else {
+          alert("User is already registered!");
+        }
         break;
       case "password":
         setPassword(inputValue);
@@ -205,7 +199,7 @@ function RegisterAlumni(props) {
       {InputsList.map((item) => {
         return (
           <div id={item.id} className="inputsConatiner">
-            <img src={item.image} style={{ width: "30px", height: "30px" }} />
+            <img src={item.image} style={{ width: "25px", height: "25px" }} />
             {item.name == "password" || item.name == "confirmPass" ? (
               <input
                 className="inputDiv"
@@ -293,5 +287,10 @@ const Container = styled.div`
     padding-left: 20px !important;
     border-radius: 7px;
     border: 1px solid rgba(218, 221, 225, 0.4);
+    background-color: rgba(218, 221, 225, 0.4);
+  }
+  .inputDiv::placeholder {
+    color: rgba(14, 55, 70, 0.4);
+    opacity: 1;
   }
 `;

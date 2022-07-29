@@ -8,6 +8,7 @@ import Payment from "../Components/EnrollSchool/Payment";
 import Complete from "../Components/EnrollSchool/Complete";
 import ContactUs from "../Components/EnrollSchool/ContactUs";
 import { Logo, RegisterImage } from "../assets/Images/Index";
+import Header from "../Components/Header";
 
 function EnrollSchool({ navigation }) {
   const navigate = useNavigate();
@@ -28,40 +29,64 @@ function EnrollSchool({ navigation }) {
   return (
     <>
       <Container>
-        <div className="leftChild">
-          <div>
-            <img src={Logo} style={{ width: "70px", height: "60px" }} />
-            <h3
+        {component != "complete" ? (
+          <>
+            <div className="leftChild">
+              <div style={{ paddingLeft: "20px" }}>
+                <img src={Logo} style={{ width: "70px", height: "60px" }} />
+                <h3
+                  style={{
+                    fontSize: 20,
+                    margin: 0,
+                    marginTop: 10,
+                    fontFamily: "Poppins-Regular",
+                  }}
+                >
+                  {component}
+                </h3>
+              </div>
+              {component === "Register" ? (
+                <Register
+                  navigation={navigation}
+                  onClick={(item1) => componentHandler(item1)}
+                  ongetval={(item1) => getKey(item1)}
+                />
+              ) : component === "schoolInformation" ? (
+                <SchoolInformation onClick={componentHandler} getKey={key} />
+              ) : component === "payment" ? (
+                <Payment onClick={componentHandler} />
+              ) : component === "contactus" ? (
+                <ContactUs onClick={componentHandler} />
+              ) : null}
+            </div>
+            <div className="rightChild">
+              <img src={RegisterImage} id="img" />
+            </div>
+          </>
+        ) : (
+          <div
+            style={{
+              width: "100%",
+              height: "100%",
+              display: "flex",
+              flexDirection: "column",
+            }}
+          >
+            <Header />
+            <div
               style={{
-                fontSize: 20,
-                margin: 0,
-                marginLeft: "20px",
-                marginTop: 10,
-                fontFamily: "Poppins-Regular",
+                width: "100%",
+                height: "100%",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "center",
               }}
             >
-              {component}
-            </h3>
+              <Complete onClick={componentHandler} />
+            </div>
           </div>
-          {component === "Register" ? (
-            <Register
-              navigation={navigation}
-              onClick={(item1) => componentHandler(item1)}
-              ongetval={(item1) => getKey(item1)}
-            />
-          ) : component === "schoolInformation" ? (
-            <SchoolInformation onClick={componentHandler} getKey={key} />
-          ) : component === "payment" ? (
-            <Payment onClick={componentHandler} />
-          ) : component === "complete" ? (
-            <Complete onClick={componentHandler} />
-          ) : component === "contactus" ? (
-            <ContactUs onClick={componentHandler} />
-          ) : null}
-        </div>
-        <div className="rightChild">
-          <img src={RegisterImage} id="img" />
-        </div>
+        )}
       </Container>
     </>
   );
@@ -77,7 +102,7 @@ const Container = styled.div`
   bottom: 0;
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
   .bgImage {
     position: fixed;
     bottom: 0;
@@ -89,8 +114,8 @@ const Container = styled.div`
   }
   #img {
     display: block;
-    width: 40vw;
-    align-self: flex-end;
+    width: 44vw;
+    align-self: center;
     height: 100vh;
     object-fit: cover;
   }

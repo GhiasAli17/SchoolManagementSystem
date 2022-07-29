@@ -10,14 +10,24 @@ function Complete(props) {
     <Container>
       <div className="paragraphDiv">
         <div className="h4Div">
-          <h4 style={{ fontFamily: "Poppins-Regular" }}>
+          <h4
+            style={{
+              fontFamily: "Poppins-Regular",
+              fontSize: "22px",
+              fontWeight: "500",
+            }}
+          >
             Thank you for registering.You will be notified within one business
             day when your school is enrolled
           </h4>
         </div>
       </div>
-      <button className="inputsConatiner button" onClick={() => doneHandler()}>
-        <h3 style={{ color: "white" }}> Next</h3>
+      <button
+        className="inputsConatiner button"
+        style={{ width: "30%" }}
+        onClick={() => doneHandler()}
+      >
+        <h3 style={{ color: "white" }}>Done</h3>
       </button>
     </Container>
   );

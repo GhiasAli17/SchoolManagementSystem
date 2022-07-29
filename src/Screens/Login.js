@@ -54,7 +54,7 @@ const Container = styled.div`
   bottom: 0;
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
   .bgImage {
     position: fixed;
     bottom: 0;
@@ -66,7 +66,7 @@ const Container = styled.div`
   }
   #img {
     display: block;
-    width: 40vw;
+    width: 44vw;
     align-self: flex-end;
     height: 100vh;
     object-fit: cover;
