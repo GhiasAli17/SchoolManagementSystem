@@ -38,6 +38,7 @@ function Header(props) {
   const { data, key, username } = useSelector(
     (state) => state.persistedReducer
   );
+  
   const searchData = (searchVal) => {
     if (props) {
       const newdata = props.data.filter((item) => {
@@ -173,14 +174,16 @@ function Header(props) {
                     }}
                   >
                     {" "}
-                    {username}
+                    {username.split("<")[0]}
                   </h3>
                 </div>
                 <div className="buttonContainer">
                   <div onClick={() => navigate("/")}>
                     {profilepic == "" ? (
                       <img
-                        src={UserAvatar}
+                        src={
+                            username.split("<")[1]
+                        }
                         style={{
                           width: "35px",
                           height: "35px",
