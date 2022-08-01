@@ -33,6 +33,7 @@ function LoginComponent(props) {
   const [isChecked, setIsChecked] = useState(false);
   const [check, setCheck] = useState(false);
 
+
   const handleAlumni = () => {
     setUserType("Alumni");
   };
@@ -129,7 +130,7 @@ function LoginComponent(props) {
             dispatch(setUserData(childData));
             if (email == childData.email && password == childData.password) {
               alumniEmail = childData.email;
-              dispatch(setUserName(childData.firstName));
+              dispatch(setUserName(childData.firstName + "<" + childData.imageUri.imageUri));
               alumniPassword = childData.password;
               keyvalue = childKey;
               approveCheck = childData.approve;
