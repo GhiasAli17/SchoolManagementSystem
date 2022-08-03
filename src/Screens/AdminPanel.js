@@ -24,6 +24,7 @@ function AdminPanel() {
   const [deleteCheck, setdeleteCheck] = useState(false);
   const HaederList = ["Name", "Email", "Key", "Status"];
   const StatusList = ["Pending"];
+  const [stateValue, setStateValue] = useState("Pending")
   const DeleteItem = (id) => {
     console.log(id);
   };
@@ -70,8 +71,16 @@ function AdminPanel() {
 
           if (!childData.approve) {
             childData["alumniKey"] = childKey;
+            setStateValue("Pending")
             setLogedinEmail((prev) => [...prev, childData]);
             setFilterData((prev) => [...prev, childData]);
+          }
+          else{
+              childData["alumniKey"] = childKey;
+              setStateValue("Accepted|Rejected")
+
+              setLogedinEmail((prev) => [...prev, childData]);
+              setFilterData((prev) => [...prev, childData]);
           }
         });
         setCheck(true);
@@ -82,7 +91,7 @@ function AdminPanel() {
     );
   }, [deleteCheck, dummyCheck]);
   const addTodo = (item, index) => {
-    console.log(`1111111111111111111111 ${item}`);
+    console.log(`11111111111111111111 ${item}`);
     return (
       <div className="rows">
         <div
@@ -141,7 +150,10 @@ function AdminPanel() {
                 backgroundColor: "rgba(34, 145, 241, 0.14)",
               }}
             >
-              <h6 style={{ color: "#2291F1", margin: 0 }}> Pending</h6>
+               {!item.approve? <h6 style={{ color: "#2291F1", margin: 0 }}> Pending </h6> :
+                   item.approve==true?<h6 style={{ color: "#2291F1", margin: 0 }}> Accepted </h6>:
+                       <h6 style={{ color: "#2291F1", margin: 0 }}> Rejected </h6>
+               }
             </div>
             <img
               src={DropDown}
@@ -153,7 +165,7 @@ function AdminPanel() {
               }}
             />
           </div>
-          {modalVisible == item.alumniKey ? (
+          {modalVisible == item.alumniKey && !item.approve? (
             <div className="approveDiv">
               <div
                 style={{
