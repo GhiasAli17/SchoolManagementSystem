@@ -258,11 +258,11 @@ const StripeContainer = () => {
 export default StripeContainer;
 const Container = styled.div`
   width: 100vw;
-  height: 80vh;
+  height: 100vh;
   position: relative;
   display: flex;
   .LeftDiv {
-    width: 50vw;
+    width: 100%;
     height: 100%;
     display: flex;
     align-items: center;
@@ -295,6 +295,7 @@ const Container = styled.div`
 
   .Form {
     animation: fade 200ms ease-out;
+    width: 40%;
   }
 
   .FormGroup {
@@ -303,9 +304,6 @@ const Container = styled.div`
     border-style: none;
     background-color: rgba(218, 221, 225, 0.4);
     will-change: opacity, transform;
-    box-shadow: 0 6px 9px rgba(50, 50, 93, 0.06), 0 2px 5px rgba(0, 0, 0, 0.08),
-      inset 0 1px 0 rgba(218, 221, 225, 0.4);
-    border-radius: 4px;
   }
 
   .FormRow {
@@ -313,8 +311,7 @@ const Container = styled.div`
     display: flex;
     -ms-flex-align: center;
     align-items: center;
-    margin-left: 15px;
-    border-top: 1px solid grey;
+    border-top: 20px solid white;
   }
 
   .FormRow:first-child {
@@ -322,13 +319,14 @@ const Container = styled.div`
   }
 
   .FormRowLabel {
-    width: 15%;
+    width: 18%;
     min-width: 70px;
     padding: 11px 0;
-    color: grey;
+    color: #242424;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    padding-left: 15px;
   }
 
   @keyframes void-animation-out {
@@ -355,7 +353,7 @@ const Container = styled.div`
   }
 
   .FormRowInput::placeholder {
-    color: #87bbfd;
+    color: #a2a4ab;
   }
 
   .StripeElement--webkit-autofill {
@@ -374,12 +372,13 @@ const Container = styled.div`
     height: 40px;
     margin: 40px 15px 0;
     background-color: #2291f1;
-    border-radius: 4px;
+    border-radius: 0;
     color: #fff;
     font-weight: 600;
     cursor: pointer;
     transition: all 100ms ease-in-out;
     will-change: transform, background-color, box-shadow;
+    box-shadow: 0 0px 15px #2190f0;
   }
 
   .SubmitButton:active {
@@ -452,5 +451,15 @@ const Container = styled.div`
     border: 0;
     cursor: pointer;
     background: transparent;
+  }
+.StripeElement{
+    padding: 11px 15px 11px 15px;
+    background: #282828;
+  }
+  .StripeElement::placeholder {
+    color: #a2a4ab;
+  }
+  .InputContainer .InputElement{
+    color: #a2a4ab !important;
   }
 `;

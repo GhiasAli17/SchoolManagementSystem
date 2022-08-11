@@ -183,7 +183,7 @@ function Settings({ navigation }) {
       <Container>
         <div className="mainBody">
           <h3
-            style={{ alignSelf: "flex-start", fontFamily: "Poppins-Regular" }}
+            style={{ fontFamily: "Poppins", fontSize: "30px", margin: "0", color: "#0E3746", fontWeight:"500" }}
           >
             Settings
           </h3>
@@ -246,7 +246,7 @@ function Settings({ navigation }) {
               <div className="userContact">
                 <div className="inputRow">
                   <div className="inputsContainer">
-                    <img width={25} height={25} src={User} />
+                    <img className="ledtIcon" width={25} height={25} src={User} />
                     <input
                       type="textbox"
                       id="firstname"
@@ -258,7 +258,7 @@ function Settings({ navigation }) {
                     />
                   </div>
                   <div className="inputsContainer">
-                    <img width={25} height={25} src={User} />
+                    <img className="ledtIcon" width={25} height={25} src={User} />
                     <input
                       type="textbox"
                       id="lastname"
@@ -272,7 +272,7 @@ function Settings({ navigation }) {
                 </div>
                 <div className="inputRow">
                   <div className="inputsContainer">
-                    <img width={25} height={25} src={Mail} />
+                    <img className="ledtIcon" width={25} height={25} src={Mail} />
                     <input
                       type="textbox"
                       id="email"
@@ -284,7 +284,7 @@ function Settings({ navigation }) {
                     />
                   </div>
                   <div className="inputsContainer">
-                    <img width={25} height={25} src={Lock} />
+                    <img className="ledtIcon" width={25} height={25} src={Lock} />
                     <input
                       type="textbox"
                       id="password"
@@ -299,11 +299,12 @@ function Settings({ navigation }) {
                 <div className="inputRow">
                   <div className="inputButton">
                     <button
-                      className="input"
+                      className="input update-btn"
                       style={{
                         color: "white",
                         backgroundColor: "#2291F1",
                         borderWidth: 0,
+                        marginTop:"70px",
                       }}
                       onClick={updateClickHandler}
 
@@ -321,12 +322,11 @@ function Settings({ navigation }) {
                 className="cardDetailContainer"
                 style={{
                   backgroundColor: "rgba(218, 221, 225, 0.4)",
-                  marginTop: "20%",
                   paddingInline: "5%",
                   width: "90%",
                 }}
               >
-                <input type="text" className="cardNumber" />
+                <input type="text" className="cardNumber card-field" />
                 {/*<div classNameCVV="cardNumber">{`2334   -   2424   -   2424   -   5666`}</div>*/}
                 <img
                   style={{ width: "25px", height: "25px" }}
@@ -407,7 +407,7 @@ function Settings({ navigation }) {
                 />
               </div>
               <button
-                className="cardDetailContainer"
+                className="cardDetailContainer update-btn"
                 style={{
                   backgroundColor: "#2291F1",
                   display: "flex",
@@ -415,6 +415,10 @@ function Settings({ navigation }) {
                   justifyContent: "center",
                   borderWidth: 0,
                   cursor: "pointer",
+                  borderRadius: "5px",
+                  marginTop:"100px",
+                  width:"70%",
+                  margin:"0 auto",
                 }}
                 onClick={() => {
                   buttonPressed == "Personal"
@@ -441,23 +445,22 @@ const Container = styled.div`
   overflow: hidden;
   display: flex;
   align-items: center;
-  justify-content: center;
   flex-direction: column;
   .mainBody {
-    width: 80%;
+    width: 90%;
     // padding-inline: 1vw;
     height: 87vh;
     overflow: hidden;
     display: flex;
-    align-items: center;
     justify-content: space-evenly;
     flex-direction: column;
+    padding-left: 20px;
   }
   button {
     cursor: pointer;
   }
   .paymentContainer {
-    width: 60%;
+    width: 100%;
     height: 100%;
     display: flex;
     align-items: flex-start;
@@ -473,12 +476,12 @@ const Container = styled.div`
   }
 
   .headerButtonsContainer {
-    width: 40%;
+    width: 30%;
     height: 7%;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    border-radius: 12px;
+    border-radius: 5px;
   }
   .headerButton {
     width: 45%;
@@ -486,29 +489,27 @@ const Container = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 12px;
+    border-radius: 5px;
     border: none;
     outline: none;
     cursor: pointer;
+    background: unset;
   }
 
   .userData {
-    width: 45%;
+    width: 100%;
     height: 15%;
     display: flex;
     justify-content: space-between;
-    margin-left: 20px;
     align-items: center;
     border-bottom: 1px solid #dadde1;
     margin-top: 20px;
-    margin-left: 120px;
   }
   .info {
     width: 30%;
     height: 100%;
     line-height: 12px;
     display: flex;
-    justify-content: space-between;
     align-items: center;
   }
   .data {
@@ -539,19 +540,17 @@ const Container = styled.div`
     outline: none;
   }
   .userContact {
-    width: 70%;
+    width: 100%;
     display: flex;
     justify-content: center;
     flex-direction: column;
     height: 50%;
-    margin-left: 100px;
   }
   .inputRow {
     width: 100%;
     display: flex;
     justify-content: flex-start;
     height: 25%;
-    margin-left: 20px;
   }
 
   .inputsContainer {
@@ -570,11 +569,11 @@ const Container = styled.div`
     justify-content: center;
     gap: 5px;
     // margin:0 auto;
-    margin-left: 50px;
+    margin: 0 auto;
   }
   .input {
-    height: 100%;
-    width: 60%;
+    height: 45px;
+    width: 88%;
     background: #dadde166;
     border: none;
     border-radius: 5px;
@@ -586,5 +585,20 @@ const Container = styled.div`
     background: #2291f1;
     border-radius: 0;
     color: #ffffff;
+  }
+  .update-btn {
+    box-shadow: 0 0px 15px #2190f0;
+  }
+  // .ledtIcon {
+  //   border: 2px solid #f0f1f3;
+  //   padding: 9px;
+  //   border-radius: 5px;
+  // }
+  .card-field {
+    height: 29px;
+    width: 95%;
+    border: 1px solid lightgrey;
+    border-radius: 5px;
+    padding-left: 15px;
   }
 `;

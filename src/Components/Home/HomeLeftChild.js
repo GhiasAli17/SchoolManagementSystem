@@ -66,7 +66,7 @@ function HomeLeftChild({ enrolAlumni, enrollSchollHandler }) {
               dispatch(setUserName(""));
             }}
             className="button"
-            style={{ marginLeft: "20px" }}
+            style={{ marginLeft: "20px", border: "2px solid #2291f1", background: "unset" }}
           >
             <h3 className="enrollText blueText">Join your School</h3>
             <h4 className="text blueText">(for school alumni)</h4>
@@ -105,12 +105,13 @@ const Container = styled.div`
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    margin: 20px 0 0 0;
+    margin: 0px 0 0 0;
   }
   h1 {
     font-size: 50px;
     font-weight: bold;
     text-align: center;
+    font-weight: 700 !important;
   }
 
   .button {
@@ -123,9 +124,12 @@ const Container = styled.div`
     border-radius: 5px;
     border-color: #2291f1;
     cursor: pointer;
+    
   }
   .blueBack {
     background-color: #2291f1;
+    border: 2px solid #2291f1;
+    box-shadow: 0 0px 15px #2190f0;
   }
   .rightDiv {
     height: 61%;
@@ -140,10 +144,10 @@ const Container = styled.div`
     width: 70%;
   }
   .detailText {
-    font-size: 25px;
+    font-size: 30px;
     font-weight: 400;
     color: rgba(14, 55, 70, 0.4);
-    margin: 30px 0 30px 0;
+    margin: 15px 0 30px 0;
 
     font-family: "Poppins-Regular";
   }
@@ -151,25 +155,24 @@ const Container = styled.div`
     font-size: 50px;
     margin-inline: 5px;
     margin: 0px;
-    font-family: "Poppins-Regular";
+    color: #0E3746;
   }
   .leftMargin {
     margin-left: 3%;
   }
   .donatedText {
     font-size: 15px;
-    font-family: "Poppins-Regular";
+    font-family: "Poppins";
   }
   .enrollText {
     font-size: 20px;
-    font-family: "Poppins-Regular";
-
+    font-family: "Poppins";
     font-weight: 500;
   }
   .text {
     font-size: 17px;
     font-weight: 500;
-    font-family: "Poppins-Regular";
+    font-family: "Poppins";
   }
   .whiteText {
     color: white;

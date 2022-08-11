@@ -38,6 +38,7 @@ function Header(props) {
   const { data, key, username } = useSelector(
     (state) => state.persistedReducer
   );
+  
   const searchData = (searchVal) => {
     if (props) {
       const newdata = props.data.filter((item) => {
@@ -125,20 +126,14 @@ function Header(props) {
                 >
                   {" "}
                   <h3
-                    style={{
-                      color: "#0E3746",
-                      alignSelf: "center",
-                      justifySelf: "center",
-                      fontSize: 15,
-                      fontWeight: "500",
-                    }}
+                    className="heading"
                   >
                     {" "}
                     Admin
                   </h3>
                 </button>
                 <button
-                  className="headerButtons"
+                  className="headerButtons shadow"
                   onClick={() => navigate("/login")}
                 >
                   <h3
@@ -173,14 +168,16 @@ function Header(props) {
                     }}
                   >
                     {" "}
-                    {username}
+                    { username.split("<")[0]}
                   </h3>
                 </div>
                 <div className="buttonContainer">
                   <div onClick={() => navigate("/")}>
-                    {profilepic == "" ? (
+                  {profilepic == "" ? (
                       <img
-                        src={UserAvatar}
+                        src={
+                            username.split("<")[1]
+                        }
                         style={{
                           width: "35px",
                           height: "35px",
@@ -195,6 +192,7 @@ function Header(props) {
                           height: "35px",
                           borderRadius: "20px",
                         }}
+                    
                       />
                     )}
                   </div>
@@ -323,7 +321,7 @@ const Container = styled.div`
     display: flex;
   }
   .leftDiv {
-    width: 25%;
+    width: 30%;
     height: 100%;
     display: flex;
     align-items: center;
@@ -349,7 +347,7 @@ const Container = styled.div`
   }
   .rightDiv {
     height: 100%;
-    width: 75%;
+    width: 70%;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -361,6 +359,7 @@ const Container = styled.div`
     align-items: center;
     border-radius: 11px;
     background-color: rgba(218, 221, 225, 0.4);
+    border: 1px solid #d7d9dd;
   }
   .searchIcon {
     color: #0e3746;
@@ -398,6 +397,12 @@ const Container = styled.div`
   .blueButton {
     background-color: white;
     width: 70%;
+  }
+  .shadow {
+    box-shadow: 0 0px 10px #2190f0;
+  }
+  .heading {
+    font-size: 15px;
   }
   .logoContainer {
     cursor: pointer;

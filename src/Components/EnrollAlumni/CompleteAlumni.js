@@ -10,14 +10,23 @@ function Complete(props) {
     <Container>
       <div className="paragraphDiv">
         <div className="h4Div">
-          <h4 style={{ fontFamily: "Poppins-Regular" }}>
+          <h4
+            style={{
+              fontFamily: "Poppins",
+              fontSize: "40px",
+              fontWeight: "500",
+            }}
+          >
             Thank you for registering.You will be notified within one business
-            day when your School Admin would accept your registrtion
-          </h4>
+            day when the School Admin would accept your registration          </h4>
         </div>
       </div>
-      <button className="inputsConatiner button" onClick={() => doneHandler()}>
-        <h3 style={{ color: "white" }}> Next</h3>
+      <button
+        className="inputsConatiner button"
+        style={{ width: "25%" }}
+        onClick={() => doneHandler()}
+      >
+        <h3 style={{ color: "white" }}>Done</h3>
       </button>
     </Container>
   );
@@ -55,13 +64,14 @@ const Container = styled.div`
     justify-content: center;
     background-color: #2291f1;
     border: 1px solid #2291f1;
-    cursor: pointer;
+    border-radius: 5px;
+    box-shadow: 0 0px 15px #2190f0;
   }
 
   .h4Div {
     //background-color: aqua;
     height: 90%;
-    width: 60%;
+    width: 75%;
     display: flex;
     align-items: center;
     justify-content: center;

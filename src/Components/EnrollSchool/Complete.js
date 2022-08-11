@@ -12,8 +12,8 @@ function Complete(props) {
         <div className="h4Div">
           <h4
             style={{
-              fontFamily: "Poppins-Regular",
-              fontSize: "22px",
+              fontFamily: "Poppins",
+              fontSize: "40px",
               fontWeight: "500",
             }}
           >
@@ -24,7 +24,7 @@ function Complete(props) {
       </div>
       <button
         className="inputsConatiner button"
-        style={{ width: "30%" }}
+        style={{ width: "25%" }}
         onClick={() => doneHandler()}
       >
         <h3 style={{ color: "white" }}>Done</h3>
@@ -65,12 +65,14 @@ const Container = styled.div`
     justify-content: center;
     background-color: #2291f1;
     border: 1px solid #2291f1;
+    border-radius: 5px;
+    box-shadow: 0 0px 15px #2190f0;
   }
 
   .h4Div {
     //background-color: aqua;
     height: 90%;
-    width: 60%;
+    width: 75%;
     display: flex;
     align-items: center;
     justify-content: center;

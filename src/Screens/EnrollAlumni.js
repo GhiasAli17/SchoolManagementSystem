@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
-
+import Complete from "../Components/EnrollAlumni/CompleteAlumni";
+import Header from "../Components/Header";
 import RegisterAlumni from "../Components/EnrollAlumni/RegisterAlumni";
 import SchoolInformationAlumni from "../Components/EnrollAlumni/SchoolInformationAlumni";
 import CompleteAlumni from "../Components/EnrollAlumni/CompleteAlumni";
@@ -10,7 +11,7 @@ import { RegisterImage, Logo } from "../assets/Images/Index";
 function EnrollAlumni() {
   const navigate = useNavigate();
 
-  const [component, setcomponent] = useState("register");
+  const [component, setcomponent] = useState("Register");
   const [key, setKey] = useState("");
 
   function getKey(item1) {
@@ -27,31 +28,63 @@ function EnrollAlumni() {
   return (
     <>
       <Container>
+        {component != "complete" ? (
+          <>
+   
         <div className="leftChild">
           <div style={{ paddingLeft: "20px" }}>
             <img src={Logo} style={{ width: "70px", height: "60px" }} />
             <h3
               style={{
-                fontSize: 20,
-                margin: 0,
-                marginTop: 10,
-                fontFamily: "Poppins-Regular",
+                fontSize: 30,
+                    margin: 0,
+                    marginTop: 10,
+                    fontFamily: "Poppins",
+                    color: "#0E3746",
+                    fontWeight:"500"
               }}
             >
               {component}
             </h3>
           </div>
-          {component === "register" ? (
+          {component === "Register" ? (
             <RegisterAlumni onClick={componentHandler} ongetval={getKey} />
-          ) : component === "schoolInformation" ? (
+          ) : component === "School Information" ? (
             <SchoolInformationAlumni onClick={componentHandler} getKey={key} />
           ) : component === "complete" ? (
             <CompleteAlumni onClick={componentHandler} />
           ) : null}
         </div>
         <div className="rightChild">
-          <img src={RegisterImage} id="img" />
+          {/* <img src={RegisterImage} id="img" /> */}
+          <div className="rightImg"></div>
         </div>
+        </>): (
+          <div
+            style={{
+              width: "100%",
+              height: "100%",
+              display: "flex",
+              flexDirection: "column",
+            }}
+          >
+            <Header />
+            <div
+              style={{
+                width: "100%",
+                height: "100%",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <Complete onClick={componentHandler} />
+            </div>
+          </div>
+        )}
+
+
       </Container>
     </>
   );
@@ -80,7 +113,7 @@ const Container = styled.div`
   #img {
     display: block;
     width: 44vw;
-    align-self: flex-end;
+    align-self: center;
     height: 100vh;
     object-fit: cover;
   }
@@ -98,5 +131,15 @@ const Container = styled.div`
     display: flex;
     align-items: center;
     justify-content: flex-end;
+  }
+  button {
+    cursor: pointer;
+  }
+  .rightImg {
+    width: 680px;
+    height: 100vh;
+    background-image: url(${RegisterImage});
+    background-repeat: no-repeat;
+    background-size: cover;
   }
 `;

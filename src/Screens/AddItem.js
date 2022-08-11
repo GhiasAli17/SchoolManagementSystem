@@ -285,7 +285,7 @@ function AddItem() {
         <Header />
         <Container>
           <div className="headingText">
-            <h3 style={{ fontFamily: "Poppins-Regular" }}>Add New Item</h3>
+            <h3 style={{ fontFamily: "Poppins", margin: "0 auto", color : "#0E3746", fontSize: "30px", fontWeight:"500", paddingTop: "20px" }}>Add New Item</h3>
           </div>
           <div className="addItemContainer">
             {InputsList.map((item) => {
@@ -335,7 +335,7 @@ function AddItem() {
               }}
             >
               <div className="h5Div">
-                <h5>Upload Item Image</h5>
+                <h5 style={{fontSize: '12px'}}>Upload Item Image</h5>
               </div>
               <div
                 className="inputDiv"
@@ -364,11 +364,12 @@ function AddItem() {
             >
               <div
                 style={{
-                  width: "20%",
-                  height: "80%",
+                  width: "100%",
+                  height: "100%",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
+                  boxShadow: "0 0px 15px #2190f0",
                 }}
               >
                 <button style={{ cursor: "pointer" }} onClick={onSubmitHandler}>
@@ -402,6 +403,7 @@ const Container = styled.div`
     align-items: center;
     margin-top: 10px;
     justify-content: space-between;
+    border-radius: 5px;
   }
   .select {
     justify-content: flex-start;

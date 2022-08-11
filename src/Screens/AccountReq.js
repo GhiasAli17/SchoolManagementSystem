@@ -13,12 +13,13 @@ import {
 import { useSelector } from "react-redux";
 
 import app from "../firebase";
-import { NoItems, DropDown } from "../assets/Images/Index";
+import { NoItems, DropDown,Succes, Fail } from "../assets/Images/Index";
 
 const db = getDatabase(app);
 
 function AccountsReq() {
   const [modalVisible, setModalVisible] = useState("");
+  const [filterData, setFilterData] = useState([]);
 
   const [deleteCheck, setdeleteCheck] = useState(false);
   const HaederList = ["Name", "Graduation Year", "Phone Number", "Status"];
@@ -40,14 +41,18 @@ function AccountsReq() {
   const starCountRef = ref(db, "users/alumni");
 
   let navigate = useNavigate();
+ 
   const onApproveHandler = (alKey) => {
+    setModalVisible(false);
     console.log("approve called", alKey);
     set(ref(db, "users/alumni/" + alKey + "/approve"), true);
     dummyCheck ? setDummyCheck(false) : setDummyCheck(true);
     setLogedinEmail([]);
+    setFilterData([]);
   };
-
   const onDisapproveHandler = (alKey) => {
+    setModalVisible(false);
+
     console.log("disaprove called", alKey);
     set(ref(db, "users/alumni/" + alKey + "/approve"), "rejected");
     deleteCheck ? setdeleteCheck(false) : setdeleteCheck(true);
@@ -74,12 +79,12 @@ function AccountsReq() {
             if (
               innerSnapshot.val().schoolName == childData.schoolInfo.schoolName
             ) {
-              if (!childData.approve) {
                 childData["alumniKey"] = childKey;
                 childData["alumniSchoolname"] = childData.schoolInfo.schoolName;
                 childData["gYear"] = childData.schoolInfo.graduationyear;
                 setLogedinEmail((prev) => [...prev, childData]);
-              }
+                setFilterData((prev) => [...prev, childData]);
+
               // else if(childData.approve){
               //     childData["alumniKey"] = childKey;
               //     childData["alumniSchoolname"] = childData.schoolInfo.schoolName;
@@ -151,21 +156,37 @@ function AccountsReq() {
             flexDirection: "row",
           }}
         >
-          <div style={{ display: "flex", alignItems: "center" }}>
+        <div style={{ display: "flex", alignItems: "center" }}>
             <div
               style={{
                 width: "80%",
                 marginRight: "20px",
                 height: "60%",
                 padding: "10px",
-                backgroundColor: "rgba(34, 145, 241, 0.14)",
+                backgroundColor:
+                  item.approve == false
+                    ? "rgba(34, 145, 241, 0.14)"
+                    : item.approve == true
+                    ? " rgba(32, 227, 0, 0.14)"
+                    : "rgba(255, 0, 0, 0.14)",
+                borderRadius: "5px",
               }}
             >
-              <h6 style={{ color: "#2291F1", margin: 0 }}> Pending</h6>
+              {item.approve == false ? (
+                <h6 style={{ color: "#2291F1", margin: 0 }}> Pending</h6>
+              ) : (
+                <>
+                  {item.approve == true ? (
+                    <h6 style={{ color: "#20E300", margin: 0 }}>Accepted</h6>
+                  ) : (
+                    <h6 style={{ color: "#FF0000", margin: 0 }}>Rejected</h6>
+                  )}
+                </>
+              )}
             </div>
             <img
               src={DropDown}
-              style={{ cursor: "pointer", width: "10px", height: "10px" }}
+              style={{ width: "10px", height: "10px", cursor: "pointer" }}
               onClick={() => {
                 modalVisible == item.alumniKey
                   ? setModalVisible("")
@@ -178,40 +199,48 @@ function AccountsReq() {
               <div
                 style={{
                   width: "100%",
-                  height: "50%",
                   borderBottom: "1px solid #DADDE1",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
                   cursor: "pointer",
+                  maxHeight: "30px",
                 }}
               >
-                <h6
-                  onClick={() => {
-                    onApproveHandler(item.alumniKey);
+                {item.approve == false ? (
+                  <h6 onClick={() => onApproveHandler(item.alumniKey)}>
+                    Approve
+                  </h6>
+                ) : (
+                  <>
+                    {item.approve == true ? (
+                      <h6 onClick={() => onDisapproveHandler(item.alumniKey)}>
+                        Reject
+                      </h6>
+                    ) : (
+                      <h6 onClick={() => onApproveHandler(item.alumniKey)}>
+                        Approve
+                      </h6>
+                    )}
+                  </>
+                )}
+              </div>
+              {item.approve == false ? (
+                <div
+                  style={{
+                    width: "100%",
+                    maxHeight: "30px",
+                    display: "flex",
+                    alignItems: "center",
+                    cursor: "pointer",
+                    justifyContent: "center",
                   }}
                 >
-                  Approve
-                </h6>
-              </div>
-              <div
-                style={{
-                  width: "100%",
-                  height: "50%",
-                  display: "flex",
-                  alignItems: "center",
-                  cursor: "pointer",
-                  justifyContent: "center",
-                }}
-              >
-                <h6
-                  onClick={() => {
-                    onDisapproveHandler(item.alumniKey);
-                  }}
-                >
-                  Reject
-                </h6>
-              </div>
+                  <h6 onClick={() => onDisapproveHandler(item.alumniKey)}>
+                    Reject
+                  </h6>
+                </div>
+              ) : null}
             </div>
           ) : null}
         </div>
@@ -243,11 +272,11 @@ function AccountsReq() {
   else
     return (
       <>
-        <Header />
+        <Header data={data} setFilterData={setFilterData} />
 
         <Container>
           <div className="nav">
-            <h3 style={{ fontFamily: "Poppins-Regular" }}>
+            <h3 style={{ fontFamily: "Poppins", fontSize: "30px", color: "#0E3746", margin: "0", fontWeight:"500" }}>
               Alumni Registrations requests
             </h3>
           </div>
@@ -272,15 +301,15 @@ function AccountsReq() {
                         justifyContent: "center",
                       }}
                     >
-                      {item == "nill" || item == "nil" ? null : <h6>{item}</h6>}
+                      {item == "nill" || item == "nil" ? null : <h6 className="tabelSet">{item}</h6>}
                     </div>
                   );
                 })}
               </div>
               <div className="innerDiv">
-                {data.map((item, index) => {
-                  return addTodo(item, index);
-                })}
+              {filterData.map((item, index) => {
+              return addTodo(item, index);
+            })}
               </div>
             </>
           ) : (
@@ -345,7 +374,6 @@ const Container = styled.div`
   .approveDiv {
     position: absolute;
     width: 70px;
-    height: 50px;
     margin-top: 80px;
     margin-left: 100px;
     z-index: 100;
@@ -358,7 +386,8 @@ const Container = styled.div`
     white-space: nowrap;
     color: #0e3746;
     font-weight: 500;
-    font-size: 12px;
+    font-size: 16px;
+    font-family: "Poppins";
   }
   .schoolPanelHeaderContainer {
     height: 7%;
@@ -371,7 +400,7 @@ const Container = styled.div`
   }
   .backButton {
     width: 10%;
-    height: 50px;
+    height: 70px;
     margin-left: 20px;
     display: flex;
     align-items: center;
@@ -379,6 +408,8 @@ const Container = styled.div`
     align-self: flex-end;
     cursor: pointer;
     background-color: #2291f1;
+    border-radius: 5px !important;
+    box-shadow: 0 0px 15px #2190f0;
   }
   .rightDiv {
     //background-color: yellow;
@@ -390,10 +421,11 @@ const Container = styled.div`
   }
   .rows {
     width: 100%;
-    height: 50px;
+    height: 23%;
     display: flex;
     align-items: center;
     justify-content: space-between;
+    border-bottom: 1px solid #dadde1;
   }
   .input {
     width: 30px;
@@ -402,7 +434,7 @@ const Container = styled.div`
   .innerDiv {
     //background-color: aqua;
     height: 100%;
-    width: 95%;
+    width: 100%;
     padding-bottom: 50px;
     margin-bottom: 50px;
     overflow: auto;
@@ -442,4 +474,9 @@ const Container = styled.div`
     align-items: center;
     justify-content: flex-end;
   }
+  .tabelSet {
+    font-size: 13px;
+    color: #0E3746;
+  }
+
 `;

@@ -93,25 +93,25 @@ function AlumniPanel() {
               justifyContent: "flex-start",
             }}
           >
-            <input style={{ outline: "none" }} type="checkbox" />
+            <input style={{ outline: "none", width: "20px", height: "20px", marginLeft:"20px", }} type="checkbox" />
           </div>
           <div
             style={{
               width: "15%",
               display: " flex",
               alignItems: "center",
-              justifyContent: "space-between",
+              justifyContent: "center",
             }}
           >
             {item.imageUrl ? (
               <img
                 src={item.imageUrl}
-                style={{ marginRight: "20px", width: "40px", height: "40px" }}
+                style={{ marginRight: "20px", width: "40px", height: "40px", borderRadius:"5px", }}
               />
             ) : (
               <img
                 src={DummyImage}
-                style={{ marginRight: "20px", width: "40px", height: "40px" }}
+                style={{ marginRight: "20px", width: "40px", height: "40px", borderRadius:"5px", }}
               />
             )}
             <h4 className="cutText">{item.itemName}</h4>
@@ -211,7 +211,7 @@ function AlumniPanel() {
         <Container>
           <div className="nav">
             <div className="leftDiv">
-              <h3 style={{ fontFamily: "Poppins-Regular" }}>Needs</h3>
+              <h3 style={{ fontFamily: "Poppins", fontSize: "25px", margin: "0", color:"#0E3746", fontWeight:"500" }}>Needs</h3>
             </div>
           </div>
           {filterData.length > 0 ? (
@@ -228,7 +228,7 @@ function AlumniPanel() {
                         justifyContent: "center",
                       }}
                     >
-                      {item == "nill" || item == "nil" ? null : <h6>{item}</h6>}
+                      {item == "nill" || item == "nil" ? null : <h6 style={{fontSize:"13px", color:"#0E3746"}}>{item}</h6>}
                     </div>
                   );
                 })}
@@ -264,8 +264,8 @@ export default AlumniPanel;
 const Container = styled.div`
   //background-color: gray;
   height: 79.7vh;
-  width: 96%;
-  padding-inline: 2%;
+  width: 94%;
+  padding-inline: 3%;
   display: flex;
   align-items: center;
   flex-direction: column;
@@ -275,7 +275,7 @@ const Container = styled.div`
     white-space: nowrap;
     color: #0e3746;
     font-weight: 500;
-    font-size: 12px;
+    font-size: 16px;
   }
 
   .nav {
@@ -288,7 +288,6 @@ const Container = styled.div`
   .leftDiv {
     height: 70%;
     width: 50%;
-    padding-left: 2.5%;
     display: flex;
     align-items: center;
     justify-content: flex-start;
@@ -305,7 +304,7 @@ const Container = styled.div`
   }
   .rows {
     width: 100%;
-    height: 15%;
+    height: 17%;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -318,7 +317,7 @@ const Container = styled.div`
   .innerDiv {
     //background-color: aqua;
     height: 100%;
-    width: 95%;
+    width: 100%;
     overflow: auto;
   }
   .AlumniPanelHeaderContainer {
@@ -344,11 +343,13 @@ const Container = styled.div`
   button {
     background-color: #2291f1;
     width: 70%;
-    height: 30px;
+    height: 35px;
     border: 0px;
     color: white;
     border-radius: 5px;
     cursor: pointer;
+    font-weight: bold;
+    box-shadow: 0 0px 15px #2190f0;
   }
   .paragraphDiv {
     //background-color: red;

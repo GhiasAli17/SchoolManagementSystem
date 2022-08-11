@@ -223,7 +223,7 @@ function SchoolInformationAlumni(props) {
         {InputsList.map((item) => {
           return (
             <div id={item.id} className="inputsConatiner">
-              <img src={item.image} style={{ width: "25px", height: "25px" }} />
+              <img className="ledtIcon" src={item.image} style={{ width: "25px", height: "25px" }} />
               <input
                 className="inputDiv"
                 style={{ outline: "none" }}
@@ -236,21 +236,15 @@ function SchoolInformationAlumni(props) {
           );
         })}
         <div className="inputsConatiner select">
-          <img src={School} style={{ width: "25px", height: "25px" }} />
+          <img className="ledtIcon" src={School} style={{ width: "25px", height: "25px" }} />
 
           <select
+          className="selecter"
             id={"xyz"}
             name="schoolName"
             value={alumniSchoolInfo.schoolName}
             style={{
-              outline: "none",
-              marginLeft: 30,
-              borderColor: "rgba(218, 221, 225, 0.4)",
-              backgroundColor: "white",
-              color: "rgba(14, 55, 70, 0.4)",
-              height: "80%",
-              width: "40%",
-              borderRadius: 5,
+              
             }}
             onClick={onChangeHandler}
             onChange={onChangeHandler}
@@ -295,7 +289,7 @@ const Container = styled.div`
 
   .inputsConatiner {
     height: 10%;
-    width: 60%;
+    width: 90%;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -311,9 +305,13 @@ const Container = styled.div`
     background-color: white;
     border: 1px solid #2291f1;
     cursor: pointer;
+    border-radius: 5px
   }
   .blueBack {
     background-color: #2291f1;
+    border-radius: 5px;
+    box-shadow: 0 0px 15px #2190f0;
+    margin-bottom: 10px;
   }
   .whiteText {
     color: white;
@@ -323,18 +321,37 @@ const Container = styled.div`
   }
   .inputDiv {
     height: 100%;
-    padding-inline: 10px;
-    width: 80%;
+    padding-inline: 20px;
+    width: 83%;
     display: flex;
     justify-content: center;
     padding-left: 20px !important;
-    border-radius: 7px;
+    border-radius: 5px;
     border: 1px solid rgba(218, 221, 225, 0.4);
     background-color: rgba(218, 221, 225, 0.4);
   }
   .inputDiv::placeholder {
     color: rgba(14, 55, 70, 0.4);
     opacity: 1;
+  }
+  // .ledtIcon {
+  //   border: 2px solid #f0f1f3;
+  //   padding: 9px;
+  //   border-radius: 5px;
+  // }
+  .selecter {
+    outline: none;
+    margin-left: 24px;
+    border-color: rgba(218, 221, 225, 0.4);
+    background-color: white;
+    color: rgba(14, 55, 70, 0.4);
+    height: 45px;
+    width: 100%;
+    border-radius: 5px;
+    padding-left: 14px;
+    border: 1px solid rgba(218,221,225,0.4);
+    background-color: rgba(218,221,225,0.4);
+    padding-right: 14px !important;
   }
 `;
 {

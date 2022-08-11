@@ -36,10 +36,12 @@ function EnrollSchool({ navigation }) {
                 <img src={Logo} style={{ width: "70px", height: "60px" }} />
                 <h3
                   style={{
-                    fontSize: 20,
+                    fontSize: 30,
                     margin: 0,
                     marginTop: 10,
-                    fontFamily: "Poppins-Regular",
+                    fontFamily: "Poppins",
+                    color: "#0E3746",
+                    fontWeight: "500",
                   }}
                 >
                   {component}
@@ -51,7 +53,7 @@ function EnrollSchool({ navigation }) {
                   onClick={(item1) => componentHandler(item1)}
                   ongetval={(item1) => getKey(item1)}
                 />
-              ) : component === "schoolInformation" ? (
+              ) : component === "School Information" ? (
                 <SchoolInformation onClick={componentHandler} getKey={key} />
               ) : component === "payment" ? (
                 <Payment onClick={componentHandler} />
@@ -60,7 +62,8 @@ function EnrollSchool({ navigation }) {
               ) : null}
             </div>
             <div className="rightChild">
-              <img src={RegisterImage} id="img" />
+              {/* <img src={RegisterImage} id="img" /> */}
+              <div className="rightImg"></div>
             </div>
           </>
         ) : (
@@ -136,5 +139,12 @@ const Container = styled.div`
   }
   button {
     cursor: pointer;
+  }
+  .rightImg {
+    width: 680px;
+    height: 100vh;
+    background-image: url(${RegisterImage});
+    background-repeat: no-repeat;
+    background-size: cover;
   }
 `;

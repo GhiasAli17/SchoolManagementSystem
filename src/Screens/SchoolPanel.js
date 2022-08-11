@@ -7,13 +7,13 @@ import { useSelector } from "react-redux";
 
 import Header from "../Components/Header";
 import app from "../firebase";
-import { NoItems, Edit, TrashIcon, DummyImage } from "../assets/Images/Index";
+import { NoItems,pending, Edit, TrashIcon, DummyImage } from "../assets/Images/Index";
 
 const db = getDatabase(app);
 
 function SchoolPanel() {
   const [deleteId, setDeletedId] = useState(false);
-  const { key } = useSelector((state) => state.persistedReducer);
+  const { key,approve } = useSelector((state) => state.persistedReducer);
   const [deleteCheck, setdeleteCheck] = useState(false);
 
   const DeleteItem = () => {
@@ -62,14 +62,14 @@ function SchoolPanel() {
         <div className="rows">
           <div
             style={{
-              width: "15%",
+              width: "13%",
               display: " flex",
               alignItems: "center",
               justifyContent: "flex-start",
             }}
           >
             <input
-              style={{ cursor: "pointer", outline: "none" }}
+              style={{ cursor: "pointer", outline: "none", width: "20px", height: "20px", marginLeft: "20px" }}
               type="checkbox"
             />
           </div>
@@ -84,12 +84,12 @@ function SchoolPanel() {
             {item.imageUrl ? (
               <img
                 src={item.imageUrl}
-                style={{ marginRight: "20px", width: "40px", height: "40px" }}
+                style={{ marginRight: "20px", width: "40px", height: "40px", borderRadius: "5px" }}
               />
             ) : (
               <img
                 src={DummyImage}
-                style={{ marginRight: "20px", width: "40px", height: "40px" }}
+                style={{ marginRight: "20px", width: "40px", height: "40px", borderRadius: "5px" }}
               />
             )}
             <h4 className="cutText">{item.itemName}</h4>
@@ -191,157 +191,184 @@ function SchoolPanel() {
       </div>
     );
   else
-    return (
-      <>
-        <Header />
+  {
+    if(approve == 'pending')
+    {
+      return (
+        <>
+                  <Header />
 
-        <Container>
-          <div className="nav">
-            <div className="leftDiv">
-              <h3 style={{ fontFamily: "Poppins-Regular" }}>Needs</h3>
-            </div>
-            <div className="rightDiv">
-              <button onClick={() => addHandler()} className="button">
-                <h4 style={{ color: "#2291F1", fontFamily: "Poppins-Regular" }}>
-                  Add New
-                </h4>
-              </button>
-
-              <button onClick={() => navigate("/accounts")} className="button">
-                <h4 style={{ color: "#2291F1", fontFamily: "Poppins-Regular" }}>
-                  Accounts Requests
-                </h4>
-              </button>
-            </div>
+           <div style={{position: 'absolute', left: 0, right: 0, top:0, bottom: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column'}}>
+           <img src={pending} />
+<h4     style={{
+              fontFamily: "Poppins",
+              fontSize: "40px",
+              fontWeight: "500",
+              color: "rgba(14, 55, 70, 0.4)"
+}} 
+            >
+           Your enrollment is pending verification
+           </h4>
           </div>
-          {data.length > 0 ? (
-            <div className="innerDiv">
-              <div className="schoolPanelHeaderContainer">
-                {HaederList.map((item) => {
-                  return (
-                    <div
-                      key={item}
-                      style={{
-                        width: "15%",
-                        display: " flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        fontFamily: "Poppins-Regular",
-                      }}
-                    >
-                      {item == "nill" || item == "nil" ? null : <h6>{item}</h6>}
-                    </div>
-                  );
+        </>
+      )
+    }
+    else{
+      return (
+        <>
+          <Header />
+  
+          <Container>
+            <div className="nav">
+              <div className="leftDiv">
+                <h3 style={{ fontFamily: "Poppins", margin: "0", fontSize: "25px", color: "#0E3746", fontWeight:"500" }}>Needs</h3>
+              </div>
+              <div className="rightDiv">
+                <button onClick={() => addHandler()} className="button">
+                  <h4 style={{ color: "#2291F1", fontFamily: "Poppins-Regular" }}>
+                    Add New
+                  </h4>
+                </button>
+  
+                <button onClick={() => navigate("/accounts")} className="button">
+                  <h4 style={{ color: "#2291F1", fontFamily: "Poppins-Regular" }}>
+                    Accounts Requests
+                  </h4>
+                </button>
+              </div>
+            </div>
+            {data.length > 0 ? (
+              <div className="innerDiv">
+                <div className="schoolPanelHeaderContainer">
+                  {HaederList.map((item) => {
+                    return (
+                      <div
+                        key={item}
+                        style={{
+                          width: "4%",
+                          display: " flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          fontFamily: "Poppins-Regular",
+                        }}
+                      >
+                        {item == "nill" || item == "nil" ? null : <h6 className="header-column">{item}</h6>}
+                      </div>
+                    );
+                  })}
+                </div>
+                {data.map((item, index) => {
+                  return addTodo(item, index);
                 })}
               </div>
-              {data.map((item, index) => {
-                return addTodo(item, index);
-              })}
-            </div>
-          ) : (
-            <div
-              style={{
-                width: "100%",
-                height: "100%",
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              <img src={NoItems} />
-              <h4
+            ) : (
+              <div
                 style={{
-                  color: "rgba(14, 55, 70, 0.4)",
-                  fontFamily: "Poppins-Regular",
+                  width: "100%",
+                  height: "100%",
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  justifyContent: "center",
                 }}
               >
-                You did not have any item in your list Click "Add new" to add
-                your school needs
-              </h4>
-            </div>
-          )}
-          <Modal
-            isOpen={modalVisible}
-            onRequestClose={() => setModalVisible(!modalVisible)}
-            style={{
-              overlay: {
-                backgroundColor: "rgba(255, 255, 255, 0.75)",
-              },
-              content: {
-                position: "absolute",
-                top: "21.3%",
-                left: "35%",
-                right: "auto",
-                width: "30%",
-                bottom: "40%",
-                border: "1px solid #ccc",
-                background: "#fff",
-
-                WebkitOverflowScrolling: "touch",
-                borderRadius: "4px",
-                outline: "none",
-                padding: "20px",
-              },
-            }}
-          >
-            <div
+                <img src={NoItems} />
+                <h4
+                  style={{
+                    color: "rgba(14, 55, 70, 0.4)",
+                    fontFamily: "Poppins-Regular",
+                  }}
+                >
+                  You did not have any item in your list Click "Add new" to add
+                  your school needs
+                </h4>
+              </div>
+            )}
+            <Modal
+              isOpen={modalVisible}
+              onRequestClose={() => setModalVisible(!modalVisible)}
               style={{
-                width: "100%",
-                flexDirection: "column",
-                height: "90%",
-                display: "flex",
-                paddingTop: "3%",
-                alignItems: "center",
-                justifyContent: "space-evenly",
+                overlay: {
+                  backgroundColor: "rgba(255, 255, 255, 0.75)",
+                },
+                content: {
+                  position: "absolute",
+                  top: "21.3%",
+                  left: "35%",
+                  right: "auto",
+                  width: "30%",
+                  bottom: "40%",
+                  border: "1px solid #ccc",
+                  background: "#fff",
+  
+                  WebkitOverflowScrolling: "touch",
+                  borderRadius: "4px",
+                  outline: "none",
+                  padding: "20px",
+                },
               }}
             >
               <div
                 style={{
-                  width: "60px",
-                  height: "60px",
+                  width: "100%",
+                  flexDirection: "column",
+                  height: "90%",
                   display: "flex",
+                  paddingTop: "3%",
                   alignItems: "center",
-                  justifyContent: "center",
-                  backgroundColor: "rgba(255, 0, 0, 0.14)",
-                  borderRadius: 30,
+                  justifyContent: "space-evenly",
                 }}
               >
-                <h4 style={{ color: "white", fontSize: "20px" }}>X</h4>
+                <div
+                  style={{
+                    width: "60px",
+                    height: "60px",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    backgroundColor: "rgba(255, 0, 0, 0.14)",
+                    borderRadius: 30,
+                  }}
+                >
+                  <h4 style={{ color: "white", fontSize: "20px" }}>X</h4>
+                </div>
+                <h3
+                  style={{
+                    marginTop: "2%",
+                    marginLeft: "3%",
+                    fontWeight: "500",
+                    color: "rgba(255, 0, 0, 0.14)",
+                    fontFamily: "Poppins-Regular",
+                  }}
+                >
+                  Are you sure to delete this Item
+                </h3>
+                <button
+                  onClick={() => {
+                    DeleteItem();
+                    setModalVisible(false);
+                  }}
+                  className="button"
+                  style={{
+                    backgroundColor: " rgba(255, 0, 0, 0.14)",
+                    borderWidth: 0,
+                    width: "45%",
+                    borderRadius: 10,
+                  }}
+                >
+                  <h4 style={{ color: "white", fontFamily: "Poppins-Regular" }}>
+                    Confirm Delete
+                  </h4>
+                </button>
               </div>
-              <h3
-                style={{
-                  marginTop: "2%",
-                  marginLeft: "3%",
-                  fontWeight: "500",
-                  color: "rgba(255, 0, 0, 0.14)",
-                  fontFamily: "Poppins-Regular",
-                }}
-              >
-                Are you sure to delete this Item
-              </h3>
-              <button
-                onClick={() => {
-                  DeleteItem();
-                  setModalVisible(false);
-                }}
-                className="button"
-                style={{
-                  backgroundColor: " rgba(255, 0, 0, 0.14)",
-                  borderWidth: 0,
-                  width: "45%",
-                  borderRadius: 10,
-                }}
-              >
-                <h4 style={{ color: "white", fontFamily: "Poppins-Regular" }}>
-                  Confirm Delete
-                </h4>
-              </button>
-            </div>
-          </Modal>
-        </Container>
-      </>
-    );
+            </Modal>
+          </Container>
+        </>
+      );
+    }
+   
+  }
+   
 }
 
 export default SchoolPanel;
@@ -360,7 +387,7 @@ const Container = styled.div`
     white-space: nowrap;
     color: #0e3746;
     font-weight: 500;
-    font-size: 12px;
+    font-size: 18px;
   }
 
   .nav {
@@ -369,6 +396,8 @@ const Container = styled.div`
     display: flex;
     flex-direction: row;
     margin-top: 20px;
+    padding: 0 0 0 20px;
+    box-sizing: border-box;
   }
   .leftDiv {
     height: 70%;
@@ -396,7 +425,7 @@ const Container = styled.div`
   }
   .rows {
     width: 100%;
-    height: 15%;
+    height: 17%;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -409,7 +438,7 @@ const Container = styled.div`
   .innerDiv {
     //background-color: aqua;
     height: 100%;
-    width: 95%;
+    width: 100%;
     overflow: auto;
   }
   .schoolPanelHeaderContainer {
@@ -432,6 +461,10 @@ const Container = styled.div`
     height: 90%;
     width: 17%;
   }
+  h4 {
+    text-align: center;
+    color: rgba(14, 55, 70, 0.4);
+  }
   button {
     background-color: gray;
     width: 100%;
@@ -446,5 +479,10 @@ const Container = styled.div`
     display: flex;
     align-items: center;
     justify-content: flex-end;
+  }
+  .header-column {
+    font-size: 13px;
+    color: #0E3746;
+    font-weight: 600;
   }
 `;

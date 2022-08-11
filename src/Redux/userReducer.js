@@ -8,6 +8,7 @@ import {
   SET_PROFILE,
   SET_USER_DATA,
   SET_USERNAME,
+  SET_APPROVE_STATUS
 } from "./actions";
 const inittialstate = {
   data: "",
@@ -19,12 +20,15 @@ const inittialstate = {
   profilepic: "",
   userData: "",
   username: "",
+  approve : ""
 };
 function userReducer(state = inittialstate, action) {
   switch (action.type) {
     case SET_DATA:
       console.log(action.payload.data);
       return { ...state, data: action.payload.data };
+      case SET_APPROVE_STATUS:
+      return { ...state, approve: action.payload.approve };
     case SET_KEY:
       console.log(action.payload.key);
       return { ...state, key: action.payload.key };

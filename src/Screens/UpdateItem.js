@@ -354,7 +354,7 @@ function UpdateItem() {
             }}
           >
             <div className="h5Div">
-              <h5>Upload Item Image</h5>
+              <h5 style={{fontSize: '12px'}}>Upload Item Image</h5>
             </div>
             <div className="inputDiv" style={{ borderWidth: 0 }}>
               <input

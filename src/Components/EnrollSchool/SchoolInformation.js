@@ -3,7 +3,8 @@ import styled from "styled-components";
 import { getDatabase, ref, set } from "firebase/database";
 import toast, { Toaster } from "react-hot-toast";
 
-import { User, School, Contact } from "../../assets/Images/Index";
+import { User,School, Contact, Succes, Fail, Cancel} from "../../assets/Images/Index";
+
 import app from "../../firebase";
 
 const db = getDatabase(app);
@@ -242,7 +243,7 @@ function SchoolInformation(props) {
       {InputsList.map((item) => {
         return (
           <div id={item.id} className="inputsConatiner">
-            <img src={item.image} style={{ width: "25px", height: "25px" }} />
+            <img className="ledtIcon" src={item.image} style={{ width: "25px", height: "25px" }} />
             <input
               className="inputDiv"
               style={{ outline: "none" }}
@@ -287,7 +288,7 @@ const Container = styled.div`
 
   .inputsConatiner {
     height: 10%;
-    width: 60%;
+    width: 90%;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -299,9 +300,13 @@ const Container = styled.div`
     flex-direction: column;
     background-color: white;
     border: 1px solid #2291f1;
+    border-radius: 5px;
   }
   .blueBack {
     background-color: #2291f1;
+    border-radius: 5px;
+    box-shadow: 0 0px 15px #2190f0;
+    margin-bottom: 10px;
   }
   .whiteText {
     color: white;
@@ -309,17 +314,22 @@ const Container = styled.div`
   .blueText {
     color: #2291f1;
   }
-  .inputDiv {
+.inputDiv {
     height: 100%;
-    padding-inline: 10px;
-    width: 80%;
+    padding-inline: 20px;
+    width: 83%;
     display: flex;
     justify-content: center;
     padding-left: 20px !important;
-    border-radius: 7px;
-    border: 1px solid rgba(218, 221, 225, 0.4);
+    border-radius: 5px;
+    border: 0;
     background-color: rgba(218, 221, 225, 0.4);
   }
+  // .ledtIcon {
+  //   border: 2px solid #f0f1f3;
+  //   padding: 9px;
+  //   border-radius: 5px;
+  // }
   .inputDiv::placeholder {
     color: rgba(14, 55, 70, 0.4);
     opacity: 1;

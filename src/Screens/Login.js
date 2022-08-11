@@ -25,10 +25,12 @@ function Login() {
             />
             <h3
               style={{
-                fontSize: 20,
-                margin: 0,
-                marginTop: 10,
-                fontFamily: "Poppins-Regular",
+                fontSize: 30,
+                    margin: 0,
+                    marginTop: 10,
+                    fontFamily: "Poppins",
+                    color: "#0E3746",
+                    fontWeight:"500"
               }}
             >
               Login
@@ -37,7 +39,8 @@ function Login() {
           <LoginComponent onClick={componentHandler} />
         </div>
         <div className="rightChild">
-          <img src={RegisterImage} id="img" />
+          {/* <img src={RegisterImage} id="img" /> */}
+          <div className="rightImg"></div>
         </div>
       </Container>
     </>
@@ -85,5 +88,12 @@ const Container = styled.div`
     display: flex;
     align-items: center;
     justify-content: flex-end;
+  }
+  .rightImg {
+    width: 680px;
+    height: 100vh;
+    background-image: url(${RegisterImage});
+    background-repeat: no-repeat;
+    background-size: cover;
   }
 `;

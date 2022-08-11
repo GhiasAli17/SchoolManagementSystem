@@ -42,6 +42,7 @@ function AdminPanel() {
 
   let navigate = useNavigate();
   const onApproveHandler = (alKey) => {
+    setModalVisible(false);
     console.log("approve called", alKey);
     set(ref(db, "users/admin/" + alKey + "/approve"), true);
     dummyCheck ? setDummyCheck(false) : setDummyCheck(true);
@@ -50,8 +51,9 @@ function AdminPanel() {
   };
 
   const onDisapproveHandler = (alKey) => {
+    setModalVisible(false);
     console.log("disaprove called", alKey);
-    set(ref(db, "users/admin/" + alKey+ "/approve"), "rejected");
+    set(ref(db, "users/admin/" + alKey + "/approve"), "rejected");
     // set(ref(db, "School/" + alKey), null);
     deleteCheck ? setdeleteCheck(false) : setdeleteCheck(true);
     setLogedinEmail([]);
@@ -68,11 +70,9 @@ function AdminPanel() {
 
           console.log("admin data", childData);
 
-          if (!childData.approve) {
-            childData["alumniKey"] = childKey;
-            setLogedinEmail((prev) => [...prev, childData]);
-            setFilterData((prev) => [...prev, childData]);
-          }
+          childData["alumniKey"] = childKey;
+          setLogedinEmail((prev) => [...prev, childData]);
+          setFilterData((prev) => [...prev, childData]);
         });
         setCheck(true);
       },
@@ -82,7 +82,7 @@ function AdminPanel() {
     );
   }, [deleteCheck, dummyCheck]);
   const addTodo = (item, index) => {
-    console.log(`1111111111111111111111 ${item}`);
+    console.log(`1111111111111111111111 ${JSON.stringify(item)}`);
     return (
       <div className="rows">
         <div
@@ -138,10 +138,26 @@ function AdminPanel() {
                 marginRight: "20px",
                 height: "60%",
                 padding: "10px",
-                backgroundColor: "rgba(34, 145, 241, 0.14)",
+                backgroundColor:
+                  item.approve == false
+                    ? "rgba(34, 145, 241, 0.14)"
+                    : item.approve == true
+                    ? " rgba(32, 227, 0, 0.14)"
+                    : "rgba(255, 0, 0, 0.14)",
+                borderRadius: "5px",
               }}
             >
-              <h6 style={{ color: "#2291F1", margin: 0 }}> Pending</h6>
+              {item.approve == false ? (
+                <h6 style={{ color: "#2291F1", margin: 0 }}> Pending</h6>
+              ) : (
+                <>
+                  {item.approve == true ? (
+                    <h6 style={{ color: "#20E300", margin: 0 }}>Accepted</h6>
+                  ) : (
+                    <h6 style={{ color: "#FF0000", margin: 0 }}>Rejected</h6>
+                  )}
+                </>
+              )}
             </div>
             <img
               src={DropDown}
@@ -158,32 +174,48 @@ function AdminPanel() {
               <div
                 style={{
                   width: "100%",
-                  height: "50%",
                   borderBottom: "1px solid #DADDE1",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
                   cursor: "pointer",
+                  maxHeight: "30px",
                 }}
               >
-                <h6 onClick={() => onApproveHandler(item.alumniKey)}>
-                  Approve
-                </h6>
+                {item.approve == false ? (
+                  <h6 onClick={() => onApproveHandler(item.alumniKey)}>
+                    Approve
+                  </h6>
+                ) : (
+                  <>
+                    {item.approve == true ? (
+                      <h6 onClick={() => onDisapproveHandler(item.alumniKey)}>
+                        Reject
+                      </h6>
+                    ) : (
+                      <h6 onClick={() => onApproveHandler(item.alumniKey)}>
+                        Approve
+                      </h6>
+                    )}
+                  </>
+                )}
               </div>
-              <div
-                style={{
-                  width: "100%",
-                  height: "50%",
-                  display: "flex",
-                  alignItems: "center",
-                  cursor: "pointer",
-                  justifyContent: "center",
-                }}
-              >
+              {item.approve == false ? (
+                <div
+                  style={{
+                    width: "100%",
+                    maxHeight: "30px",
+                    display: "flex",
+                    alignItems: "center",
+                    cursor: "pointer",
+                    justifyContent: "center",
+                  }}
+                >
                   <h6 onClick={() => onDisapproveHandler(item.alumniKey)}>
-                  Reject
-                </h6>
-              </div>
+                    Reject
+                  </h6>
+                </div>
+              ) : null}
             </div>
           ) : null}
         </div>
@@ -219,7 +251,16 @@ function AdminPanel() {
 
         <Container>
           <div className="nav">
-            <h3 style={{ fontFamily: "Poppins-Regular" }}>Admin Dashboard</h3>
+            <h3
+              style={{
+                fontFamily: "Poppins",
+                fontSize: "30px",
+                margin: "0",
+                color: "#0E3746",
+              }}
+            >
+              Admin Dashboard
+            </h3>
           </div>
           <div
             style={{
@@ -240,7 +281,11 @@ function AdminPanel() {
                     justifyContent: "center",
                   }}
                 >
-                  {item == "nill" || item == "nil" ? null : <h6>{item}</h6>}
+                  {item == "nill" || item == "nil" ? null : (
+                    <h6 style={{ fontSize: "13px", color: "#0E3746" }}>
+                      {item}
+                    </h6>
+                  )}
                 </div>
               );
             })}
@@ -277,7 +322,6 @@ const Container = styled.div`
   .approveDiv {
     position: absolute;
     width: 70px;
-    height: 50px;
     margin-top: 80px;
     margin-left: 100px;
     z-index: 100;
@@ -290,7 +334,7 @@ const Container = styled.div`
     white-space: nowrap;
     color: #0e3746;
     font-weight: 500;
-    font-size: 12px;
+    font-size: 16px;
   }
   .schoolPanelHeaderContainer {
     height: 7%;
@@ -333,7 +377,7 @@ const Container = styled.div`
   .innerDiv {
     //background-color: aqua;
     height: 100%;
-    width: 95%;
+    width: 100%;
     padding-bottom: 50px;
     margin-bottom: 50px;
     overflow: auto;

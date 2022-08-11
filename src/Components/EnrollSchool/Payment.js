@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 import { getDatabase, ref, set } from "firebase/database";
 
 import app from "../../firebase";
-import { User, Document, Bank } from "../../assets/Images/Index";
+import { User, Document,Bank, Succes, Fail, Cancel} from "../../assets/Images/Index";
 
 const db = getDatabase(app);
 
@@ -34,55 +34,12 @@ function Payment(props) {
         } else {
           toast.custom(
             <div
-              style={{
-                marginTop: "5%",
-                width: "100%",
-                height: "6vh",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "flex-start",
-              }}
-            >
-              <div
-                style={{
-                  alignSelf: "flex-start",
-                  width: "30%",
-                  height: "100%",
-                  borderLeftWidth: "8px",
-                  borderColor: "red",
-                  borderStyle: "solid",
-                  borderBottomWidth: 0,
-                  borderRightWidth: 0,
-                  borderTopWidth: 0,
-                  borderRadius: 5,
-                  backgroundColor: "#F5F5F5",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
-              >
-                <h3
-                  style={{
-                    color: "#515C6F",
-                    fontFamily: "GraphikMedium",
-                    fontWeight: "100",
-                    fontSize: "12px",
-                  }}
-                >
-                  length of number should be 11
-                </h3>
-              </div>
-            </div>,
-            { duration: 1000 }
-          );
-        }
-      } else {
-        toast.custom(
-          <div
             style={{
-              marginTop: "5%",
+              marginTop: "2%",
+              marginLeft: '12%',
               width: "100%",
-              height: "6vh",
+              height: "8vh",
+              borderRadius: '20px',
               display: "flex",
               alignItems: "center",
               justifyContent: "flex-start",
@@ -90,34 +47,79 @@ function Payment(props) {
           >
             <div
               style={{
-                alignSelf: "flex-start",
                 width: "30%",
                 height: "100%",
-                borderLeftWidth: "8px",
-                borderColor: "red",
+                borderRadius: '30px',
+                borderWidth: '1px',
+                borderColor: '#F5F5F5',
                 borderStyle: "solid",
-                borderBottomWidth: 0,
-                borderRightWidth: 0,
-                borderTopWidth: 0,
-                borderRadius: 5,
-                backgroundColor: "#F5F5F5",
+                backgroundColor: "white",
                 display: "flex",
                 alignItems: "center",
-                justifyContent: "center",
+                paddingInline: '5px',
+                justifyContent: "space-between",
               }}
             >
-              <h3
-                style={{
-                  color: "#515C6F",
-                  fontFamily: "GraphikMedium",
-                  fontWeight: "100",
-                  fontSize: "12px",
-                }}
-              >
-                invalid key presed
-              </h3>
+              <div style={{display: 'flex',alignItems: 'center', justifyContent: 'center',borderRadius: '50px', backgroundColor: 'rgba(255, 0, 0, 0.22)', width: '11%', height: '75%'}}>
+                <img src={Fail} style={{width: '60%', height: '60%', borderRadius: '60px', overflow: 'hidden'}}/>
+                 </div>
+              <div style={{width: '70%', height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'flex-start', justifyContent:'center'}}>
+                <h6 style={{margin: 0}}>Empty fields</h6>
+                <h6 style={{color: '#FF0000', margin: 0}}>Kindly fill all the fields</h6>
+    
+              </div>
+              <div style={{width: '10%', height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent:'center'}}>
+              <img src={Cancel} style={{width: '40%', height: '40%', borderRadius: '60px', overflow: 'hidden'}}/>
+    
+              </div>
             </div>
           </div>,
+            { duration: 1000 }
+          );
+        }
+      } else {
+        toast.custom(
+          <div
+          style={{
+            marginTop: "2%",
+            marginLeft: '12%',
+            width: "100%",
+            height: "8vh",
+            borderRadius: '20px',
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "flex-start",
+          }}
+        >
+          <div
+            style={{
+              width: "30%",
+              height: "100%",
+              borderRadius: '30px',
+              borderWidth: '1px',
+              borderColor: '#F5F5F5',
+              borderStyle: "solid",
+              backgroundColor: "white",
+              display: "flex",
+              alignItems: "center",
+              paddingInline: '5px',
+              justifyContent: "space-between",
+            }}
+          >
+            <div style={{display: 'flex',alignItems: 'center', justifyContent: 'center',borderRadius: '50px', backgroundColor: 'rgba(255, 0, 0, 0.22)', width: '11%', height: '75%'}}>
+              <img src={Fail} style={{width: '60%', height: '60%', borderRadius: '60px', overflow: 'hidden'}}/>
+               </div>
+            <div style={{width: '70%', height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'flex-start', justifyContent:'center'}}>
+              <h6 style={{margin: 0}}>invalid key presed</h6>
+              <h6 style={{color: '#FF0000', margin: 0}}>Kindly put numeric value</h6>
+  
+            </div>
+            <div style={{width: '10%', height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent:'center'}}>
+            <img src={Cancel} style={{width: '40%', height: '40%', borderRadius: '60px', overflow: 'hidden'}}/>
+  
+            </div>
+          </div>
+        </div>,
           { duration: 1000 }
         );
       }
@@ -132,45 +134,46 @@ function Payment(props) {
     ) {
       toast.custom(
         <div
+        style={{
+          marginTop: "2%",
+          marginLeft: '12%',
+          width: "100%",
+          height: "8vh",
+          borderRadius: '20px',
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "flex-start",
+        }}
+      >
+        <div
           style={{
-            marginTop: "5%",
-            width: "100%",
-            height: "6vh",
+            width: "30%",
+            height: "100%",
+            borderRadius: '30px',
+            borderWidth: '1px',
+            borderColor: '#F5F5F5',
+            borderStyle: "solid",
+            backgroundColor: "white",
             display: "flex",
             alignItems: "center",
-            justifyContent: "flex-start",
+            paddingInline: '5px',
+            justifyContent: "space-between",
           }}
         >
-          <div
-            style={{
-              alignSelf: "flex-start",
-              width: "30%",
-              height: "100%",
-              borderLeftWidth: "8px",
-              borderColor: "red",
-              borderStyle: "solid",
-              borderBottomWidth: 0,
-              borderRightWidth: 0,
-              borderTopWidth: 0,
-              borderRadius: 5,
-              backgroundColor: "#F5F5F5",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            <h3
-              style={{
-                color: "#515C6F",
-                fontFamily: "GraphikMedium",
-                fontWeight: "100",
-                fontSize: "12px",
-              }}
-            >
-              Kindly fill all the fields
-            </h3>
+          <div style={{display: 'flex',alignItems: 'center', justifyContent: 'center',borderRadius: '50px', backgroundColor: 'rgba(255, 0, 0, 0.22)', width: '11%', height: '75%'}}>
+            <img src={Fail} style={{width: '60%', height: '60%', borderRadius: '60px', overflow: 'hidden'}}/>
+             </div>
+          <div style={{width: '70%', height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'flex-start', justifyContent:'center'}}>
+            <h6 style={{margin: 0}}>Empty fields</h6>
+            <h6 style={{color: '#FF0000', margin: 0}}>Kindly fill all the fields</h6>
+
           </div>
-        </div>,
+          <div style={{width: '10%', height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent:'center'}}>
+          <img src={Cancel} style={{width: '40%', height: '40%', borderRadius: '60px', overflow: 'hidden'}}/>
+
+          </div>
+        </div>
+      </div>,
         { duration: 1000 }
       );
     } else {
@@ -230,7 +233,7 @@ function Payment(props) {
       {InputsList.map((item) => {
         return (
           <div id={item.id} className="inputsConatiner">
-            <img src={item.image} style={{ width: "25px", height: "25px" }} />
+            <img className="ledtIcon" src={item.image} style={{ width: "25px", height: "25px" }} />
             <input
               className="inputDiv"
               style={{ outline: "none" }}
@@ -274,7 +277,7 @@ const Container = styled.div`
   margin-top: 20px;
   .inputsConatiner {
     height: 10%;
-    width: 60%;
+    width: 90%;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -286,9 +289,13 @@ const Container = styled.div`
     flex-direction: column;
     background-color: white;
     border: 1px solid #2291f1;
+    border-radius: 5px;
   }
   .blueBack {
     background-color: #2291f1;
+    border-radius: 5px;
+    box-shadow: 0 0px 15px #2190f0;
+    margin-bottom: 10px;
   }
   .whiteText {
     color: white;
@@ -298,15 +305,20 @@ const Container = styled.div`
   }
   .inputDiv {
     height: 100%;
-    padding-inline: 10px;
-    width: 80%;
+    padding-inline: 20px;
+    width: 83%;
     display: flex;
     justify-content: center;
     padding-left: 20px !important;
-    border-radius: 7px;
+    border-radius: 5px;
     border: 1px solid rgba(218, 221, 225, 0.4);
     background-color: rgba(218, 221, 225, 0.4);
   }
+  // .ledtIcon {
+  //   border: 2px solid #f0f1f3;
+  //   padding: 9px;
+  //   border-radius: 5px;
+  // }
   .inputDiv::placeholder {
     color: rgba(14, 55, 70, 0.4);
     opacity: 1;

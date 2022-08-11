@@ -485,10 +485,10 @@ function AdminLogin() {
       <Header />
       <Container>
         <div className="leftChild">
-          <h3 style={{ fontFamily: "Poppins-Regular" }}>Admin Login</h3>
+          <h3 style={{ fontFamily: "Poppins", fontSize: "30px", margin: "0 auto", fontWeight: "500", paddingTop: "20px", color: "#0E3746", }}>Admin Login</h3>
           <div className="loginComponent">
             <div className="inputsConatiner">
-              <img src={Mail} style={{ width: "25px", height: "25px" }} />
+              <img className="ledtIcon" src={Mail} style={{ width: "25px", height: "25px" }} />
               <input
                 className="inputDiv"
                 style={{ outline: "none" }}
@@ -499,7 +499,7 @@ function AdminLogin() {
               />
             </div>
             <div className="inputsConatiner">
-              <img src={Lock} style={{ width: "25px", height: "25px" }} />
+              <img className="ledtIcon" src={Lock} style={{ width: "25px", height: "25px" }} />
               <input
                 className="inputDiv"
                 style={{ outline: "none" }}
@@ -519,7 +519,7 @@ function AdminLogin() {
               }}
             ></div>
             <button
-              style={{ width: "40%", cursor: "pointer" }}
+              style={{ width: "80%", cursor: "pointer", height: "40px", borderRadius: "5px", boxShadow: "0 0px 15px #2190f0", marginTop:"70px" }}
               className="inputsConatiner button blueBack"
               onClick={() => nextHandler()}
             >
@@ -553,7 +553,7 @@ const Container = styled.div`
     align-items: center;
     justify-content: flex-start;
     margin-top: 20px;
-    padding-top: 30px;
+    padding-top: 0;
   }
   .inputsConatiner {
     height: 14%;
@@ -585,7 +585,7 @@ const Container = styled.div`
     color: #2291f1;
   }
   .inputDiv {
-    height: 100%;
+    height: 42px;
     padding-inline: 10px;
     width: 80%;
     display: flex;
@@ -624,7 +624,7 @@ const Container = styled.div`
     border: 2px solid rgba(218, 221, 225, 0.4);
     border-radius: 10px;
     flex-direction: column;
-    box-shadow: 1px 2px 1px rgba(218, 221, 225, 0.4);
+    box-shadow: 0 5px 30px #dcdcdc;
   }
   .rightChild {
     height: 100%;
@@ -632,5 +632,10 @@ const Container = styled.div`
     display: flex;
     align-items: center;
     justify-content: flex-end;
+  }
+  .ledtIcon {
+    border: 2px solid #f0f1f3;
+    padding: 9px;
+    border-radius: 5px;
   }
 `;

@@ -3,6 +3,7 @@ export const SET_DATA = "SET_DATA";
 export const SET_KEY = "SET_KEY";
 export const SET_PROFILE = "SET_PROFILE";
 export const SET_USERNAME = "SET_USERNAME";
+export const SET_APPROVE_STATUS = "SET_APPROVE_STATUS";
 
 export const SET_ALUMNI_KEY = "SET_ALUMNI_KEY";
 export const SET_USER_DATA = "SET_USER_DATA";
@@ -17,6 +18,14 @@ export const setAmount = (amount) => (dispatch) => {
     type: SET_AMOUNT,
     payload: {
       amount: amount,
+    },
+  });
+};
+export const setApprove = (approve) => (dispatch) => {
+  dispatch({
+    type: SET_APPROVE_STATUS,
+    payload: {
+      approve: approve,
     },
   });
 };
