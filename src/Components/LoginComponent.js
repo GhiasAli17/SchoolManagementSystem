@@ -135,7 +135,10 @@ function LoginComponent(props) {
               if(childData.approve == true)
               {
                 alumniEmail = childData.email;
+                if(childData?.imageUri?.imageUri)
                 dispatch(setUserName(childData.firstName + "<" + childData.imageUri.imageUri));
+                else
+                    dispatch(setUserName(childData.firstName))
                 alumniPassword = childData.password;
                 keyvalue = childKey;
                 onValue(

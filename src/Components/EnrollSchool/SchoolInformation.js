@@ -17,6 +17,7 @@ function SchoolInformation(props) {
     relationship: "",
     phoneNumber: "",
     items: "",
+    donations:0
   });
   const key = props.getKey;
 

@@ -15,6 +15,7 @@ function SchoolPanel() {
   const [deleteId, setDeletedId] = useState(false);
   const { key,approve } = useSelector((state) => state.persistedReducer);
   const [deleteCheck, setdeleteCheck] = useState(false);
+  const [total, setTotal] = useState("")
 
   const DeleteItem = () => {
     console.log("delted id", deleteId);
@@ -32,6 +33,12 @@ function SchoolPanel() {
 
   let navigate = useNavigate();
 
+  useEffect(() => {
+      onValue(ref(db,"School/" + key + "/donations"),snapshot => {
+          setTotal(snapshot.val())
+
+      })
+  },[])
   useEffect(() => {
     setData([]);
 
@@ -221,7 +228,7 @@ function SchoolPanel() {
           <Container>
             <div className="nav">
               <div className="leftDiv">
-                <h3 style={{ fontFamily: "Poppins", margin: "0", fontSize: "25px", color: "#0E3746", fontWeight:"500" }}>Needs</h3>
+                <h3 style={{ fontFamily: "Poppins", margin: "0", fontSize: "25px", color: "#0E3746", fontWeight:"500" }}>Needs : Donated = {total}</h3>
               </div>
               <div className="rightDiv">
                 <button onClick={() => addHandler()} className="button">

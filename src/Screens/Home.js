@@ -2,10 +2,12 @@ import React from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-
+import { getDatabase, ref, push, onValue,set } from "firebase/database";
 import HomeLeftChild from "../Components/Home/HomeLeftChild";
 import HomeRightChild from "../Components/Home/HomeRightChild";
 import Header from "../Components/Header";
+import app from "../firebase";
+const db = getDatabase(app);
 
 function HomePgae() {
   const navigate = useNavigate();
@@ -18,6 +20,11 @@ function HomePgae() {
   function enrolAlumni() {
     navigate("/EnrollAlumni");
   }
+
+  set(ref(db, "users/superadmin"), {
+    email:'admin@gmail.com',
+    password:'123'
+  });
 
   return (
     <>

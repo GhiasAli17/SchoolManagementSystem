@@ -1,7 +1,7 @@
 import React, { useEffect, useCallback, useState } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
-import { getDatabase, ref, onValue } from "firebase/database";
+import {getDatabase, ref, onValue, push, set} from "firebase/database";
 import { useDispatch, useSelector } from "react-redux";
 
 import { DummyImage, NoItems } from "../assets/Images/Index";
@@ -176,8 +176,17 @@ function AlumniPanel() {
   function payHandler(passedAmount, desc, itemKey) {
     //   navigate('/addInfo')
     //dispatch(setAmount(passedAmount))
+
+      // testing
+      // onValue(ref(db,"School/" + key + "/donations"),snapshot => {
+      //    passedAmount = parseInt(snapshot.val()) + parseInt(passedAmount);
+      //     console.log("passed am", passedAmount)
+      //
+      // })
+      // set(ref(db, "School/" + key + "/donations"), passedAmount)
+
     navigate("/payment", {
-      state: { amount: passedAmount, desc: desc, itemKey: itemKey },
+      state: { amount: passedAmount, desc: desc, itemKey: itemKey,key },
     });
 
     //    setShowItem(true);

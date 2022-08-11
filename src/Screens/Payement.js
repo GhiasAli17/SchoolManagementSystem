@@ -8,8 +8,25 @@ import {
 } from "@stripe/react-stripe-js";
 import styled from "styled-components";
 import { useLocation } from "react-router-dom";
+import { getDatabase, ref, set, onValue, push } from "firebase/database";
+import { useNavigate } from "react-router-dom";
+import {
+  getStorage,
+  ref as sRef,
+  uploadBytesResumable,
+  getDownloadURL,
+} from "firebase/storage";
+import toast, { Toaster } from "react-hot-toast";
+import { useSelector } from "react-redux";
 
-import "./styles.css";
+import '../App.css'
+
+import app, { storage } from "../firebase";
+
+const db = getDatabase(app);
+
+
+
 
 const CARD_OPTIONS = {
   iconStyle: "solid",
@@ -106,6 +123,10 @@ const ResetButton = ({ onClick }) => (
 );
 
 const CheckoutForm = ({ amount }) => {
+
+  const {state} = useLocation();
+  const {key} = state;
+  console.log("itemKey",key)
   const stripe = useStripe();
   const elements = useElements();
   const [error, setError] = useState(null);
@@ -148,6 +169,18 @@ const CheckoutForm = ({ amount }) => {
       setError(payload.error);
     } else {
       setPaymentMethod(payload.paymentMethod);
+
+
+
+      // #######################
+      var total=0;
+      onValue(ref(db,"School/" + key + "/donations"),snapshot => {
+        total = parseInt(snapshot.val()) + parseInt(amount);
+
+      })
+      set(ref(db, "School/" + key + "/donations"), total)
+
+      // ###################
     }
   };
 

@@ -22,7 +22,7 @@ export { default as Logo } from "./Logo.svg";
 export { default as LogOut } from "./LogOut.svg";
 export { default as Mail } from "./Mail.svg";
 export { default as NoItems } from "./NoItems.svg";
-export { default as Pending } from "./Pending.svg";
+export { default as Pending } from "./pending.svg";
 export { default as RegisterImage } from "./RegisterImage.svg";
 export { default as School } from "./School.svg";
 export { default as Settings } from "./Settings.svg";
